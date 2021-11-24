@@ -4,8 +4,12 @@
  */
 package com.posn.nextgenpos.servlet;
 
+import com.posn.nextgenpos.common.ItemDetails;
+import com.posn.nextgenpos.ejb.ItemBean;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.List;
+import javax.inject.Inject;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -19,6 +23,8 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet(name = "Items", urlPatterns = {"/Items"})
 public class Items extends HttpServlet {
 
+    @Inject
+    private ItemBean itemBean;
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -57,7 +63,10 @@ public class Items extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        request.setAttribute("activePage","Items");
+        List<ItemDetails> items = itemBean.getAllItems();
+        request.setAttribute("items", items);
+        request.getRequestDispatcher("/WEB-INF/pages/items.jsp").forward(request, response);
     }
 
     /**

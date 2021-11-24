@@ -9,22 +9,25 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Table;
 
 /**
  *
  * @author teodo
  */
 @Entity
+@Table(name= "ITEMS")
 public class Item implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
-    private int quantity;
+    private Integer quantity;
     public Integer getId() {
         return id;
     }
+    
 
     public void setId(Integer id) {
         this.id = id;

@@ -14,14 +14,17 @@
         <button class="btn btn-danger" type="submit">Delete items</button>
         <c:forEach var="item" items="${items}" varStatus="status">
             <div class="row">
-                <div class=""col-md>
-                    <input type="checkbox" name="car_ids" value="${item.id}"/>
+                 <div class="col-md">
+                    ${item.id}
+                </div>
+                <div class="col-md">
+                    <input type="checkbox" name="item_ids" value="${item.id}"/>
                 </div>
                 <div class="col-md-4">
                     ${item.quantity}
                 </div>
                 <div class="col-md-3">
-                    <a class="btn btn-secondary" href="${pageContext.request.contextPath}/EditItem?id=${item.itemId}" role="button">Edit Item</a>
+                    <a class="btn btn-secondary" href="${pageContext.request.contextPath}/EditItem?id=${item.id}" role="button">Edit Item</a>
                 </div>
             </div>
         </c:forEach>
