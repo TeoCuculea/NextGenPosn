@@ -1,4 +1,4 @@
-package com.pos.nextgenpos.resources;
+package com.posn.nextgenpos.resources;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;

@@ -1,4 +1,4 @@
-package com.pos.nextgenpos;
+package com.posn.nextgenpos;
 
 import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.core.Application;
