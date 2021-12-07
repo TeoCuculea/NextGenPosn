@@ -20,15 +20,17 @@ import javax.persistence.Table;
  * @author teodo
  */
 @Entity
-@Table(name= "ITEMS")
-public class Item implements Serializable {
+@Table(name = "PRODUCTSPECIFICATION")
+public class ProductSpecification implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name="id")
     private Integer id;
-    private Integer quantity;
+    private String name;
+    private String description;
+    private Double pricePerUnit;
     public Integer getId() {
         return id;
     }
@@ -36,17 +38,34 @@ public class Item implements Serializable {
     public void setId(Integer id) {
         this.id = id;
     }
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name="item_id", referencedColumnName="id")
+    private Item item;
     
-    @OneToOne(mappedBy="item")
-    private ProductSpecification specs;
-    public int getQuantity() {
-        return quantity;
+    public String getName() {
+        return name;
     }
 
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
+    public String getDescription() {
+        return description;
     }
 
+    public Double getPricePerUnit() {
+        return pricePerUnit;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setPricePerUnit(Double pricePerUnit) {
+        this.pricePerUnit = pricePerUnit;
+    }
     @Override
     public int hashCode() {
         int hash = 0;
@@ -57,10 +76,10 @@ public class Item implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Item)) {
+        if (!(object instanceof ProductSpecification)) {
             return false;
         }
-        Item other = (Item) object;
+        ProductSpecification other = (ProductSpecification) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -69,7 +88,7 @@ public class Item implements Serializable {
 
     @Override
     public String toString() {
-        return "com.posn.nextgenpos.entity.Item[ id=" + id + " ]";
+        return "com.posn.nextgenpos.entity.ProductSpecification[ id=" + id + " ]";
     }
     
 }
