@@ -31,6 +31,7 @@ public class ProductSpecification implements Serializable {
     private String name;
     private String description;
     private Double pricePerUnit;
+    
     public Integer getId() {
         return id;
     }
@@ -88,7 +89,9 @@ public class ProductSpecification implements Serializable {
 
     @Override
     public String toString() {
-        return "com.posn.nextgenpos.entity.ProductSpecification[ id=" + id + " ]";
+        String s;
+        s="ID: "+this.id+"\nName: "+this.name+"\nDescription: "+this.description+"\nPricePerUnit:"+this.pricePerUnit;
+        return s;
     }
     
 }

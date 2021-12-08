@@ -35,7 +35,7 @@ public class ItemBean {
         } catch (Exception ex) {
             throw new EJBException(ex);
         }
-    }
+    }    
     private List<ItemDetails> copyItemsToDetails(List<Item> items)
     {
         List<ItemDetails> detailsList = new ArrayList();
