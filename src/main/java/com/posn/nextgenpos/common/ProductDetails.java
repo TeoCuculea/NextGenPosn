@@ -8,7 +8,7 @@ package com.posn.nextgenpos.common;
  *
  * @author teodo
  */
-public class ProductDetails {
+public class ProductDetails implements java.io.Serializable{
     private Integer id;
     private String name;
     private String description;

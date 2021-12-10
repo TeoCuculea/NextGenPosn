@@ -5,7 +5,6 @@
 package com.posn.nextgenpos.entity;
 
 import java.io.Serializable;
-import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -13,7 +12,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
@@ -22,17 +21,24 @@ import javax.persistence.Table;
  * @author teodo
  */
 @Entity
-@Table(name = "PRODUCT_SPECIFICATION")
-public class ProductSpecification implements Serializable {
+@Table(name="SALE_LINE_ITEMS")
+public class SaleLineItem implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name="id")
     private Integer id;
-    private String name;
-    private String description;
-    private Double pricePerUnit;
+    private int quantity;  
+    //private int itemId, saleID;-> tabel
+    @ManyToOne
+    @JoinColumn(name="sale_id")
+    private Sale sale;
+    
+    @ManyToOne
+    @JoinColumn(name="productspec_id", referencedColumnName="id")
+    private ProductSpecification prodSpecs;
+    
     public Integer getId() {
         return id;
     }
@@ -41,36 +47,22 @@ public class ProductSpecification implements Serializable {
         this.id = id;
     }
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name="item_id", referencedColumnName="id")
-    private Item item;
-    
-    @OneToMany(mappedBy="prodSpecs")
-    private List<SaleLineItem> lineItem;
-    
-    public String getName() {
-        return name;
+    public int getQuantity() {
+        return quantity;
     }
 
-    public String getDescription() {
-        return description;
+    public ProductSpecification getProdSpecs() {
+        return prodSpecs;
     }
 
-    public Double getPricePerUnit() {
-        return pricePerUnit;
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setProdSpecs(ProductSpecification prodSpecs) {
+        this.prodSpecs = prodSpecs;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public void setPricePerUnit(Double pricePerUnit) {
-        this.pricePerUnit = pricePerUnit;
-    }
     @Override
     public int hashCode() {
         int hash = 0;
@@ -81,10 +73,10 @@ public class ProductSpecification implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof ProductSpecification)) {
+        if (!(object instanceof SaleLineItem)) {
             return false;
         }
-        ProductSpecification other = (ProductSpecification) object;
+        SaleLineItem other = (SaleLineItem) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -93,7 +85,7 @@ public class ProductSpecification implements Serializable {
 
     @Override
     public String toString() {
-        return "com.posn.nextgenpos.entity.ProductSpecification[ id=" + id + " ]";
+        return "com.posn.nextgenpos.entity.SaleLineItem[ id=" + id + " ]";
     }
     
 }

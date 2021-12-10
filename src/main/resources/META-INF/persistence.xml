@@ -5,6 +5,9 @@
     <jta-data-source>jdbc/sample</jta-data-source>
     <class>com.posn.nextgenpos.entity.Item</class>
     <class>com.posn.nextgenpos.entity.ProductSpecification</class>
+    <class>com.posn.nextgenpos.entity.Sale</class>
+    <class>com.posn.nextgenpos.entity.Payment</class>
+    <class>com.posn.nextgenpos.entity.SaleLineItem</class>
     <properties>
       <property name="javax.persistence.schema-generation.database.action" value="create"/>
       <property name="javax.persistence.jdbc.url" value="jdbc:derby://localhost:1527/NextGenPos"/>

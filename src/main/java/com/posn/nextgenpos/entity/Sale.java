@@ -5,6 +5,7 @@
 package com.posn.nextgenpos.entity;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -12,7 +13,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
@@ -22,17 +22,24 @@ import javax.persistence.Table;
  * @author teodo
  */
 @Entity
-@Table(name = "PRODUCT_SPECIFICATION")
-public class ProductSpecification implements Serializable {
+@Table(name="SALES")
+public class Sale implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name="id")
     private Integer id;
-    private String name;
-    private String description;
-    private Double pricePerUnit;
+    private LocalDateTime date;
+    private boolean isComplete;
+    private double total;
+    private double change;
+    
+    @OneToMany(mappedBy="sale")
+    private List<SaleLineItem> lineItems;
+    
+    @OneToOne(cascade = CascadeType.ALL)
+    private Payment payment;
+    
     public Integer getId() {
         return id;
     }
@@ -41,36 +48,54 @@ public class ProductSpecification implements Serializable {
         this.id = id;
     }
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name="item_id", referencedColumnName="id")
-    private Item item;
-    
-    @OneToMany(mappedBy="prodSpecs")
-    private List<SaleLineItem> lineItem;
-    
-    public String getName() {
-        return name;
+    public boolean isIsComplete() {
+        return isComplete;
     }
 
-    public String getDescription() {
-        return description;
+    public List<SaleLineItem> getLineItems() {
+        return lineItems;
     }
 
-    public Double getPricePerUnit() {
-        return pricePerUnit;
+    public double getTotal() {
+        return total;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public double getChange() {
+        return change;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public Payment getPayment() {
+        return payment;
     }
 
-    public void setPricePerUnit(Double pricePerUnit) {
-        this.pricePerUnit = pricePerUnit;
+    public LocalDateTime getDate() {
+        return date;
     }
+
+    public void setIsComplete(boolean isComplete) {
+        this.isComplete = isComplete;
+    }
+
+    public void setLineItems(List<SaleLineItem> lineItems) {
+        this.lineItems = lineItems;
+    }
+
+    public void setTotal(double total) {
+        this.total = total;
+    }
+
+    public void setChange(double change) {
+        this.change = change;
+    }
+
+    public void setPayment(Payment payment) {
+        this.payment = payment;
+    }
+
+    public void setDate(LocalDateTime date) {
+        this.date = date;
+    }
+
     @Override
     public int hashCode() {
         int hash = 0;
@@ -81,10 +106,10 @@ public class ProductSpecification implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof ProductSpecification)) {
+        if (!(object instanceof Sale)) {
             return false;
         }
-        ProductSpecification other = (ProductSpecification) object;
+        Sale other = (Sale) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -93,7 +118,6 @@ public class ProductSpecification implements Serializable {
 
     @Override
     public String toString() {
-        return "com.posn.nextgenpos.entity.ProductSpecification[ id=" + id + " ]";
+        return "com.posn.nextgenpos.entity.Sale[ id=" + id + " ]";
     }
-    
 }

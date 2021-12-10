@@ -5,15 +5,12 @@
 package com.posn.nextgenpos.entity;
 
 import java.io.Serializable;
-import java.util.List;
 import javax.persistence.CascadeType;
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
@@ -22,17 +19,20 @@ import javax.persistence.Table;
  * @author teodo
  */
 @Entity
-@Table(name = "PRODUCT_SPECIFICATION")
-public class ProductSpecification implements Serializable {
+@Table(name="PAYMENTS")
+public class Payment implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name="id")
     private Integer id;
-    private String name;
-    private String description;
-    private Double pricePerUnit;
+    private double amount;
+    private double total;
+    
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name="sale_id")
+    private Sale sale2;
+    
     public Integer getId() {
         return id;
     }
@@ -41,36 +41,22 @@ public class ProductSpecification implements Serializable {
         this.id = id;
     }
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name="item_id", referencedColumnName="id")
-    private Item item;
-    
-    @OneToMany(mappedBy="prodSpecs")
-    private List<SaleLineItem> lineItem;
-    
-    public String getName() {
-        return name;
+    public double getAmount() {
+        return amount;
     }
 
-    public String getDescription() {
-        return description;
+    public double getTotal() {
+        return total;
     }
 
-    public Double getPricePerUnit() {
-        return pricePerUnit;
+    public void setAmount(double amount) {
+        this.amount = amount;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setTotal(double total) {
+        this.total = total;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public void setPricePerUnit(Double pricePerUnit) {
-        this.pricePerUnit = pricePerUnit;
-    }
     @Override
     public int hashCode() {
         int hash = 0;
@@ -81,10 +67,10 @@ public class ProductSpecification implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof ProductSpecification)) {
+        if (!(object instanceof Payment)) {
             return false;
         }
-        ProductSpecification other = (ProductSpecification) object;
+        Payment other = (Payment) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -93,7 +79,7 @@ public class ProductSpecification implements Serializable {
 
     @Override
     public String toString() {
-        return "com.posn.nextgenpos.entity.ProductSpecification[ id=" + id + " ]";
+        return "com.posn.nextgenpos.entity.Payment[ id=" + id + " ]";
     }
     
 }
