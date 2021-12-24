@@ -7,6 +7,7 @@ package com.posn.nextgenpos.ejb;
 import com.posn.nextgenpos.common.ItemDetails;
 import com.posn.nextgenpos.entity.Item;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.logging.Logger;
 import javax.ejb.EJBException;
@@ -22,11 +23,12 @@ import javax.persistence.PersistenceContext;
 public class ItemBean {
 
     private static final Logger LOG = Logger.getLogger(ItemBean.class.getName());
-
-    // Add business logic below. (Right-click in editor and choose
-    // "Insert Code > Add Business Method")
     @PersistenceContext
     private EntityManager em;
+    
+    
+    // Add business logic below. (Right-click in editor and choose
+    // "Insert Code > Add Business Method")
     public List<ItemDetails>getAllItems(){
         LOG.info("getAllItems");
         try {
@@ -35,7 +37,35 @@ public class ItemBean {
         } catch (Exception ex) {
             throw new EJBException(ex);
         }
-    }    
+    }  
+    public ItemDetails findById(Integer itemId)
+    {
+        Item item = em.find(Item.class, itemId);
+        return new ItemDetails(item.getId(), item.getQuantity());
+    }
+    public void createItem(Integer quantity)
+    {
+        LOG.info("createItem");
+        Item item = new Item();
+        item.setQuantity(quantity);
+        
+        em.persist(item);
+    }
+    public void deleteItemsByIds(Collection<Integer> ids)
+    {
+        LOG.info("deleteItemsByIds");
+        for(Integer id : ids)
+        {
+            Item item = em.find(Item.class, id);
+            em.remove(item);
+        }
+    }
+    public void updateItem(Integer itemId, Integer quantity)
+    {
+        LOG.info("updateItem");
+        Item item = em.find(Item.class, itemId);
+        item.setQuantity(quantity);
+    }
     private List<ItemDetails> copyItemsToDetails(List<Item> items)
     {
         List<ItemDetails> detailsList = new ArrayList();

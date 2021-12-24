@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
  *
  * @author teodo
  */
-public class SaleDetails {
+public class SaleDetails implements java.io.Serializable {
     private Integer id;
     private LocalDateTime date;
     private boolean isComplete;

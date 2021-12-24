@@ -8,7 +8,7 @@ package com.posn.nextgenpos.common;
  *
  * @author teodo
  */
-public class LineDetails {
+public class LineDetails implements java.io.Serializable {
     private Integer id;
     private int quantity;  
 

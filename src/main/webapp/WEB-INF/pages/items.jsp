@@ -10,15 +10,15 @@
 <t:pageTemplate pageTitle="Items">
     <h1>Items</h1>
     <form method="POST" action="${pageContext.request.contextPath}/Items">
-        <a class="btn btn-primary btn-lg" href="/NextGenPos/AddItem" role="button">Add item</a>
-        <button class="btn btn-danger" type="submit">Delete items</button>
+        <a class="btn btn-primary btn-lg" href="/NextGenPos/Items/AddItem" role="button">Add item</a>
+        <button class="btn btn-danger" type="submit">Delete Items</button>
         <c:forEach var="item" items="${items}" varStatus="status">
             <div class="row">
-                 <div class="col-md">
-                    ${item.id}
-                </div>
                 <div class="col-md">
                     <input type="checkbox" name="item_ids" value="${item.id}"/>
+                </div>
+                 <div class="col-md">
+                    ${item.id}
                 </div>
                 <div class="col-md-4">
                     ${item.quantity}

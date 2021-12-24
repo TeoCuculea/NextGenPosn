@@ -7,8 +7,6 @@ package com.posn.nextgenpos.servlet;
 import com.posn.nextgenpos.common.ItemDetails;
 import com.posn.nextgenpos.ejb.ItemBean;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
 import javax.servlet.ServletException;
@@ -21,11 +19,12 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author teodo
  */
-@WebServlet(name = "Items", urlPatterns = {"/Items"})
-public class Items extends HttpServlet {
+//@ServletSecurity( value = @HttpConstraint(rolesAllowed = { "AdminRole"}))
+@WebServlet(name = "AddItem", urlPatterns = {"/Items/AddItem"})
+public class AddItem extends HttpServlet {
 
     @Inject
-    private ItemBean itemBean;
+    ItemBean itemBean;
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -35,22 +34,6 @@ public class Items extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet Items</title>");            
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet Items at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
-        }
-    }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
@@ -64,10 +47,9 @@ public class Items extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        request.setAttribute("activePage","Items");
         List<ItemDetails> items = itemBean.getAllItems();
         request.setAttribute("items", items);
-        request.getRequestDispatcher("/WEB-INF/pages/items.jsp").forward(request, response);
+        request.getRequestDispatcher("/WEB-INF/pages/addItem.jsp").forward(request, response);
     }
 
     /**
@@ -81,17 +63,9 @@ public class Items extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String[] itemIdsAsString = request.getParameterValues("item_ids");
-        if(itemIdsAsString!=null)
-        {
-            List<Integer> itemIds = new ArrayList<>();
-            for(String ids : itemIdsAsString)
-            {
-                itemIds.add(Integer.parseInt(ids));  
-            }
-            itemBean.deleteItemsByIds(itemIds);
-        }
-        response.sendRedirect(request.getContextPath()+"/Items");
+        Integer quantity = Integer.parseInt(request.getParameter("quantity"));
+        itemBean.createItem(quantity);
+        response.sendRedirect(request.getContextPath()+ "/Items");//ma intoarce inapoi in pagina Items     
     }
 
     /**
@@ -101,7 +75,7 @@ public class Items extends HttpServlet {
      */
     @Override
     public String getServletInfo() {
-        return "Items";
+        return "Add Item";
     }// </editor-fold>
 
 }
