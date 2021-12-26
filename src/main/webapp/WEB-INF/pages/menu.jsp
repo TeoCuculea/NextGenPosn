@@ -16,12 +16,10 @@
                     <li class="nav-item ${activePage eq 'Items' ? 'active' : ''}">
                         <a class="nav-link" href="${pageContext.request.contextPath}/Items">Items</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Link</a>
+                    <li class="nav-item ${activePage eq 'ProductSpecifications' ? 'active' : ''}">
+                        <a class="nav-link" href="${pageContext.request.contextPath}/ProductSpecifications">ProductSpecifications</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link disabled">Disabled</a>
-                    </li>
+                    
                 </ul>
                 <ul class="navbar-nav d-flex">
                     <li class="nav-item">

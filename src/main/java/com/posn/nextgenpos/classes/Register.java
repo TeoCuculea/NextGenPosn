@@ -20,7 +20,7 @@ public class Register {
         this.catalog = catalog;
     }
 
-    void makeNewSale() {
+    public void makeNewSale() {
         currentSale = new Sale();
     }
 
@@ -44,7 +44,8 @@ public class Register {
         currentSale.printShopingList();
     }*/
 
-    Sale getSale() {
+    public Sale getCurrentSale() {
         return currentSale;
     }
+    
 }

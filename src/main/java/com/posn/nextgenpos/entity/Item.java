@@ -20,15 +20,16 @@ import javax.persistence.Table;
  * @author teodo
  */
 @Entity
-@Table(name= "ITEMS")
+@Table(name = "ITEMS")
 public class Item implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name="id")
+    @Column(name = "id")
     private Integer id;
     private Integer quantity;
+
     public Integer getId() {
         return id;
     }
@@ -36,15 +37,24 @@ public class Item implements Serializable {
     public void setId(Integer id) {
         this.id = id;
     }
-    
-    @OneToOne(mappedBy="item")
-    private ProductSpecification specs;
-    public int getQuantity() {
+
+    @OneToOne(mappedBy = "item")
+    private ProductSpecification productSpecification;
+
+    public Integer getQuantity() {
         return quantity;
     }
 
-    public void setQuantity(int quantity) {
+    public ProductSpecification getProductSpecification() {
+        return productSpecification;
+    }
+
+    public void setQuantity(Integer quantity) {
         this.quantity = quantity;
+    }
+
+    public void setProductSpecification(ProductSpecification productSpecification) {
+        this.productSpecification = productSpecification;
     }
 
     @Override
@@ -71,5 +81,5 @@ public class Item implements Serializable {
     public String toString() {
         return "com.posn.nextgenpos.entity.Item[ id=" + id + " ]";
     }
-    
+
 }

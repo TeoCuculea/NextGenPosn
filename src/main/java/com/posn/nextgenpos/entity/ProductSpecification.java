@@ -72,6 +72,23 @@ public class ProductSpecification implements Serializable {
     public void setPricePerUnit(Double pricePerUnit) {
         this.pricePerUnit = pricePerUnit;
     }
+
+    public Item getItem() {
+        return item;
+    }
+
+    public List<SaleLineItem> getLineItem() {
+        return lineItem;
+    }
+
+    public void setItem(Item item) {
+        this.item = item;
+    }
+
+    public void setLineItem(List<SaleLineItem> lineItem) {
+        this.lineItem = lineItem;
+    }
+    
     @Override
     public int hashCode() {
         int hash = 0;

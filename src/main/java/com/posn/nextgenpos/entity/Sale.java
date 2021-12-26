@@ -4,6 +4,7 @@
  */
 package com.posn.nextgenpos.entity;
 
+import com.posn.nextgenpos.classes.Register;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.List;

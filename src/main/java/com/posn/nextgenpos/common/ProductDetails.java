@@ -12,9 +12,9 @@ public class ProductDetails implements java.io.Serializable{
     private Integer id;
     private String name;
     private String description;
-    private String pricePerUnit;
+    private Double pricePerUnit;
 
-    public ProductDetails(Integer id, String name, String description, String pricePerUnit) {
+    public ProductDetails(Integer id, String name, String description, Double pricePerUnit) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -33,7 +33,7 @@ public class ProductDetails implements java.io.Serializable{
         return description;
     }
 
-    public String getPricePerUnit() {
+    public Double getPricePerUnit() {
         return pricePerUnit;
     }
     
