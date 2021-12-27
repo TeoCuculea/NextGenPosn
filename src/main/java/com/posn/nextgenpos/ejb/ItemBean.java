@@ -43,13 +43,16 @@ public class ItemBean {
         Item item = em.find(Item.class, itemId);
         return new ItemDetails(item.getId(), item.getQuantity());
     }
-    public void createItem(Integer quantity)
+    public int createItem(Integer quantity)
     {
         LOG.info("createItem");
         Item item = new Item();
         item.setQuantity(quantity);
         
         em.persist(item);
+        em.flush();
+        int itemId = item.getId();
+        return itemId;
     }
     public void deleteItemsByIds(Collection<Integer> ids)
     {

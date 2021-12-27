@@ -55,6 +55,12 @@ public class ProductSpecificationBean {
         return new ProductDetails(productSpecification.getId(), productSpecification.getName(), productSpecification.getDescription(), productSpecification.getPricePerUnit());
     }
     
+    public ProductDetails findByItemId(Integer itemId)
+    {
+        ProductSpecification productSpecification = (ProductSpecification)em.createQuery("SELECT p FROM ProductSpecification p WHERE p.item.id = :id").setParameter("id",itemId).getSingleResult();
+        return new ProductDetails(productSpecification.getId(), productSpecification.getName(), productSpecification.getDescription(), productSpecification.getPricePerUnit());
+    }
+    
     public void createProductSpecification(String name, String description, Double pricePerUnit, Integer itemId) {
         LOG.info("createProductSpecification");
         ProductSpecification productSpecification = new ProductSpecification();
@@ -83,11 +89,18 @@ public class ProductSpecificationBean {
         productSpecification.setItem(item);
     }
     
-    public void deleteProductSpecificationByIds(Collection<Integer> ids) 
+    public void deleteProductSpecificationByIds(Collection<Integer> productId) 
     {
         LOG.info("deleteProductSpecificationByIds");
-        for (Integer id : ids) {
+        for (Integer id : productId) {
             ProductSpecification productSpecification = em.find(ProductSpecification.class, id);
+            em.remove(productSpecification);
+        }
+    }
+
+    public void deleteProductSpecificationByItemIds(List<Integer> itemIds) {
+        for (Integer id : itemIds) {
+            ProductSpecification productSpecification = (ProductSpecification)em.createQuery("SELECT p FROM ProductSpecification p WHERE p.item.id = :id").setParameter("id",id).getSingleResult();
             em.remove(productSpecification);
         }
     }

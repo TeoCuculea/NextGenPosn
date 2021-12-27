@@ -16,8 +16,8 @@
                     <li class="nav-item ${activePage eq 'Items' ? 'active' : ''}">
                         <a class="nav-link" href="${pageContext.request.contextPath}/Items">Items</a>
                     </li>
-                    <li class="nav-item ${activePage eq 'ProductSpecifications' ? 'active' : ''}">
-                        <a class="nav-link" href="${pageContext.request.contextPath}/ProductSpecifications">ProductSpecifications</a>
+                    <li class="nav-item ${activePage eq 'ProductSpecification' ? 'active' : ''}">
+                        <a class="nav-link" href="${pageContext.request.contextPath}/ProductSpecification">ProductSpecifications</a>
                     </li>
                     
                 </ul>

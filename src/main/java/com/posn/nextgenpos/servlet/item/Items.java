@@ -5,9 +5,10 @@
 package com.posn.nextgenpos.servlet.item;
 
 import com.posn.nextgenpos.common.ItemDetails;
+import com.posn.nextgenpos.common.ProductDetails;
 import com.posn.nextgenpos.ejb.ItemBean;
+import com.posn.nextgenpos.ejb.ProductSpecificationBean;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
@@ -26,6 +27,10 @@ public class Items extends HttpServlet {
 
     @Inject
     private ItemBean itemBean;
+    
+    @Inject
+    private ProductSpecificationBean prodSpecsBean;
+    
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -51,6 +56,8 @@ public class Items extends HttpServlet {
         request.setAttribute("activePage","Items");
         List<ItemDetails> items = itemBean.getAllItems();
         request.setAttribute("items", items);
+        List<ProductDetails> itemSpecs = prodSpecsBean.getAllProductSpecifications();
+        request.setAttribute("itemSpecs", itemSpecs);
         request.getRequestDispatcher("/WEB-INF/pages/item/items.jsp").forward(request, response);
     }
 
@@ -65,7 +72,7 @@ public class Items extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String[] itemIdsAsString = request.getParameterValues("item_ids");
+         String[] itemIdsAsString = request.getParameterValues("item_ids");
         if(itemIdsAsString!=null)
         {
             List<Integer> itemIds = new ArrayList<>();
@@ -73,7 +80,7 @@ public class Items extends HttpServlet {
             {
                 itemIds.add(Integer.parseInt(ids));  
             }
-            itemBean.deleteItemsByIds(itemIds);
+            prodSpecsBean.deleteProductSpecificationByItemIds(itemIds);
         }
         response.sendRedirect(request.getContextPath()+"/Items");
     }

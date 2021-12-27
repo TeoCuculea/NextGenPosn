@@ -46,8 +46,8 @@ public class ProductSpecification implements Serializable {
     @JoinColumn(name="item_id", referencedColumnName="id")
     private Item item;
     
-    @OneToMany(mappedBy="prodSpecs")
-    private List<SaleLineItem> lineItem;
+//    @OneToMany(mappedBy="prodSpecs")
+//    private List<SaleLineItem> lineItem;
     
     public String getName() {
         return name;
@@ -77,17 +77,17 @@ public class ProductSpecification implements Serializable {
         return item;
     }
 
-    public List<SaleLineItem> getLineItem() {
-        return lineItem;
-    }
+//    public List<SaleLineItem> getLineItem() {
+//        return lineItem;
+//    }
 
     public void setItem(Item item) {
         this.item = item;
     }
 
-    public void setLineItem(List<SaleLineItem> lineItem) {
-        this.lineItem = lineItem;
-    }
+//    public void setLineItem(List<SaleLineItem> lineItem) {
+//        this.lineItem = lineItem;
+//    }
     
     @Override
     public int hashCode() {

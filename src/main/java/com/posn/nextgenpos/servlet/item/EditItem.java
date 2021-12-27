@@ -5,7 +5,9 @@
 package com.posn.nextgenpos.servlet.item;
 
 import com.posn.nextgenpos.common.ItemDetails;
+import com.posn.nextgenpos.common.ProductDetails;
 import com.posn.nextgenpos.ejb.ItemBean;
+import com.posn.nextgenpos.ejb.ProductSpecificationBean;
 import java.io.IOException;
 import java.util.List;
 import javax.inject.Inject;
@@ -19,7 +21,7 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author teodo
  */
-@WebServlet(name = "EditCar", urlPatterns = {"/EditItem"})
+@WebServlet(name = "EditItem", urlPatterns = {"/Items/EditItem"})
 public class EditItem extends HttpServlet {
 
     /**
@@ -43,6 +45,9 @@ public class EditItem extends HttpServlet {
     @Inject
     ItemBean itemBean;
 
+    @Inject
+    private ProductSpecificationBean prodSpecsBean;
+    
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -51,8 +56,11 @@ public class EditItem extends HttpServlet {
       
 
         int itemId = Integer.parseInt(request.getParameter("id"));
+        
         ItemDetails item = itemBean.findById(itemId);
+        ProductDetails prodDetails = prodSpecsBean.findByItemId(itemId);
         request.setAttribute("item", item);
+        request.setAttribute("itemSpecs",prodDetails);
         
         request.getRequestDispatcher("/WEB-INF/pages/item/editItem.jsp").forward(request, response);
     }
@@ -72,6 +80,13 @@ public class EditItem extends HttpServlet {
         Integer itemId = Integer.parseInt(request.getParameter("item_id"));
 
         itemBean.updateItem(itemId, quantity);
+        String name = request.getParameter("name");
+        String description = request.getParameter("description");
+        Double price = Double.parseDouble(request.getParameter("priceperunit"));
+        Integer productId = Integer.parseInt(request.getParameter("product_id"));
+        
+        itemBean.updateItem(itemId, quantity);
+        prodSpecsBean.updateProductSpecification(productId,name,description,price,itemId);
         response.sendRedirect(request.getContextPath() + "/Items");
     }
 

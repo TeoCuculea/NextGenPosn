@@ -6,6 +6,7 @@ package com.posn.nextgenpos.servlet.item;
 
 import com.posn.nextgenpos.common.ItemDetails;
 import com.posn.nextgenpos.ejb.ItemBean;
+import com.posn.nextgenpos.ejb.ProductSpecificationBean;
 import java.io.IOException;
 import java.util.List;
 import javax.inject.Inject;
@@ -25,6 +26,10 @@ public class AddItem extends HttpServlet {
 
     @Inject
     ItemBean itemBean;
+    
+    @Inject
+    private ProductSpecificationBean prodSpecsBean;
+    
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -63,8 +68,13 @@ public class AddItem extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        Integer quantity = Integer.parseInt(request.getParameter("quantity"));
-        itemBean.createItem(quantity);
+        Integer quantity = Integer.parseInt(request.getParameter("quantity"));        
+        String name = request.getParameter("name");
+        String description = request.getParameter("description");
+        Double price = Double.parseDouble(request.getParameter("priceperunit"));
+        Integer itemId = itemBean.createItem(quantity);
+        prodSpecsBean.createProductSpecification(name, description, price,itemId);
+        
         response.sendRedirect(request.getContextPath()+ "/Items");//ma intoarce inapoi in pagina Items     
     }
 

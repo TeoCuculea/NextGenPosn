@@ -10,14 +10,36 @@
 <t:pageTemplate pageTitle="Add Item">
     <h1>Add Item</h1>
     <form class="needs-validation"  novalidate="" method="POST" action="${pageContext.request.contextPath}/Items/AddItem">
-        <div class="row">
-            <div class="col-md-6 mb-3">
+         <div class="row">
+            <div class="col-md-2">
+                <label for="name">Name</label>
+                <input type="text" class="form-control" id="name" name="name" placeholder="" value="" required="">
+                <div class="invalid-feedback">
+                    Name is required.
+                </div>
+            </div>
+            <div class="col-md-2">
                 <label for="quantity">Quantity</label>
                 <input type="text" class="form-control" id="quantity" name="quantity" placeholder="" value="" required="">
                 <div class="invalid-feedback">
                     Quantity is required.
                 </div>
             </div>
+            <div class="col-md-2">
+                <label for="description">Description</label>
+                <input type="text" class="form-control" id="description" name="description" placeholder="" value="" required="">
+                <div class="invalid-feedback">
+                    Description is required.
+                </div>
+            </div>
+            <div class="col-md-2">
+                <label for="priceperunit">Price per Unit</label>
+                <input type="text" class="form-control" id="priceperunit" name="priceperunit" placeholder="" value="" required="">
+                <div class="invalid-feedback">
+                    Price is required.
+                </div>
+            </div>
+            
         </div>
 
         <hr class="col-md-12">

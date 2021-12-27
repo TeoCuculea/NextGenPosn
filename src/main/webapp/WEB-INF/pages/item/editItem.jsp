@@ -9,17 +9,39 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <t:pageTemplate pageTitle="Edit Item">
     <h1>Edit Item</h1>
-    <form class="needs-validation"  novalidate="" method="POST" action="${pageContext.request.contextPath}/EditItem">
-        <div class="row">
-            <div class="col-md-6 mb-3">
+    <form class="needs-validation"  novalidate="" method="POST" action="${pageContext.request.contextPath}/Items/EditItem">
+         <div class="row">
+            <div class="col-md">
+                <label for="name">Name</label>
+                <input type="text" class="form-control" id="name" name="name" placeholder="" value="${itemSpecs.name}" required="">
+                <div class="invalid-feedback">
+                    Name is required.
+                </div>
+            </div>
+            <div class="col-md-2">
                 <label for="quantity">Quantity</label>
                 <input type="text" class="form-control" id="quantity" name="quantity" placeholder="" value="${item.quantity}" required="">
                 <div class="invalid-feedback">
                     Quantity is required.
                 </div>
             </div>
+            <div class="col-md-2">
+                <label for="description">Description</label>
+                <input type="text" class="form-control" id="description" name="description" placeholder="" value="${itemSpecs.description}" required="">
+                <div class="invalid-feedback">
+                    Quantity is required.
+                </div>
+            </div>
+            <div class="col-md-2">
+                <label for="priceperunit">Price Per Unit</label>
+                <input type="text" class="form-control" id="priceperunit" name="priceperunit" placeholder="" value="${itemSpecs.pricePerUnit}" required="">
+                <div class="invalid-feedback">
+                    Quantity is required.
+                </div>
+            </div>
         </div>
         <input type="hidden" name="item_id" value="${item.id}"/>
+        <input type="hidden" name="product_id" value="${itemSpecs.id}"/>
         <hr class="col-md-12">
         
         <button class="btn btn-primary btn-lg btn-block col-md-12" type="submit">Save</button>
