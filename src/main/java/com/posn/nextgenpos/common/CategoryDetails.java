@@ -4,26 +4,27 @@
  */
 package com.posn.nextgenpos.common;
 
-import com.posn.nextgenpos.entity.ProductSpecification;
+import java.io.Serializable;
 
 /**
  *
- * @author teodo
+ * @author barb_
  */
-public class LineDetails implements java.io.Serializable {
+public class CategoryDetails implements Serializable{
+    
     private Integer id;
-    private int quantity;
+    private String categoryName;
 
-    public LineDetails(Integer id, int quantity) {
+    public CategoryDetails(Integer id, String categoryName) {
         this.id = id;
-        this.quantity = quantity;
+        this.categoryName = categoryName;
     }
-
+    
     public Integer getId() {
         return id;
     }
 
-    public int getQuantity() {
-        return quantity;
+    public String getCategoryName() {
+        return categoryName;
     }
 }

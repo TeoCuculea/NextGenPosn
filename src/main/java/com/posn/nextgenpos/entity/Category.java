@@ -5,22 +5,41 @@
 package com.posn.nextgenpos.entity;
 
 import java.io.Serializable;
+import java.util.Collection;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.Table;
 
 /**
  *
  * @author barb_
  */
 @Entity
+@Table(name = "CATEGORY")
 public class Category implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name="id")
     private Integer id;
+
+    @ManyToMany
+    @JoinTable(
+            name="CATEGORY_PRODUCT_SPECIFICATION",
+            joinColumns=
+                    @JoinColumn(name="CATEGORY_ID",referencedColumnName="ID"),
+            inverseJoinColumns=
+                    @JoinColumn(name="PRODUCT_SPECIFICATION_ID",referencedColumnName="ID")
+    )
+    Collection<ProductSpecification> productSpecification;
+    
     private String categoryName;
     
     public Integer getId() {
@@ -37,6 +56,24 @@ public class Category implements Serializable {
 
     public void setCategoryName(String categoryName) {
         this.categoryName = categoryName;
+    }
+
+    public Collection<ProductSpecification> getProductSpecification() {
+        return productSpecification;
+    }
+
+    public void setProductSpecification(Collection<ProductSpecification> productSpecification) {
+        this.productSpecification = productSpecification;
+    }
+    
+    public void addProduct(ProductSpecification prodSpec)
+    {
+        this.getProductSpecification().add(prodSpec);
+    }
+    
+    public void dropProduct(ProductSpecification prodSpecs)
+    {
+        this.getProductSpecification().remove(prodSpecs);
     }
     
     @Override

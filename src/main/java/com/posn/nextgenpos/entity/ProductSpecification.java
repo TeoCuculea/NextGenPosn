@@ -5,7 +5,7 @@
 package com.posn.nextgenpos.entity;
 
 import java.io.Serializable;
-import java.util.List;
+import java.util.Collection;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -13,7 +13,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
@@ -33,6 +33,9 @@ public class ProductSpecification implements Serializable {
     private String name;
     private String description;
     private Double pricePerUnit;
+    
+    @ManyToMany(mappedBy="productSpecification")
+    private Collection<Category> category;
     
     public Integer getId() {
         return id;
@@ -88,6 +91,24 @@ public class ProductSpecification implements Serializable {
 //    public void setLineItem(List<SaleLineItem> lineItem) {
 //        this.lineItem = lineItem;
 //    }
+
+    public Collection<Category> getCategory() {
+        return category;
+    }
+
+    public void setCategory(Collection<Category> category) {
+        this.category = category;
+    }
+    
+    public void addCategory(Category category)
+    {
+        this.getCategory().add(category);
+    }
+    
+    public void dropCategory(Category category)
+    {
+        this.getCategory().remove(category);
+    }
     
     @Override
     public int hashCode() {
