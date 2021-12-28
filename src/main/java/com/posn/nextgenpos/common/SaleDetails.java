@@ -12,14 +12,15 @@ import java.time.LocalDateTime;
  */
 public class SaleDetails implements java.io.Serializable {
     private Integer id;
-    private LocalDateTime date;
+    private LocalDateTime currentDate;
     private boolean isComplete;
     private double total;
     private double change;
 
     public SaleDetails(Integer id, LocalDateTime date, boolean isComplete, double total, double change) {
+        this.currentDate = date;
         this.id = id;
-        this.date = date;
+        this.currentDate = date;
         this.isComplete = isComplete;
         this.total = total;
         this.change = change;
@@ -30,7 +31,7 @@ public class SaleDetails implements java.io.Serializable {
     }
 
     public LocalDateTime getDate() {
-        return date;
+        return currentDate;
     }
 
     public boolean isIsComplete() {

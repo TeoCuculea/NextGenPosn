@@ -31,7 +31,7 @@ public class Payment implements Serializable {
     
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name="sale_id")
-    private Sale sale2;
+    private Sale sale;
     
     public Integer getId() {
         return id;
@@ -56,6 +56,15 @@ public class Payment implements Serializable {
     public void setTotal(double total) {
         this.total = total;
     }
+
+    public Sale getSale() {
+        return sale;
+    }
+
+    public void setSale(Sale sale) {
+        this.sale = sale;
+    }
+    
 
     @Override
     public int hashCode() {

@@ -30,7 +30,7 @@ public class Sale implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
-    private LocalDateTime date;
+    private LocalDateTime date ;
     private boolean isComplete;
     private double total;
     private double change;
@@ -40,7 +40,7 @@ public class Sale implements Serializable {
     
     @OneToOne(cascade = CascadeType.ALL)
     private Payment payment;
-    
+  
     public Integer getId() {
         return id;
     }
