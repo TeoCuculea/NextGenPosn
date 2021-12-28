@@ -16,10 +16,12 @@
                     <li class="nav-item ${activePage eq 'Items' ? 'active' : ''}">
                         <a class="nav-link" href="${pageContext.request.contextPath}/Items">Items</a>
                     </li>
-                    <li class="nav-item ${activePage eq 'ProductSpecification' ? 'active' : ''}">
-                        <a class="nav-link" href="${pageContext.request.contextPath}/ProductSpecification">ProductSpecifications</a>
+                    <li class="nav-item ${activePage eq 'Sales' ? 'active' : ''}">
+                        <a class="nav-link" href="${pageContext.request.contextPath}/Sales">Sales</a>
                     </li>
-                    
+                    <li class="nav-item ${activePage eq 'Users' ? 'active' : ''}">
+                        <a class="nav-link" href="${pageContext.request.contextPath}/Users">Users</a>
+                    </li>  
                 </ul>
                 <ul class="navbar-nav d-flex">
                     <li class="nav-item">

@@ -9,40 +9,33 @@ package com.posn.nextgenpos.common;
  * @author barb_
  */
 public class UserDetails {
-    
-    private Integer id;
-    private String lastName;
-    private String firstName;
-    private String address;
-    private String role;
 
-    public UserDetails(Integer id, String lastName, String firstName, String address, String role) {
+    private Integer id;
+    private String username;
+    private String email;
+    private String position;
+
+    public UserDetails(Integer id, String username, String email,  String position) {
         this.id = id;
-        this.lastName = lastName;
-        this.firstName = firstName;
-        this.address = address;
-        this.role = role;
+        this.username = username;
+        this.email = email;
+        this.position = position;
     }
 
     public Integer getId() {
         return id;
     }
 
-    public String getLastName() {
-        return lastName;
+    public String getUsername() {
+        return username;
     }
 
-    public String getFirstName() {
-        return firstName;
+    public String getEmail() {
+        return email;
     }
 
-    public String getAddress() {
-        return address;
+    public String getPosition() {
+        return position;
     }
 
-    public String getRole() {
-        return role;
-    }
-    
-    
 }
