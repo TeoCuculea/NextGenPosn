@@ -50,19 +50,27 @@ public class SaleLineItem implements Serializable {
     public int getQuantity() {
         return quantity;
     }
+  
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
 
     public ProductSpecification getProdSpecs() {
         return prodSpecs;
-    }
-
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
     }
 
     public void setProdSpecs(ProductSpecification prodSpecs) {
         this.prodSpecs = prodSpecs;
     }
 
+    public Sale getSale() {
+        return sale;
+    }
+
+    public void setSale(Sale sale) {
+        this.sale = sale;
+    }
+    
     @Override
     public int hashCode() {
         int hash = 0;

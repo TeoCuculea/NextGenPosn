@@ -4,13 +4,15 @@
  */
 package com.posn.nextgenpos.common;
 
+import com.posn.nextgenpos.entity.ProductSpecification;
+
 /**
  *
  * @author teodo
  */
 public class LineDetails implements java.io.Serializable {
     private Integer id;
-    private int quantity;  
+    private int quantity;
 
     public LineDetails(Integer id, int quantity) {
         this.id = id;

@@ -69,7 +69,7 @@ public class ItemBean {
     }
 
     private List<ItemDetails> copyItemsToDetails(List<Item> items) {
-        List<ItemDetails> detailsList = new ArrayList();
+        List<ItemDetails> detailsList = new ArrayList<>();
         for (Item item : items) {
             ItemDetails itemDetails = new ItemDetails(item.getId(),
                     item.getQuantity()
