@@ -5,10 +5,12 @@
 package com.posn.nextgenpos.ejb;
 
 import com.posn.nextgenpos.common.ProductDetails;
+import com.posn.nextgenpos.entity.Category;
 import com.posn.nextgenpos.entity.Item;
 import com.posn.nextgenpos.entity.ProductSpecification;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Logger;
 import javax.ejb.EJBException;
@@ -22,12 +24,12 @@ import javax.persistence.PersistenceContext;
  */
 @Stateless
 public class ProductSpecificationBean {
-    
+
     private static final Logger LOG = Logger.getLogger(ProductSpecificationBean.class.getName());
     @PersistenceContext
     private EntityManager em;
-    
-    private List<ProductDetails> copyProductsToDetails(List<ProductSpecification> products) {
+
+    public List<ProductDetails> copyProductsToDetails(List<ProductSpecification> products) {
         List<ProductDetails> detailsList = new ArrayList();
         for (ProductSpecification product : products) {
             ProductDetails productDetails = new ProductDetails(product.getId(),
@@ -49,29 +51,28 @@ public class ProductSpecificationBean {
             throw new EJBException(ex);
         }
     }
-    
+
     public ProductDetails findById(Integer productId) {
         ProductSpecification productSpecification = em.find(ProductSpecification.class, productId);
         return new ProductDetails(productSpecification.getId(), productSpecification.getName(), productSpecification.getDescription(), productSpecification.getPricePerUnit());
     }
-    
-    public ProductDetails findByItemId(Integer itemId)
-    {
-        ProductSpecification productSpecification = (ProductSpecification)em.createQuery("SELECT p FROM ProductSpecification p WHERE p.item.id = :id").setParameter("id",itemId).getSingleResult();
+
+    public ProductDetails findByItemId(Integer itemId) {
+        ProductSpecification productSpecification = (ProductSpecification) em.createQuery("SELECT p FROM ProductSpecification p WHERE p.item.id = :id").setParameter("id", itemId).getSingleResult();
         return new ProductDetails(productSpecification.getId(), productSpecification.getName(), productSpecification.getDescription(), productSpecification.getPricePerUnit());
     }
-    
+
     public void createProductSpecification(String name, String description, Double pricePerUnit, Integer itemId) {
         LOG.info("createProductSpecification");
         ProductSpecification productSpecification = new ProductSpecification();
         productSpecification.setName(name);
         productSpecification.setDescription(description);
         productSpecification.setPricePerUnit(pricePerUnit);
-        
+
         Item item = em.find(Item.class, itemId);
         item.setProductSpecification(productSpecification);
         productSpecification.setItem(item);
-        
+
         em.persist(productSpecification);
     }
 
@@ -81,26 +82,31 @@ public class ProductSpecificationBean {
         productSpecification.setName(name);
         productSpecification.setDescription(description);
         productSpecification.setPricePerUnit(pricePerUnit);
-        
+
         //normal s-ar sterge legatura cu vechiul Item cand avem CASCADE ALL la tabele
-        
         Item item = em.find(Item.class, itemId);
         item.setProductSpecification(productSpecification);
         productSpecification.setItem(item);
     }
-    
-    public void deleteProductSpecificationByIds(Collection<Integer> productId) 
-    {
+
+    public void deleteProductSpecificationByIds(Collection<Integer> productId) {
         LOG.info("deleteProductSpecificationByIds");
         for (Integer id : productId) {
             ProductSpecification productSpecification = em.find(ProductSpecification.class, id);
+
+            Collection<Category> categories = productSpecification.getCategory();
+            Iterator<Category> i = categories.iterator();
+            while (i.hasNext()) {
+                Category category = (Category) i.next();
+                category.dropProduct(productSpecification);
+            }
             em.remove(productSpecification);
         }
     }
 
     public void deleteProductSpecificationByItemIds(List<Integer> itemIds) {
         for (Integer id : itemIds) {
-            ProductSpecification productSpecification = (ProductSpecification)em.createQuery("SELECT p FROM ProductSpecification p WHERE p.item.id = :id").setParameter("id",id).getSingleResult();
+            ProductSpecification productSpecification = (ProductSpecification) em.createQuery("SELECT p FROM ProductSpecification p WHERE p.item.id = :id").setParameter("id", id).getSingleResult();
             em.remove(productSpecification);
         }
     }
