@@ -13,6 +13,9 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarCollapse">
                 <ul class="navbar-nav me-auto mb-2 mb-md-0">
+                    <li class="nav-item ${activePage eq 'Catalogs' ? 'active' : ''}">
+                        <a class="nav-link" href="${pageContext.request.contextPath}/Catalogs">Catalogs</a>
+                    </li>
                     <li class="nav-item ${activePage eq 'Items' ? 'active' : ''}">
                         <a class="nav-link" href="${pageContext.request.contextPath}/Items">Items</a>
                     </li>
