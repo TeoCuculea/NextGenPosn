@@ -16,12 +16,11 @@
         <tr>
             <th>Sale ID</th>
             <th>Date</th>
-            <th>IsComplete</th>
+            <th>Is Complete</th>
             <th>Change</th>
             <th>Total</th>
-            
-            <!-- comment<th>Sale Payment_ID</th> <th>Payment_ID</th>
-            <th>Payment Amount</th>-->
+            <th>Payment_ID</th>
+            <th>Payment Amount</th>
         </tr>
         <c:forEach var="sale" items="${sales}" varStatus="status">
             <tr>
@@ -30,9 +29,8 @@
                 <td>${sale.isComplete}</td> 
                 <td>${sale.change}</td> 
                 <td>${sale.total}</td> 
-                
-                <!-- <td>{sale.getPayment}</td> comment<td>{payment.id}</td>
-                <td>{payment.amount}</td>-->
+                <td>{payment[status.index].id}</td>
+                <td>{payment[status.index].amount}</td>
         </tr>
     </c:forEach>
 </table>
