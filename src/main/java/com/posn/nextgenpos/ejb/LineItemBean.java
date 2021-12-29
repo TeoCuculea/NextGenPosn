@@ -47,7 +47,7 @@ public class LineItemBean {
     public List<LineDetails> getAllLineItem(){
         LOG.info("getAllItems");
         try {
-            List<SaleLineItem> lineItems = (List<SaleLineItem>) em.createQuery("SELECT i FROM Sale_Line_Item i").getResultList();
+            List<SaleLineItem> lineItems = (List<SaleLineItem>) em.createQuery("SELECT i FROM SaleLineItem i").getResultList();
             return copyLineItemsToDetails(lineItems);
         } catch (Exception ex) {
             throw new EJBException(ex);
@@ -64,7 +64,7 @@ public class LineItemBean {
     public void deleteLineItemBySaleId(Integer saleId){
         LOG.info("deleteLineItemBySaleId");
         
-        List<SaleLineItem> lineItems = em.createQuery("SELECT i FROM SALE_LINE_ITEMS i WHERE i.sale.id =:id ").setParameter("id", saleId).getResultList();
+        List<SaleLineItem> lineItems = em.createQuery("SELECT i FROM SaleLineItem i WHERE i.sale.id =:id").setParameter("id", saleId).getResultList();
         for(SaleLineItem item:lineItems){
             em.remove(item);
         }
