@@ -3,6 +3,8 @@
     Created on : 24-Nov-2021, 12:14:41
     Author     : teodo
 --%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
 
 <div class="container">
     <nav class="navbar navbar-expand-md navbar-dark bg-dark">
