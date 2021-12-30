@@ -10,7 +10,23 @@
 <t:pageTemplate pageTitle="Users">
     <h1>Users</h1>
     <form method="POST" action="${pageContext.request.contextPath}/Users">
-        <a class="btn btn-primary btn-lg" href="${pageContext.request.contextPath}/Users/Create" role="button">Add User</a>
+        <a class="btn btn-primary btn-lg" href="${pageContext.request.contextPath}/Users/Create" role="button">Add
+            User</a>
+        <div class="row">
+            <div class="col-md-3">
+                <h3> Checkbox</h3>
+            </div>
+            <div class="col-md-3">
+                <h3>Username</h3>
+            </div>
+            <div class="col-md-3">
+                <h3>Email</h3>
+            </div>
+            <div class="col-md-3">
+                <h3>Position</h3>
+            </div>
+        </div>
+
         <c:forEach var="user" items="${users}" varStatus="status">
             <div class="row">
                 <div class="col-md-3">
