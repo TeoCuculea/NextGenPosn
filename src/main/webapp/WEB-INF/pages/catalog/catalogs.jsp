@@ -21,15 +21,15 @@
                         <th>Pret/<br>bucata[RON]</th> 
                     </tr>
                     <a class="btn btn-primary btn-lg" href="${pageContext.request.contextPath}/Catalogs/AddFilter" role="button">Filters</a>
-                    <button class="btn btn-danger" type="submit">Delete filters</button>
+                    <button class="btn btn-danger" type="submit">Delete filters</button> 
                     <c:forEach var="itemSpec" items="${itemSpecs}" varStatus="status">
                         <tr>
                         <div class="col-md">
-                            <td><button class="w3-button w3-large w3-circle w3-xlarge w3-ripple w3-black" style="z-index:0">+</button></td>
+                            <td><a href="${pageContext.request.contextPath}/Cart?id=${itemSpec.id}&quan=" onclick="this.href+=document.getElementById('quantity${itemSpec.id}').value" class="w3-button w3-large w3-circle w3-xlarge w3-ripple w3-black" style="z-index:0">+</a></td>
                         </div>
                         <div class="col-md-2">
                             <td><label for="quantity" >Cantitate</label>
-                                <input type="text" class="form-control" id="quantity" name="quantity" placeholder="" value="" required=""></td>
+                                <input type="text" class="form-control" id="quantity${itemSpec.id}" name="quantity" placeholder="" value="" required=""></td>
                             <div class="invalid-feedback">
                                 Quantity is required.
                             </div>
@@ -46,7 +46,7 @@
                         </tr>
                     </c:forEach>
                 </table>
-            </form>    
+            </form>
         </div> 
         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
             <form method="POST" action="${pageContext.request.contextPath}/ValidareCart"> 
@@ -58,23 +58,32 @@
                         <th>Pret/<br>bucata[RON]</th> 
                         <th>Subtotal[RON]</th>
                     </tr>
-                    <c:forEach var="itemSpecs" items="${cart}" varStatus="status">     
-                        <tr><div class="col-md">
-                            <td><input type="checkbox" name="item_ids" value="${item.id}" /><td>
-                        </div>
-                        <div class="col-md-2">
-                            <td>${itemSpecs.name}<td>
-                        </div>
-                        <div class="col-md-2">
-                            <td>${itemSpecs.pricePerUnit}<td>
-                        </div>
+                    <c:forEach var="itemSpecs" items="${cartItemSpecs}" varStatus="status">     
+                        <tr>
+                            <div class="col-md">
+                                <td><a <a href="${pageContext.request.contextPath}/DeleteFromCart?id=${cartItem[status.index].id}">-</a></td>
+                            </div>
+                            <div>
+                                <td id="cartQuantity{itemSpecs.id}">
+                                    ${cartItem[status.index].quantity}
+                                </td>
+                            </div>
+                            <div class="col-md-2">
+                                <td>${itemSpecs.name}</td>
+                            </div>
+                            <div class="col-md-2">
+                                <td>${itemSpecs.pricePerUnit}</td>
+                            </div>
+                            <div>
+                                <td ${total=total + itemSpecs.pricePerUnit * cartItem[status.index].quantity}>
+                                    ${itemSpecs.pricePerUnit * cartItem[status.index].quantity}
+                                </td>
+                            </div>
                         </tr>
-                        <!--  camp subtotal la fiecare item eventual
-                        jos de tot totalul si buton de mergem mai departe/validiare-->
                     </c:forEach>
                 </table>
                 <div style="text-align:center">
-                    Total:
+                    Total:${total}
                 </div>
                 <div style="text-align:center">
                     <a class="btn btn-primary btn-lg" href="${pageContext.request.contextPath}/Catalogs/Payment" role="button" padding = "100px">Spre plata</a>

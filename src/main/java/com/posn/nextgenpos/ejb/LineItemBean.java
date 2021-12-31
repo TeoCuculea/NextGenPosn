@@ -5,6 +5,7 @@
 package com.posn.nextgenpos.ejb;
 
 import com.posn.nextgenpos.common.LineDetails;
+import com.posn.nextgenpos.common.ProductDetails;
 import com.posn.nextgenpos.entity.ProductSpecification;
 import com.posn.nextgenpos.entity.Sale;
 import com.posn.nextgenpos.entity.SaleLineItem;
@@ -13,6 +14,7 @@ import java.util.List;
 import java.util.logging.Logger;
 import javax.ejb.EJBException;
 import javax.ejb.Stateless;
+import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
@@ -26,6 +28,9 @@ public class LineItemBean {
     private static final Logger LOG = Logger.getLogger(ItemBean.class.getName());
     @PersistenceContext
     private EntityManager em;
+    
+    @Inject
+    ProductSpecificationBean prodSpecsBean;
     
     // Add business logic below. (Right-click in editor and choose
     // "Insert Code > Add Business Method")
@@ -54,6 +59,31 @@ public class LineItemBean {
         }
     }
 
+    public List<LineDetails> getAllBySaleId(Integer saleId){
+        LOG.info("getAllItems");
+        try {
+            List<SaleLineItem> lineItems = (List<SaleLineItem>) em.createQuery("SELECT i FROM SaleLineItem i WHERE i.sale.id = :id").setParameter("id", saleId).getResultList();
+            return copyLineItemsToDetails(lineItems);
+        } catch (Exception ex) {
+            throw new EJBException(ex);
+        }}
+    
+    public List<ProductDetails> getAllProductSpecificationsBySaleId(Integer saleId)
+    {
+        LOG.info("getAllProductSpecificationsBySaleId");
+        List<ProductSpecification> prodSpecsList = new ArrayList<>();
+        try{
+            List<SaleLineItem> lineItemsList = (List<SaleLineItem>) em.createQuery("SELECT i FROM SaleLineItem i WHERE i.sale.id = :id").setParameter("id", saleId).getResultList();
+            for(SaleLineItem lineItem:lineItemsList){
+                prodSpecsList.add(lineItem.getProdSpecs());
+            }
+            return prodSpecsBean.copyProductsToDetails(prodSpecsList);
+        }
+        catch(Exception ex){
+            throw new EJBException(ex);
+        }
+    }
+    
     public void deleteLineItemById(Integer lineItemId){
         LOG.info("deleteLineItemById");
         

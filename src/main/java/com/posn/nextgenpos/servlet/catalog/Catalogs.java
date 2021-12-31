@@ -4,7 +4,9 @@
  */
 package com.posn.nextgenpos.servlet.catalog;
 
+import com.posn.nextgenpos.common.LineDetails;
 import com.posn.nextgenpos.common.ProductDetails;
+import com.posn.nextgenpos.ejb.LineItemBean;
 import com.posn.nextgenpos.ejb.ProductCatalogBean;
 import com.posn.nextgenpos.ejb.ProductSpecificationBean;
 import java.io.IOException;
@@ -28,6 +30,9 @@ public class Catalogs extends HttpServlet {
     
     @Inject
     private ProductSpecificationBean prodSpecsBean;
+    
+    @Inject 
+    LineItemBean lineItemBean;
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -53,6 +58,13 @@ public class Catalogs extends HttpServlet {
         request.setAttribute("activePage", "Catalogs");
         List<ProductDetails> itemSpecs = prodSpecsBean.getAllProductSpecifications();
         request.setAttribute("itemSpecs", itemSpecs);
+        
+        List<LineDetails> lineItemDetails = lineItemBean.getAllBySaleId(1);
+        List<ProductDetails> prodSpecs = lineItemBean.getAllProductSpecificationsBySaleId(1);
+        
+        request.setAttribute("cartItem", lineItemDetails);
+        request.setAttribute("cartItemSpecs", prodSpecs);
+        
         request.getRequestDispatcher("/WEB-INF/pages/catalog/catalogs.jsp").forward(request, response);
     }
     /**
