@@ -10,7 +10,7 @@
 <t:pageTemplate pageTitle="Add Item">
     <h1>Add Item</h1>
     <form class="needs-validation"  novalidate="" method="POST" action="${pageContext.request.contextPath}/Items/AddItem">
-         <div class="row">
+        <div class="row">
             <div class="col-md-2">
                 <label for="name">Name</label>
                 <input type="text" class="form-control" id="name" name="name" placeholder="" value="" required="">
@@ -39,7 +39,19 @@
                     Price is required.
                 </div>
             </div>
-            
+            <div class="col-md-2">
+                <label for="category_id">Category</label>
+                <select class="custom-select d-block w-100" id="category_id" name="category_id" required="">
+                    <option value="">Choose...</option>
+                    <c:forEach var="category" items="${category}" varStatus="status">
+                        <option value="${category.id}">${category.categoryName}</option>
+                    </c:forEach>
+                </select>
+                <div class="invalid-feedback">
+                    Please select a category.
+                </div>
+            </div>
+
         </div>
 
         <hr class="col-md-12">
@@ -47,7 +59,7 @@
     </form>
 
     <script>
-    // Example starter JavaScript for disabling form submissions if there are invalid fields
+        // Example starter JavaScript for disabling form submissions if there are invalid fields
         (function () {
             'use strict';
 

@@ -30,7 +30,7 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author teodo
  */
-@DeclareRoles({"Admin", "Casier", "DirectorGeneral"})
+/*@DeclareRoles({"Admin", "Casier", "DirectorGeneral"})
 @ServletSecurity(
 //atributul value din adnotarea de mai jos ne permite sa setam ce roluri au drepturi/voie sa vada pagina aceasta, respectiva.
         value = @HttpConstraint(rolesAllowed = {"Admin"})
@@ -44,7 +44,7 @@ import javax.servlet.http.HttpServletResponse;
 //                        value = "GET", rolesAllowed = {"ClientRole"}
 //                )
 //        }
-)
+)*/
 @WebServlet(name = "Users", urlPatterns = {"/Users"})
 public class Users extends HttpServlet {
 

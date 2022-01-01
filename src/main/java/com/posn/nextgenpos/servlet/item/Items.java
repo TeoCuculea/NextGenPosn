@@ -4,12 +4,15 @@
  */
 package com.posn.nextgenpos.servlet.item;
 
+import com.posn.nextgenpos.common.CategoryDetails;
 import com.posn.nextgenpos.common.ItemDetails;
 import com.posn.nextgenpos.common.ProductDetails;
+import com.posn.nextgenpos.ejb.CategoryBean;
 import com.posn.nextgenpos.ejb.ItemBean;
 import com.posn.nextgenpos.ejb.ProductSpecificationBean;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import javax.annotation.security.DeclareRoles;
 import javax.inject.Inject;
@@ -26,16 +29,19 @@ import javax.servlet.http.HttpServletResponse;
  * @author teodo
  */
 @DeclareRoles({"Admin"})
-@ServletSecurity(value= @HttpConstraint(rolesAllowed = {"Admin"}))
+@ServletSecurity(value = @HttpConstraint(rolesAllowed = {"Admin"}))
 @WebServlet(name = "Items", urlPatterns = {"/Items"})
 public class Items extends HttpServlet {
 
     @Inject
     private ItemBean itemBean;
-    
+
     @Inject
     private ProductSpecificationBean prodSpecsBean;
-    
+
+    @Inject
+    private CategoryBean categoryBean;
+
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -58,11 +64,18 @@ public class Items extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        request.setAttribute("activePage","Items");
+        request.setAttribute("activePage", "Items");
         List<ItemDetails> items = itemBean.getAllItems();
         request.setAttribute("items", items);
         List<ProductDetails> itemSpecs = prodSpecsBean.getAllProductSpecifications();
         request.setAttribute("itemSpecs", itemSpecs);
+        List<Integer> productIds = prodSpecsBean.getAllIds(itemSpecs);
+        List<CategoryDetails> category = new ArrayList<>();
+        productIds.stream().map(productId -> categoryBean.findByProductId(productId)).forEachOrdered(cat -> {
+            category.add(cat);
+        });
+        //categorii din tabelul combinat
+        request.setAttribute("categories", category);
         request.getRequestDispatcher("/WEB-INF/pages/item/items.jsp").forward(request, response);
     }
 
@@ -77,17 +90,19 @@ public class Items extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-         String[] itemIdsAsString = request.getParameterValues("item_ids");
-        if(itemIdsAsString!=null)
-        {
-            List<Integer> itemIds = new ArrayList<>();
-            for(String ids : itemIdsAsString)
-            {
-                itemIds.add(Integer.parseInt(ids));  
+        String[] itemIdsAsString = request.getParameterValues("item_ids");
+        if (itemIdsAsString != null) {
+            //List<Integer> itemIds = new ArrayList<>();
+            List<Integer> productIds = new ArrayList<>();
+            for (String ids : itemIdsAsString) {
+                //itemIds.add(Integer.parseInt(ids));
+                ProductDetails prod = prodSpecsBean.findByItemId(Integer.parseInt(ids));
+                productIds.add(prod.getId());
             }
-            prodSpecsBean.deleteProductSpecificationByItemIds(itemIds);
+            //itemBean.deleteItemsByIds(itemIds);
+            prodSpecsBean.deleteProductSpecificationByIds(productIds);
         }
-        response.sendRedirect(request.getContextPath()+"/Items");
+        response.sendRedirect(request.getContextPath() + "/Items");
     }
 
     /**
@@ -97,7 +112,7 @@ public class Items extends HttpServlet {
      */
     @Override
     public String getServletInfo() {
-        return "Items";
+        return "Items v1.0";
     }// </editor-fold>
 
 }

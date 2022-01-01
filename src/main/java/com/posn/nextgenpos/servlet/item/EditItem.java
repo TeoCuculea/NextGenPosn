@@ -4,8 +4,10 @@
  */
 package com.posn.nextgenpos.servlet.item;
 
+import com.posn.nextgenpos.common.CategoryDetails;
 import com.posn.nextgenpos.common.ItemDetails;
 import com.posn.nextgenpos.common.ProductDetails;
+import com.posn.nextgenpos.ejb.CategoryBean;
 import com.posn.nextgenpos.ejb.ItemBean;
 import com.posn.nextgenpos.ejb.ProductSpecificationBean;
 import java.io.IOException;
@@ -43,25 +45,26 @@ public class EditItem extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     @Inject
-    ItemBean itemBean;
+    private ItemBean itemBean;
 
     @Inject
     private ProductSpecificationBean prodSpecsBean;
     
+    @Inject 
+    private CategoryBean categoryBean;
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        List<ItemDetails> items = itemBean.getAllItems();
-        request.setAttribute("items", items);
-      
-
-        int itemId = Integer.parseInt(request.getParameter("id"));
-        
+        List<CategoryDetails> categories = categoryBean.getAllCategories();
+        request.setAttribute("categories", categories);
+        int itemId = Integer.parseInt(request.getParameter("id")); 
+        //int categoryId = Integer.parseInt(request.getParameter("categoryId")); 
         ItemDetails item = itemBean.findById(itemId);
         ProductDetails prodDetails = prodSpecsBean.findByItemId(itemId);
+        CategoryDetails category = categoryBean.findByProductId(prodDetails.getId());
         request.setAttribute("item", item);
         request.setAttribute("itemSpecs",prodDetails);
-        
+        request.setAttribute("category", category);
         request.getRequestDispatcher("/WEB-INF/pages/item/editItem.jsp").forward(request, response);
     }
 
@@ -78,15 +81,15 @@ public class EditItem extends HttpServlet {
             throws ServletException, IOException {
         Integer quantity = Integer.parseInt(request.getParameter("quantity"));
         Integer itemId = Integer.parseInt(request.getParameter("item_id"));
-
         itemBean.updateItem(itemId, quantity);
+        
         String name = request.getParameter("name");
         String description = request.getParameter("description");
         Double price = Double.parseDouble(request.getParameter("priceperunit"));
         Integer productId = Integer.parseInt(request.getParameter("product_id"));
+        Integer categoryId = Integer.parseInt(request.getParameter("category_id"));
+        prodSpecsBean.updateProductSpecification(productId,name,description,price,itemId, categoryId);
         
-        itemBean.updateItem(itemId, quantity);
-        prodSpecsBean.updateProductSpecification(productId,name,description,price,itemId);
         response.sendRedirect(request.getContextPath() + "/Items");
     }
 
@@ -97,7 +100,7 @@ public class EditItem extends HttpServlet {
      */
     @Override
     public String getServletInfo() {
-        return "Short description";
+        return "Edit Item v1.0";
     }// </editor-fold>
 
 }

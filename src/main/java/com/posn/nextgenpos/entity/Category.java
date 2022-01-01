@@ -6,6 +6,7 @@ package com.posn.nextgenpos.entity;
 
 import java.io.Serializable;
 import java.util.Collection;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -29,7 +30,8 @@ public class Category implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name="id")
     private Integer id;
-
+    private String categoryName;
+    
     @ManyToMany
     @JoinTable(
             name="CATEGORY_PRODUCT_SPECIFICATION",
@@ -39,8 +41,6 @@ public class Category implements Serializable {
                     @JoinColumn(name="PRODUCT_SPECIFICATION_ID",referencedColumnName="ID")
     )
     Collection<ProductSpecification> productSpecification;
-    
-    private String categoryName;
     
     public Integer getId() {
         return id;

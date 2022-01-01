@@ -34,8 +34,8 @@ public class ProductSpecification implements Serializable {
     private String description;
     private Double pricePerUnit;
     
-    @ManyToMany(mappedBy="productSpecification")
-    private Collection<Category> category;
+    @ManyToMany( mappedBy="productSpecification")
+    private Collection<Category> categories;
     
     public Integer getId() {
         return id;
@@ -92,22 +92,22 @@ public class ProductSpecification implements Serializable {
 //        this.lineItem = lineItem;
 //    }
 
-    public Collection<Category> getCategory() {
-        return category;
+    public Collection<Category> getCategories() {
+        return categories;
     }
 
-    public void setCategory(Collection<Category> category) {
-        this.category = category;
+    public void setCategory(Collection<Category> categories) {
+        this.categories = categories;
     }
     
     public void addCategory(Category category)
     {
-        this.getCategory().add(category);
+        this.getCategories().add(category);
     }
     
     public void dropCategory(Category category)
     {
-        this.getCategory().remove(category);
+        this.getCategories().remove(category);
     }
     
     @Override

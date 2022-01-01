@@ -10,7 +10,7 @@
 <t:pageTemplate pageTitle="Edit Item">
     <h1>Edit Item</h1>
     <form class="needs-validation"  novalidate="" method="POST" action="${pageContext.request.contextPath}/Items/EditItem">
-         <div class="row">
+        <div class="row">
             <div class="col-md">
                 <label for="name">Name</label>
                 <input type="text" class="form-control" id="name" name="name" placeholder="" value="${itemSpecs.name}" required="">
@@ -40,15 +40,28 @@
                 </div>
             </div>
         </div>
+        <div class="col-md-2">
+            <label for="category_id">Category</label>
+            <select class="custom-select d-block w-100" id="category_id" name="category_id" required="">
+                <option value="">${category.categoryName}</option>
+                <c:forEach var="category" items="${categories}" varStatus="status">
+                    <option value="${category.id}">${category.categoryName}</option>
+                </c:forEach>
+            </select>
+            <div class="invalid-feedback">
+                Please select a category.
+            </div>
+        </div>
         <input type="hidden" name="item_id" value="${item.id}"/>
         <input type="hidden" name="product_id" value="${itemSpecs.id}"/>
+        <input type="hidden" name="category_id" value="${category.id}"/>
         <hr class="col-md-12">
-        
+
         <button class="btn btn-primary btn-lg btn-block col-md-12" type="submit">Save</button>
     </form>
 
     <script>
-    // Example starter JavaScript for disabling form submissions if there are invalid fields
+        // Example starter JavaScript for disabling form submissions if there are invalid fields
         (function () {
             'use strict';
 

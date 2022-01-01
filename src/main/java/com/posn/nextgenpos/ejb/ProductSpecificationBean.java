@@ -62,7 +62,7 @@ public class ProductSpecificationBean {
         return new ProductDetails(productSpecification.getId(), productSpecification.getName(), productSpecification.getDescription(), productSpecification.getPricePerUnit());
     }
 
-    public void createProductSpecification(String name, String description, Double pricePerUnit, Integer itemId) {
+    public void createProductSpecification(String name, String description, Double pricePerUnit, Integer itemId, Integer categoryId) {
         LOG.info("createProductSpecification");
         ProductSpecification productSpecification = new ProductSpecification();
         productSpecification.setName(name);
@@ -73,10 +73,13 @@ public class ProductSpecificationBean {
         item.setProductSpecification(productSpecification);
         productSpecification.setItem(item);
 
+        Category category = em.find(Category.class, categoryId);
+        category.addProduct(productSpecification);
+        productSpecification.setCategory(productSpecification.getCategories());
         em.persist(productSpecification);
     }
 
-    public void updateProductSpecification(Integer productId, String name, String description, Double pricePerUnit, Integer itemId) {
+    public void updateProductSpecification(Integer productId, String name, String description, Double pricePerUnit, Integer itemId, Integer categoryId) {
         LOG.info("updateProductSpecification");
         ProductSpecification productSpecification = em.find(ProductSpecification.class, productId);
         productSpecification.setName(name);
@@ -87,6 +90,19 @@ public class ProductSpecificationBean {
         Item item = em.find(Item.class, itemId);
         item.setProductSpecification(productSpecification);
         productSpecification.setItem(item);
+
+        List<Category> oldCategory =  (List<Category>) productSpecification.getCategories() ;
+        LOG.info(oldCategory.get(0).getCategoryName()+"---------");
+        oldCategory.get(0).dropProduct(productSpecification);
+        productSpecification.dropCategory(oldCategory.get(0));
+        
+        Category category = em.find(Category.class, categoryId);
+         LOG.info(category.getCategoryName()+"XXXXXXXXXXXX");
+        category.addProduct(productSpecification);
+        //category.setProductSpecification(category.getProductSpecification());
+        productSpecification.addCategory(category);
+        //productSpecification.setCategory(productSpecification.getCategories());
+
     }
 
     public void deleteProductSpecificationByIds(Collection<Integer> productId) {
@@ -94,7 +110,7 @@ public class ProductSpecificationBean {
         for (Integer id : productId) {
             ProductSpecification productSpecification = em.find(ProductSpecification.class, id);
 
-            Collection<Category> categories = productSpecification.getCategory();
+            Collection<Category> categories = productSpecification.getCategories();
             Iterator<Category> i = categories.iterator();
             while (i.hasNext()) {
                 Category category = (Category) i.next();
@@ -109,5 +125,19 @@ public class ProductSpecificationBean {
             ProductSpecification productSpecification = (ProductSpecification) em.createQuery("SELECT p FROM ProductSpecification p WHERE p.item.id = :id").setParameter("id", id).getSingleResult();
             em.remove(productSpecification);
         }
+    }
+
+    public List<Integer> getAllIds(List<ProductDetails> itemSpecs) {
+        List<Integer> productIds = new ArrayList<>();
+        try {
+            Iterator<ProductDetails> i = itemSpecs.iterator();
+            while (i.hasNext()) {
+                ProductDetails prod = (ProductDetails) i.next();
+                productIds.add(prod.getId());
+            }
+        } catch (Exception ex) {
+            throw new EJBException(ex);
+        }
+        return productIds;
     }
 }
