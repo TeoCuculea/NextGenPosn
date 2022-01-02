@@ -4,8 +4,8 @@
  */
 package com.posn.nextgenpos.classes;
 
-import com.posn.nextgenpos.classes.ProductCatalog;
 import com.posn.nextgenpos.classes.Register;
+import com.posn.nextgenpos.entity.ProductCatalog;
 import java.util.ArrayList;
 import java.util.List;
 

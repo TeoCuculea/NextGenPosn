@@ -2,16 +2,16 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
-package com.posn.nextgenpos.servlet.item;
+package com.posn.nextgenpos.servlet.category;
 
 import com.posn.nextgenpos.common.CategoryDetails;
 import com.posn.nextgenpos.ejb.CategoryBean;
-import com.posn.nextgenpos.ejb.ItemBean;
-import com.posn.nextgenpos.ejb.ProductSpecificationBean;
 import java.io.IOException;
 import java.util.List;
 import javax.inject.Inject;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.HttpConstraint;
+import javax.servlet.annotation.ServletSecurity;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -21,18 +21,12 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author teodo
  */
-//@ServletSecurity( value = @HttpConstraint(rolesAllowed = { "AdminRole"}))
-@WebServlet(name = "AddItem", urlPatterns = {"/Items/AddItem"})
-public class AddItem extends HttpServlet {
+@ServletSecurity(value= @HttpConstraint(rolesAllowed = {"Admin"}))
+@WebServlet(name = "AddCategory", urlPatterns = {"/Categories/AddCategory"})
+public class AddCategory extends HttpServlet {
 
     @Inject
-    ItemBean itemBean;
-    
-    @Inject
-    private ProductSpecificationBean prodSpecsBean;
-    
-    @Inject
-    private CategoryBean categoryBean;
+    CategoryBean categoryBean;
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -55,9 +49,7 @@ public class AddItem extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        List<CategoryDetails> category = categoryBean.getAllCategories();
-        request.setAttribute("category", category);
-        request.getRequestDispatcher("/WEB-INF/pages/item/addItem.jsp").forward(request, response);
+        request.getRequestDispatcher("/WEB-INF/pages/category/addCategory.jsp").forward(request, response);
     }
 
     /**
@@ -71,15 +63,9 @@ public class AddItem extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        Integer quantity = Integer.parseInt(request.getParameter("quantity"));        
         String name = request.getParameter("name");
-        String description = request.getParameter("description");
-        Double price = Double.parseDouble(request.getParameter("priceperunit"));
-        Integer categoryId = Integer.parseInt(request.getParameter("category_id"));
-        Integer itemId = itemBean.createItem(quantity);
-        prodSpecsBean.createProductSpecification(name, description, price,itemId, categoryId);
-        
-        response.sendRedirect(request.getContextPath()+ "/Items");//ma intoarce inapoi in pagina Items     
+        categoryBean.createCategory(name);
+        response.sendRedirect(request.getContextPath()+ "/Categories");
     }
 
     /**
@@ -89,7 +75,7 @@ public class AddItem extends HttpServlet {
      */
     @Override
     public String getServletInfo() {
-        return "Add Item 1.0";
+        return "Short description";
     }// </editor-fold>
 
 }

@@ -10,32 +10,29 @@
 <t:pageTemplate pageTitle="Items">
     <h1>Items</h1>
     <form method="POST" action="${pageContext.request.contextPath}/Items">
+        <table name="items" width="100%">
+            <th>Select <br>Item</th>
+            <th>Item Id</th>
+            <th>Name</th>
+            <th>Quantity</th>
+            <th>Description</th>
+            <th>Price/<br>Item[RON]</th>
+            <th>Category</th>
+            <th>Edit</th>
         <a class="btn btn-primary btn-lg" href="${pageContext.request.contextPath}/Items/AddItem" role="button">Add item</a>
         <button class="btn btn-danger" type="submit">Delete Items</button>
         <c:forEach var="item" items="${items}" varStatus="status">
-             <div class="row">
-                <div class="col-md">
-                    <input type="checkbox" name="item_ids" value="${item.id}"/>
-                </div>
-                 <div class="col-md">
-                    ${item.id}
-                </div>
-                <div class="col-md-2">
-                    ${itemSpecs[status.index].name}
-                </div>
-                <div class="col-md-2">
-                    ${item.quantity}
-                </div>
-                <div class="col-md-2">
-                    ${itemSpecs[status.index].description}
-                </div>
-                <div class="col-md-2">
-                    ${itemSpecs[status.index].pricePerUnit}
-                </div>
-                <div class="col-md-3">
-                    <a class="btn btn-secondary" href="${pageContext.request.contextPath}/Items/EditItem?id=${item.id}" role="button">Edit Item</a>
-                </div>
-            </div>
+            <tr>
+                    <td><input type="checkbox" name="item_ids" value="${item.id}"/></td>
+                    <td>${item.id}</td>
+                    <td>${itemSpecs[status.index].name}</td>
+                    <td>${item.quantity}</td>
+                    <td>${itemSpecs[status.index].description}</td>
+                    <td>${itemSpecs[status.index].pricePerUnit}</td>
+                    <td>${categories[status.index].categoryName}</td>
+                    <td><a class="btn btn-secondary" href="${pageContext.request.contextPath}/Items/EditItem?id=${item.id}" role="button">Edit Item</a></td>
+        </tr>
         </c:forEach>
+        </table>
     </form>
 </t:pageTemplate>

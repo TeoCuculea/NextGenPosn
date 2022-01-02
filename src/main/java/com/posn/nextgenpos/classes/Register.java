@@ -4,6 +4,7 @@
  */
 package com.posn.nextgenpos.classes;
 
+import com.posn.nextgenpos.entity.ProductCatalog;
 import com.posn.nextgenpos.entity.ProductSpecification;
 import com.posn.nextgenpos.entity.Sale;
 

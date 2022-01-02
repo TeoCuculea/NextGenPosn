@@ -18,6 +18,8 @@ import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
+import javax.persistence.TypedQuery;
 
 /**
  *
@@ -46,14 +48,14 @@ public class CategoryBean {
     public List<CategoryDetails> getAllCategories() {
         LOG.info("getAllCategories");
         try {
-            List<Category> categories = (List<Category>) em.createQuery("SELECT c from Category c").getResultList();
+            List<Category> categories = (List<Category>) em.createQuery("SELECT c FROM Category c").getResultList();
             return copyCategoriesToDetails(categories);
         } catch (Exception ex) {
             throw new EJBException(ex);
         }
     }
 
-    public CategoryDetails getCategoryById(Integer categoryId) {
+    public CategoryDetails findById(Integer categoryId) {
         Category category = em.find(Category.class, categoryId);
         return new CategoryDetails(category.getId(), category.getCategoryName());
     }
@@ -80,7 +82,6 @@ public class CategoryBean {
 
     public void addProductToCategory(Integer categoryId, Integer productId) {
         LOG.info("addProductToCategory");
-
         try {
             Category category = em.find(Category.class, categoryId);
             ProductSpecification product = em.find(ProductSpecification.class, productId);
@@ -106,9 +107,9 @@ public class CategoryBean {
         }
     }
 
-    public void getAllProductsFromCategory(Integer categoryId) {
+    public List<ProductDetails> getAllProductsFromCategory(Integer categoryId) {
         LOG.info("getAllProductsFromCategory");
-        
+
         List<ProductDetails> productSpecificationList = null;
         try {
             Category category = em.find(Category.class, categoryId);
@@ -116,6 +117,7 @@ public class CategoryBean {
         } catch (Exception ex) {
             throw new EJBException(ex);
         }
+        return productSpecificationList;
     }
 
     public List<CategoryDetails> copyCategoriesToDetails(List<Category> categories) {
@@ -126,4 +128,59 @@ public class CategoryBean {
         }
         return detailsList;
     }
+
+    public void updateCategory(int categoryId, String name) {
+        LOG.info("updateCategory");
+        Category category = em.find(Category.class, categoryId);
+        category.setCategoryName(name);
+
+        //ProductSpecification prodSpecs = em.find(ProductSpecification.class, productId);
+        //prodSpecs.setCategory(category);
+        /*List<ProductSpecification> oldProdSpecs = (List<ProductSpecification>) category.getProductSpecification();
+        for(ProductSpecification oldProdSpec : oldProdSpecs)
+        {
+            oldProdSpec.getCategories().remove(category);
+        }
+        
+        ProductSpecification prodSpecs = em.find(ProductSpecification.class, productId );
+        prodSpecs.getCategories().add(category);
+        category.setProductSpecification(oldProdSpecs);  */
+    }
+
+    public List<CategoryDetails> getCategoriesOfProduct(Integer productId) {
+        LOG.info("getCategoriesOfProduct");
+        List<CategoryDetails> categoryList = null;
+        try {
+            ProductSpecification prod = em.find(ProductSpecification.class, productId);
+            categoryList = this.copyCategoriesToDetails((List<Category>) prod.getCategories());
+        } catch (Exception ex) {
+            throw new EJBException(ex);
+        }
+        return categoryList;
+    }
+
+    public CategoryDetails findByProductId(Integer productId) {
+        ProductSpecification prodSpec = em.find(ProductSpecification.class, productId);
+        if(!prodSpec.getCategories().isEmpty())
+        {
+            return copyCategoriesToDetails((List<Category>) prodSpec.getCategories()).get(0);
+        }
+        else
+            return null;
+        //Category category = (Category) em.createQuery("SELECT csp from CATEGORY_PRODUCT_SPECIFICATION csp WHERE csp.PRODUCT_SPECIFICATION_ID=: prodId ").setParameter("prodId", productId).getResultList();
+        //return new CategoryDetails(category.getId(), category.getCategoryName());
+    }
+
+    /*public List<CategoryDetails> getAllCategoriesofProducts() {
+        LOG.info("getAllCategories");
+        try {
+            //List<Category> categories = (List<Category>) em.createQuery("SELECT csp from CATEGORY_PRODUCT_SPECIFICATION csp").getResultList();
+            Query query = em.createQuery("SELECT csp FROM CATEGORY_PRODUCT_SPECIFICATION csp");
+            List<Category> categories = query.getResultList();
+
+            return copyCategoriesToDetails(categories);
+        } catch (Exception ex) {
+            throw new EJBException(ex);
+        }
+    }*/
 }
