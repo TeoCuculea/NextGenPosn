@@ -21,6 +21,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+        //PROBLEMS THAT REQUIRE ATTENTION
+
+//	1.request.isUserInRole('Casier') always returns false
+//		-some problem with the role, maybe its only local
+//	2.item page not showing category name
+//	3.save button from edit item not working
+//		maybe 2 and 3 are connected, in database the id's in tables are ok
+
 /**
  *
  * @author teodo
@@ -63,6 +71,7 @@ public class Catalogs extends HttpServlet {
             throws ServletException, IOException {
         request.setAttribute("activePage", "Catalogs");
         
+        request.setAttribute("trying",request.isUserInRole("Casier"));
         List<ProductDetails> itemSpecs = prodSpecsBean.getAllProductSpecifications();
         request.setAttribute("itemSpecs", itemSpecs);
         

@@ -47,8 +47,14 @@
                     </c:forEach>
                 </table>
             </form>
-        </div> 
+        </div>
+                    <div>
+                        Value returned from servlet 'request.isUserInRole("Casier")': ${trying}
+                        <br>
+                        Value from page of request.getRemoteUser(): ${pageContext.request.getRemoteUser()}
+                    </div>
         <c:if test="${pageContext.request.isUserInRole('Casier')}">
+            <div>The casier part is working.</div>
             <c:choose>
                 <c:when test="${sessionScope.sale !=null}" >
                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
