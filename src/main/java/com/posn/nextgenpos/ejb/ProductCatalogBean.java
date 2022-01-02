@@ -10,6 +10,7 @@ import com.posn.nextgenpos.entity.ProductCatalog;
 import com.posn.nextgenpos.entity.ProductSpecification;
 import java.util.List;
 import java.util.logging.Logger;
+import javax.ejb.EJBException;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -27,9 +28,30 @@ public class ProductCatalogBean {
     @PersistenceContext
     private EntityManager em;
 
-    public void createCatalog(List<ProductSpecification> productSpecification) {
+    public ProductCatalogDetails getCatalog() {
+        LOG.info("getCatalog");
+        try {
+            ProductCatalog catalog = (ProductCatalog) em.createQuery("SELECT p FROM ProductCatalog p").getSingleResult();
+            return copyCatalogToDetails(catalog);
+        } catch (Exception ex) {
+            throw new EJBException(ex);
+        }
+    }
+    /*public void createCatalog(List<ProductDetails> productSpecification) {
         LOG.info("createCatalog");
-        ProductCatalog catalog = new ProductCatalog();
+        ProductCatalog catalog = ProductCatalog.getInstance();
         catalog.setProductSpecification(productSpecification);
+        em.persist(catalog);
+    }*/
+    public void updateCatalog(List<ProductDetails> productSpecification) {
+        LOG.info("updateCatalog");
+        ProductCatalog catalog = (ProductCatalog) em.createQuery("SELECT p FROM ProductCatalog p").getSingleResult();
+        //ProductCatalog catalog = ProductCatalog.getInstance();
+        List<ProductDetails> ceva = catalog.getProductSpecification();
+        catalog.setProductSpecification(productSpecification);
+    }
+     public ProductCatalogDetails copyCatalogToDetails(ProductCatalog catalog) {
+        ProductCatalogDetails catalogDetail = new ProductCatalogDetails(catalog.getId(), catalog.getProductSpecification());
+        return catalogDetail;
     }
 }

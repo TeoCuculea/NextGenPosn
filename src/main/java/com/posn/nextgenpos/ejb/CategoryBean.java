@@ -109,8 +109,7 @@ public class CategoryBean {
 
     public List<ProductDetails> getAllProductsFromCategory(Integer categoryId) {
         LOG.info("getAllProductsFromCategory");
-
-        List<ProductDetails> productSpecificationList = null;
+        List<ProductDetails> productSpecificationList = new ArrayList<>();
         try {
             Category category = em.find(Category.class, categoryId);
             productSpecificationList = prodSpecBean.copyProductsToDetails((List<ProductSpecification>) category.getProductSpecification());
@@ -133,18 +132,6 @@ public class CategoryBean {
         LOG.info("updateCategory");
         Category category = em.find(Category.class, categoryId);
         category.setCategoryName(name);
-
-        //ProductSpecification prodSpecs = em.find(ProductSpecification.class, productId);
-        //prodSpecs.setCategory(category);
-        /*List<ProductSpecification> oldProdSpecs = (List<ProductSpecification>) category.getProductSpecification();
-        for(ProductSpecification oldProdSpec : oldProdSpecs)
-        {
-            oldProdSpec.getCategories().remove(category);
-        }
-        
-        ProductSpecification prodSpecs = em.find(ProductSpecification.class, productId );
-        prodSpecs.getCategories().add(category);
-        category.setProductSpecification(oldProdSpecs);  */
     }
 
     public List<CategoryDetails> getCategoriesOfProduct(Integer productId) {
@@ -170,17 +157,4 @@ public class CategoryBean {
         //Category category = (Category) em.createQuery("SELECT csp from CATEGORY_PRODUCT_SPECIFICATION csp WHERE csp.PRODUCT_SPECIFICATION_ID=: prodId ").setParameter("prodId", productId).getResultList();
         //return new CategoryDetails(category.getId(), category.getCategoryName());
     }
-
-    /*public List<CategoryDetails> getAllCategoriesofProducts() {
-        LOG.info("getAllCategories");
-        try {
-            //List<Category> categories = (List<Category>) em.createQuery("SELECT csp from CATEGORY_PRODUCT_SPECIFICATION csp").getResultList();
-            Query query = em.createQuery("SELECT csp FROM CATEGORY_PRODUCT_SPECIFICATION csp");
-            List<Category> categories = query.getResultList();
-
-            return copyCategoriesToDetails(categories);
-        } catch (Exception ex) {
-            throw new EJBException(ex);
-        }
-    }*/
 }

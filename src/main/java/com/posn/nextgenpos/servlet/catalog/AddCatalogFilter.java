@@ -5,17 +5,13 @@
 package com.posn.nextgenpos.servlet.catalog;
 
 import com.posn.nextgenpos.common.CategoryDetails;
-import com.posn.nextgenpos.common.ProductCatalogDetails;
 import com.posn.nextgenpos.common.ProductDetails;
 import com.posn.nextgenpos.ejb.CategoryBean;
 import com.posn.nextgenpos.ejb.ProductCatalogBean;
 import com.posn.nextgenpos.ejb.ProductSpecificationBean;
-import com.posn.nextgenpos.entity.ProductCatalog;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collectors;
 import javax.inject.Inject;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -27,21 +23,17 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author teodo
  */
-@WebServlet(name = "Catalogs", urlPatterns = {"/Catalogs"})
-public class Catalogs extends HttpServlet {
+@WebServlet(name = "AddCatalogFilter", urlPatterns = {"/Catalogs/AddCatalogFilter"})
+public class AddCatalogFilter extends HttpServlet {
 
     @Inject
-    private ProductCatalogBean productCatalogBean;
-
+    CategoryBean categoryBean;
+    
     @Inject
-    private ProductSpecificationBean prodSpecsBean;
-
+    ProductSpecificationBean prodSpecsBean;
+    
     @Inject
-    private CategoryBean categoryBean;
-
-    @Inject
-    private ProductCatalogBean prodCatBean;
-
+    ProductCatalogBean prodCatBean;
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -64,14 +56,9 @@ public class Catalogs extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        request.setAttribute("activePage", "Catalogs");
-        ProductCatalogDetails catalog = prodCatBean.getCatalog();
-        List<ProductDetails> itemSpecs = catalog.getProductSpecification();
-        prodCatBean.updateCatalog(itemSpecs);
-        request.setAttribute("itemSpecs", itemSpecs);
         List<CategoryDetails> categories = categoryBean.getAllCategories();
         request.setAttribute("categories", categories);
-        request.getRequestDispatcher("/WEB-INF/pages/catalog/catalogs.jsp").forward(request, response);
+        request.getRequestDispatcher("/WEB-INF/pages/catalog/addCatalogFilter.jsp").forward(request, response);
     }
 
     /**
@@ -85,35 +72,16 @@ public class Catalogs extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String buton = request.getParameter("delete");
-        String act = request.getParameter("sort");
-        if(buton == null)
-        {
-            //nu s-a apasat
-        }
-        else if(buton.equals("deleteFilters")){
-            List<ProductDetails> itemSpecs = prodSpecsBean.getAllProductSpecifications();
+        String[] itemIdsAsString = null;
+        itemIdsAsString = request.getParameterValues("category_ids");
+        if (itemIdsAsString != null) {
+            List<Integer> categoryIds = new ArrayList<>();
+            for (String ids : itemIdsAsString) {
+                CategoryDetails cat = categoryBean.findById(Integer.parseInt(ids));
+                categoryIds.add(cat.getId());
+            }
+            List<ProductDetails> itemSpecs = prodSpecsBean.getAllProductSpecificationsWithFilters(categoryIds);
             prodCatBean.updateCatalog(itemSpecs);
-        }
-        if (act == null) {
-            //nu s-a apasat butonul
-        } else if (act.equals("sortByName")) {
-            ProductCatalogDetails catalog = prodCatBean.getCatalog();
-            List<ProductDetails>itemSpecs = catalog.getProductSpecification()
-                    .stream()
-                    .sorted(Comparator.comparing(ProductDetails::getName))
-                    .collect(Collectors.toList());
-            prodCatBean.updateCatalog(itemSpecs);
-            request.setAttribute("itemSpecs", itemSpecs);
-        }
-        else if (act.equals("sortByPrice")) {
-            ProductCatalogDetails catalog = prodCatBean.getCatalog();
-            List<ProductDetails>itemSpecs = catalog.getProductSpecification()
-                    .stream()
-                    .sorted(Comparator.comparingDouble(ProductDetails::getPricePerUnit))
-                    .collect(Collectors.toList());
-            prodCatBean.updateCatalog(itemSpecs);
-            request.setAttribute("itemSpecs", itemSpecs);
         }
         response.sendRedirect(request.getContextPath() + "/Catalogs");
     }
@@ -125,7 +93,7 @@ public class Catalogs extends HttpServlet {
      */
     @Override
     public String getServletInfo() {
-        return "Catalog V1.0";
+        return "AddCatalogFilter v1.0";
     }// </editor-fold>
 
 }

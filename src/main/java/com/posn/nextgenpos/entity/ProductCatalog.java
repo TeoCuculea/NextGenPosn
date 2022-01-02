@@ -4,25 +4,30 @@
  */
 package com.posn.nextgenpos.entity;
 
+import com.posn.nextgenpos.common.ProductDetails;
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Table;
 
 /**
  *
  * @author teodo
  */
 @Entity
-public class ProductCatalog implements Serializable {
+@Table(name="CATALOG")
+public class ProductCatalog {
 
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    private List<ProductSpecification> productSpecification;
+    private List<ProductDetails> productSpecification;
+    //private static ProductCatalog instance;
+    
     public Long getId() {
         return id;
     }
@@ -31,15 +36,21 @@ public class ProductCatalog implements Serializable {
         this.id = id;
     }
 
+    /*public static ProductCatalog getInstance() {
+        if(instance == null)
+            instance = new ProductCatalog();
+        return instance;
+    }*/
+    
     public static long getSerialVersionUID() {
         return serialVersionUID;
     }
 
-    public List<ProductSpecification> getProductSpecification() {
+    public List<ProductDetails> getProductSpecification() {
         return productSpecification;
     }
 
-    public void setProductSpecification(List<ProductSpecification> productSpecification) {
+    public void setProductSpecification(List<ProductDetails> productSpecification) {
         this.productSpecification = productSpecification;
     }
     

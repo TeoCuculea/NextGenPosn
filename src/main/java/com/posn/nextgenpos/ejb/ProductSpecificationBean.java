@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.logging.Logger;
 import javax.ejb.EJBException;
 import javax.ejb.Stateless;
+import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
@@ -29,6 +30,9 @@ public class ProductSpecificationBean {
     @PersistenceContext
     private EntityManager em;
 
+    @Inject
+    CategoryBean categoryBean;
+    
     public List<ProductDetails> copyProductsToDetails(List<ProductSpecification> products) {
         List<ProductDetails> detailsList = new ArrayList();
         for (ProductSpecification product : products) {
@@ -139,5 +143,21 @@ public class ProductSpecificationBean {
             throw new EJBException(ex);
         }
         return productIds;
+    }
+
+    public List<ProductDetails> getAllProductSpecificationsWithFilters(List<Integer> categoryIds) {
+        LOG.info("getAllProductSpecificationsWithFilters");
+        List<ProductDetails> products = new ArrayList<>();
+        List<ProductDetails> allProducts = new ArrayList<>();
+        try {
+            for ( Integer categoryId : categoryIds)
+            {
+                products = categoryBean.getAllProductsFromCategory(categoryId);
+                allProducts.addAll(products);
+            }
+            return allProducts;
+        } catch (Exception ex) {
+            throw new EJBException(ex);
+        }
     }
 }
