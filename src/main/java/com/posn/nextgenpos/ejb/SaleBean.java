@@ -43,7 +43,7 @@ public class SaleBean {
         for (Sale sale : sales) {
             SaleDetails saleDetails = new SaleDetails(sale.getId(),
                     sale.getDate(),
-                    sale.isIsComplete(),
+                    sale.getIsComplete(),
                     sale.getTotal(),
                     sale.getChange()
             );
@@ -51,29 +51,44 @@ public class SaleBean {
         }
         return saleDetailsList;
     }
-    
-    public int createSale(LocalDateTime Date,boolean isComplete, double total, double change, Integer paymentId)
-    {
+
+    public int createSale(LocalDateTime Date, boolean isComplete, double total, double change) {
         LOG.info("createSale");
         Sale sale = new Sale();
         sale.setDate(Date);
         sale.setIsComplete(isComplete);
         sale.setTotal(total);
         sale.setChange(change);
-        
-        Payment payment = em.find(Payment.class, paymentId);
-        payment.setSale(sale);
-        sale.setPayment(payment);
+
         em.persist(sale);
         em.flush();
         int saleId = sale.getId();
         return saleId;
     }
-    
-    public SaleDetails findById(Integer saleId)
-    {
+
+    public SaleDetails findById(Integer saleId) {
         Sale sale = em.find(Sale.class, saleId);
-        return new SaleDetails(sale.getId(), sale.getDate(), sale.isIsComplete(), sale.getChange(), sale.getTotal());
+        return new SaleDetails(sale.getId(), sale.getDate(), sale.getIsComplete(), sale.getChange(), sale.getTotal());
     }
-    
+
+    public SaleDetails getIncompleteSale() {
+        List<Sale> sale = (List<Sale>) em.createQuery("SELECT s FROM Sale s WHERE s.isComplete = :c").setParameter("c", false).getResultList();
+
+        if (!sale.isEmpty()) {
+            return new SaleDetails(sale.get(0).getId(),
+                    sale.get(0).getDate(),
+                    sale.get(0).getIsComplete(),
+                    sale.get(0).getTotal(),
+                    sale.get(0).getChange());
+        }
+        return null;
+    }
+
+    public void updateSale(Integer saleId, boolean isComplete, double total, double change) {
+        Sale sale = em.find(Sale.class, saleId);
+        sale.setIsComplete(isComplete);
+        sale.setTotal(total);
+        sale.setChange(change);
+    }
+
 }

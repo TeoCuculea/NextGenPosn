@@ -8,30 +8,23 @@ import com.posn.nextgenpos.common.SaleDetails;
 import com.posn.nextgenpos.ejb.SaleBean;
 import java.io.IOException;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.Date;
-import java.util.List;
-import javax.annotation.security.DeclareRoles;
 import javax.inject.Inject;
 import javax.servlet.ServletException;
-import javax.servlet.annotation.HttpConstraint;
-import javax.servlet.annotation.ServletSecurity;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  *
- * @author teodo
+ * @author barb_
  */
-@DeclareRoles({"Sales"})
-@ServletSecurity(value = @HttpConstraint(rolesAllowed = {"Sales"}))
-@WebServlet(name = "Sales", urlPatterns = {"/Sales"})
-public class Sales extends HttpServlet {
-
+@WebServlet(name = "NewSale", urlPatterns = {"/NewSale"})
+public class NewSale extends HttpServlet {
     @Inject
-    private SaleBean saleBean;
+    SaleBean saleBean;
+    
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -54,10 +47,13 @@ public class Sales extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        request.setAttribute("activePage", "Sales");
-        List<SaleDetails> sales = saleBean.getAllSales();
-        request.setAttribute("sales", sales);
-        request.getRequestDispatcher("/WEB-INF/pages/sale/sales.jsp").forward(request, response);
+        
+        int saleId = saleBean.createSale(LocalDateTime.now(), false, 0, 0);
+        SaleDetails saleDetails = saleBean.findById(saleId);
+        HttpSession session = request.getSession();
+        session.setAttribute("sale", saleDetails);
+        
+        response.sendRedirect(request.getContextPath()+"/Catalogs");
     }
 
     /**
@@ -71,16 +67,6 @@ public class Sales extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-        String currentDate = request.getParameter("currentDate");
-        LocalDateTime dateTime = LocalDateTime.parse(currentDate, formatter);
-        Boolean isComplete = Boolean.parseBoolean(request.getParameter("is_complete"));
-        Double total = Double.parseDouble(request.getParameter("total"));
-        Double change = Double.parseDouble(request.getParameter("change"));
-        Integer paymentId = Integer.parseInt(request.getParameter("pay_id"));//trebe formular in moment payment, pun valori la value
-        Integer saleId = saleBean.createSale(dateTime, isComplete, total, change);
-        
-        response.sendRedirect(request.getContextPath()+ "/Sales");
     }
 
     /**
@@ -90,7 +76,7 @@ public class Sales extends HttpServlet {
      */
     @Override
     public String getServletInfo() {
-        return "Sale V1.0";
+        return "Short description";
     }// </editor-fold>
 
 }

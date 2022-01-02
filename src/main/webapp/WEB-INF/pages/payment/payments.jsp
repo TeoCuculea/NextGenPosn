@@ -5,13 +5,51 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<!DOCTYPE html>
-<html>
-    <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>JSP Page</title>
-    </head>
-    <body>
-        <h1>Hello World!</h1>
-    </body>
-</html>
+<%@taglib prefix="t" tagdir="/WEB-INF/tags" %>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
+<t:pageTemplate pageTitle="Payment">
+    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+        <form method="POST" action="${pageContext.request.contextPath}/Catalogs/Payment"> 
+            <table name="lista_cumparaturi" width="100%" >
+                <tr>
+                    <th>Cantitate</th>
+                    <th>Nume <br>produs</th>
+                    <th>Pret/<br>bucata[RON]</th> 
+                    <th>Subtotal[RON]</th>
+                </tr>
+                <c:forEach var="itemSpecs" items="${cartItemSpecs}" varStatus="status">
+                    <tr>
+                        <div>
+                            <td id="cartQuantity{itemSpecs.id}">
+                                ${cartItem[status.index].quantity}
+                            </td>
+                        </div>
+                        <div class="col-md-2">
+                            <td>${itemSpecs.name}</td>
+                        </div>
+                        <div class="col-md-2">
+                            <td>${itemSpecs.pricePerUnit}</td>
+                        </div>
+                        <div>
+                            <td ${total=total + itemSpecs.pricePerUnit * cartItem[status.index].quantity}>
+                                ${itemSpecs.pricePerUnit * cartItem[status.index].quantity}
+                            </td>
+                        </div>
+                    </tr>
+                </c:forEach>
+            </table>
+            <div style="text-align:center">
+                Total:${total}
+                <input type ="hidden" name="total" id="total" value="${total}">
+            </div>
+            <div>
+                <label for="amount">Introdu suma:</label>
+                <input type="text" name="amount" id="amount" placeholder="" value="" required="">
+            </div>
+            <div style="text-align:center">
+                <button class="btn btn-primary btn-lg btn-block" type="submit">Plata</button>
+            </div>
+        </form> 
+    </div>
+</t:pageTemplate>

@@ -48,47 +48,58 @@
                 </table>
             </form>
         </div> 
-        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
-            <form method="POST" action="${pageContext.request.contextPath}/ValidareCart"> 
-                <table name="lista_cumparaturi" width="100%" >
-                    <tr>
-                        <th>Sterge <br>produs<br> din cos</th>
-                        <th>Cantitate</th>
-                        <th>Nume <br>produs</th>
-                        <th>Pret/<br>bucata[RON]</th> 
-                        <th>Subtotal[RON]</th>
-                    </tr>
-                    <c:forEach var="itemSpecs" items="${cartItemSpecs}" varStatus="status">     
-                        <tr>
-                            <div class="col-md">
-                                <td><a <a href="${pageContext.request.contextPath}/DeleteFromCart?id=${cartItem[status.index].id}">-</a></td>
-                            </div>
-                            <div>
-                                <td id="cartQuantity{itemSpecs.id}">
-                                    ${cartItem[status.index].quantity}
-                                </td>
-                            </div>
-                            <div class="col-md-2">
-                                <td>${itemSpecs.name}</td>
-                            </div>
-                            <div class="col-md-2">
-                                <td>${itemSpecs.pricePerUnit}</td>
-                            </div>
-                            <div>
-                                <td ${total=total + itemSpecs.pricePerUnit * cartItem[status.index].quantity}>
-                                    ${itemSpecs.pricePerUnit * cartItem[status.index].quantity}
-                                </td>
-                            </div>
-                        </tr>
-                    </c:forEach>
-                </table>
-                <div style="text-align:center">
-                    Total:${total}
+        <c:if test="${pageContext.request.isUserInRole('Casier')}">
+            <c:choose>
+                <c:when test="${sessionScope.sale !=null}" >
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                    <form method="POST" action="${pageContext.request.contextPath}/ValidareCart"> 
+                        <table name="lista_cumparaturi" width="100%" >
+                            <tr>
+                                <th>Sterge <br>produs<br> din cos</th>
+                                <th>Cantitate</th>
+                                <th>Nume <br>produs</th>
+                                <th>Pret/<br>bucata[RON]</th> 
+                                <th>Subtotal[RON]</th>
+                            </tr>
+                            <c:forEach var="itemSpecs" items="${cartItemSpecs}" varStatus="status">
+                                <tr>
+                                    <div class="col-md">
+                                        <td><a href="${pageContext.request.contextPath}/DeleteFromCart?id=${cartItem[status.index].id}">-</a></td>
+                                    </div>
+                                    <div>
+                                        <td id="cartQuantity{itemSpecs.id}">
+                                            ${cartItem[status.index].quantity}
+                                        </td>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <td>${itemSpecs.name}</td>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <td>${itemSpecs.pricePerUnit}</td>
+                                    </div>
+                                    <div>
+                                        <td ${total=total + itemSpecs.pricePerUnit * cartItem[status.index].quantity}>
+                                            ${itemSpecs.pricePerUnit * cartItem[status.index].quantity}
+                                        </td>
+                                    </div>
+                                </tr>
+                            </c:forEach>
+                        </table>
+                        <div style="text-align:center">
+                            Total:${total}
+                        </div>
+                        <div style="text-align:center">
+                            <a class="btn btn-primary btn-lg" href="${pageContext.request.contextPath}/Catalogs/Payment" role="button" padding = "100px">Spre plata</a>
+                        </div>
+                    </form> 
                 </div>
-                <div style="text-align:center">
-                    <a class="btn btn-primary btn-lg" href="${pageContext.request.contextPath}/Catalogs/Payment" role="button" padding = "100px">Spre plata</a>
-                </div>
-            </form> 
-        </div>
+                </c:when>
+                <c:otherwise>
+                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                        <a href="${pageContext.request.contextPath}/NewSale" class="btn btn-primary btn-lg" role="button">New Sale</a>
+                    </div>
+                </c:otherwise>
+            </c:choose>
+        </c:if>
     </div>
 </t:pageTemplate>

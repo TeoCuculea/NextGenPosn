@@ -4,12 +4,10 @@
  */
 package com.posn.nextgenpos.entity;
 
-import com.posn.nextgenpos.classes.Register;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.List;
 import javax.persistence.CascadeType;
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -38,7 +36,7 @@ public class Sale implements Serializable {
     @OneToMany(mappedBy="sale")
     private List<SaleLineItem> lineItems;
     
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(mappedBy="sale")
     private Payment payment;
   
     public Integer getId() {
@@ -49,7 +47,7 @@ public class Sale implements Serializable {
         this.id = id;
     }
 
-    public boolean isIsComplete() {
+    public boolean getIsComplete() {
         return isComplete;
     }
 
