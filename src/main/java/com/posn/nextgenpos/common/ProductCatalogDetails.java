@@ -13,9 +13,9 @@ import java.util.List;
  */
 public class ProductCatalogDetails {
     private Long id;
-    private List<ProductSpecification> productSpecification;
+    private List<ProductDetails> productSpecification;
 
-    public ProductCatalogDetails(Long id, List<ProductSpecification> productSpecification) {
+    public ProductCatalogDetails(Long id, List<ProductDetails> productSpecification) {
         this.id = id;
         this.productSpecification = productSpecification;
     }
@@ -24,7 +24,7 @@ public class ProductCatalogDetails {
         return id;
     }
 
-    public List<ProductSpecification> getProductSpecification() {
+    public List<ProductDetails> getProductSpecification() {
         return productSpecification;
     }
     

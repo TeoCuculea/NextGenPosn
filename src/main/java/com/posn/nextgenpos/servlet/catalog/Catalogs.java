@@ -15,8 +15,9 @@ import com.posn.nextgenpos.ejb.ProductCatalogBean;
 import com.posn.nextgenpos.ejb.ProductSpecificationBean;
 import com.posn.nextgenpos.ejb.SaleBean;
 import java.io.IOException;
+import java.util.Comparator;
 import java.util.List;
-import javax.annotation.security.DeclareRoles;
+import java.util.stream.Collectors;
 import javax.inject.Inject;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -29,38 +30,26 @@ import javax.servlet.http.HttpSession;
  *
  * @author teodo
  */
-@DeclareRoles({"Admin", "Casier", "DirectorGeneral"})
-/*@ServletSecurity(
-//atributul value din adnotarea de mai jos ne permite sa setam ce roluri au drepturi/voie sa vada pagina aceasta, respectiva.
-        value = @HttpConstraint(rolesAllowed = {"Admin"})
-//atributul de mai jos se refera la faptul ca doar rolul AdminRole poate sa faca POST pe acest servlet.
-//       , httpMethodConstraints = {
-//                @HttpMethodConstraint(
-//                        value = "POST", rolesAllowed = {"AdminRole"}
-//                )
-//                ,
-//                @HttpMethodConstraint(
-//                        value = "GET", rolesAllowed = {"ClientRole"}
-//                )
-//        }
-)*/
 @WebServlet(name = "Catalogs", urlPatterns = {"/Catalogs"})
 public class Catalogs extends HttpServlet {
 
     @Inject
-    private ProductCatalogBean prodCatBean;
+    private ProductCatalogBean productCatalogBean;
 
     @Inject
     private ProductSpecificationBean prodSpecsBean;
 
     @Inject
     private CategoryBean categoryBean;
+
+    @Inject
+    private ProductCatalogBean prodCatBean;
+    
+    @Inject
+    private SaleBean saleBean;
     
     @Inject
     private LineItemBean lineItemBean;
-
-    @Inject
-    private SaleBean saleBean;
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -84,22 +73,28 @@ public class Catalogs extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        request.setAttribute("activePage", "Catalogs");
+         request.setAttribute("activePage", "Catalogs");    
+        
         ProductCatalogDetails catalog = prodCatBean.getCatalog();
         List<ProductDetails> itemSpecs = catalog.getProductSpecification();
         prodCatBean.updateCatalog(itemSpecs);
         request.setAttribute("itemSpecs", itemSpecs);
+        
         List<CategoryDetails> categories = categoryBean.getAllCategories();
         request.setAttribute("categories", categories);
         HttpSession session = request.getSession();
+        
         SaleDetails incompleteSale = saleBean.getIncompleteSale();
-        if(incompleteSale!= null){
+        if(incompleteSale!=null)
+        {
             session.setAttribute("sale", incompleteSale);
         }
-        if(session.getAttribute("sale")!=null){
+        if(session.getAttribute("sale")!=null)
+        {
             SaleDetails sale = (SaleDetails) session.getAttribute("sale");
             List<LineDetails> lineItemDetails = lineItemBean.getAllBySaleId(sale.getId());
             List<ProductDetails> prodSpecs = lineItemBean.getAllProductSpecificationsBySaleId(sale.getId());
+
             request.setAttribute("cartItem", lineItemDetails);
             request.setAttribute("cartItemSpecs", prodSpecs);
         }

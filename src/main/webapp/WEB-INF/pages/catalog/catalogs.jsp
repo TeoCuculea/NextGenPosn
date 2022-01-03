@@ -9,6 +9,27 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <t:pageTemplate pageTitle="Catalogs">
     <h1>Catalogs</h1>
+    <div class="clearfix">
+        <form "needs-validation"  novalidate="" method="POST" action="${pageContext.request.contextPath}/Catalogs">
+            <button name="delete" value="deleteFilters" class="btn btn-danger" type="submit">Delete filters</button>
+            <input type="submit" name="sort" value="sortByName"/>
+            <input type="submit" name="sort" value="sortByPrice"/>
+        </form>
+        <form class="needs-validation"  novalidate="" method="POST" action="${pageContext.request.contextPath}/Catalogs/AddCatalogFilter">
+            <div class="dropdown">
+                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                    Filters
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <c:forEach var="category" items="${categories}" varStatus="status">
+                        <li class="dropdown-item"><input type="checkbox" name="category_ids" value="${category.id}"></li>
+                        <li class="dropdown-item">${category.categoryName}</li>
+                        </c:forEach> 
+                    <button class="btn btn-primary btn-lg btn-block col-md-12 " type="submit">Apply filters</button>
+                </ul>
+            </div> 
+        </form >
+    </div>
     <div class="row">
         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6"> 
             <form method="POST" action="${pageContext.request.contextPath}/Catalogs">   
