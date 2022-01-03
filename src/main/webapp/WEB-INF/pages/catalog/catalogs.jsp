@@ -19,9 +19,7 @@
                         <th>Nume <br>produs</th>
                         <th>Descriere</th>
                         <th>Pret/<br>bucata[RON]</th> 
-                    </tr>
-                    <a class="btn btn-primary btn-lg" href="${pageContext.request.contextPath}/Catalogs/AddFilter" role="button">Filters</a>
-                    <button class="btn btn-danger" type="submit">Delete filters</button> 
+                    </tr> 
                     <c:forEach var="itemSpec" items="${itemSpecs}" varStatus="status">
                         <tr>
                         <div class="col-md">
