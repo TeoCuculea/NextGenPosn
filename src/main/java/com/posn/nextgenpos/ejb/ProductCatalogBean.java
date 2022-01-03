@@ -37,12 +37,12 @@ public class ProductCatalogBean {
             throw new EJBException(ex);
         }
     }
-    /*public void createCatalog(List<ProductDetails> productSpecification) {
+    public void createCatalog(List<ProductDetails> productSpecification) {
         LOG.info("createCatalog");
         ProductCatalog catalog = ProductCatalog.getInstance();
         catalog.setProductSpecification(productSpecification);
         em.persist(catalog);
-    }*/
+    }
     public void updateCatalog(List<ProductDetails> productSpecification) {
         LOG.info("updateCatalog");
         ProductCatalog catalog = (ProductCatalog) em.createQuery("SELECT p FROM ProductCatalog p").getSingleResult();
