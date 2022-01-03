@@ -73,8 +73,8 @@ public class Catalogs extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-         request.setAttribute("activePage", "Catalogs");    
-        
+        request.setAttribute("activePage", "Catalogs");   
+
         ProductCatalogDetails catalog = prodCatBean.getCatalog();
         List<ProductDetails> itemSpecs = catalog.getProductSpecification();
         prodCatBean.updateCatalog(itemSpecs);
