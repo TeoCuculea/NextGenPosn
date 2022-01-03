@@ -34,9 +34,6 @@ import javax.servlet.http.HttpSession;
 public class Catalogs extends HttpServlet {
 
     @Inject
-    private ProductCatalogBean productCatalogBean;
-
-    @Inject
     private ProductSpecificationBean prodSpecsBean;
 
     @Inject
@@ -44,10 +41,10 @@ public class Catalogs extends HttpServlet {
 
     @Inject
     private ProductCatalogBean prodCatBean;
-    
+
     @Inject
     private SaleBean saleBean;
-    
+
     @Inject
     private LineItemBean lineItemBean;
 
@@ -60,7 +57,6 @@ public class Catalogs extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
@@ -73,24 +69,22 @@ public class Catalogs extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-         request.setAttribute("activePage", "Catalogs");    
-        
+        request.setAttribute("activePage", "Catalogs");
+
         ProductCatalogDetails catalog = prodCatBean.getCatalog();
         List<ProductDetails> itemSpecs = catalog.getProductSpecification();
         prodCatBean.updateCatalog(itemSpecs);
         request.setAttribute("itemSpecs", itemSpecs);
-        
+
         List<CategoryDetails> categories = categoryBean.getAllCategories();
         request.setAttribute("categories", categories);
         HttpSession session = request.getSession();
-        
+
         SaleDetails incompleteSale = saleBean.getIncompleteSale();
-        if(incompleteSale!=null)
-        {
+        if (incompleteSale != null) {
             session.setAttribute("sale", incompleteSale);
         }
-        if(session.getAttribute("sale")!=null)
-        {
+        if (session.getAttribute("sale") != null) {
             SaleDetails sale = (SaleDetails) session.getAttribute("sale");
             List<LineDetails> lineItemDetails = lineItemBean.getAllBySaleId(sale.getId());
             List<ProductDetails> prodSpecs = lineItemBean.getAllProductSpecificationsBySaleId(sale.getId());
@@ -114,11 +108,9 @@ public class Catalogs extends HttpServlet {
             throws ServletException, IOException {
         String buton = request.getParameter("delete");
         String act = request.getParameter("sort");
-        if(buton == null)
-        {
+        if (buton == null) {
             //nu s-a apasat
-        }
-        else if(buton.equals("deleteFilters")){
+        } else if (buton.equals("deleteFilters")) {
             List<ProductDetails> itemSpecs = prodSpecsBean.getAllProductSpecifications();
             prodCatBean.updateCatalog(itemSpecs);
         }
@@ -126,16 +118,15 @@ public class Catalogs extends HttpServlet {
             //nu s-a apasat butonul
         } else if (act.equals("sortByName")) {
             ProductCatalogDetails catalog = prodCatBean.getCatalog();
-            List<ProductDetails>itemSpecs = catalog.getProductSpecification()
+            List<ProductDetails> itemSpecs = catalog.getProductSpecification()
                     .stream()
                     .sorted(Comparator.comparing(ProductDetails::getName))
                     .collect(Collectors.toList());
             prodCatBean.updateCatalog(itemSpecs);
             request.setAttribute("itemSpecs", itemSpecs);
-        }
-        else if (act.equals("sortByPrice")) {
+        } else if (act.equals("sortByPrice")) {
             ProductCatalogDetails catalog = prodCatBean.getCatalog();
-            List<ProductDetails>itemSpecs = catalog.getProductSpecification()
+            List<ProductDetails> itemSpecs = catalog.getProductSpecification()
                     .stream()
                     .sorted(Comparator.comparingDouble(ProductDetails::getPricePerUnit))
                     .collect(Collectors.toList());

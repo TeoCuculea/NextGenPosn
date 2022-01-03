@@ -26,7 +26,7 @@ public class ProductCatalog {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private List<ProductDetails> productSpecification;
-    //private static ProductCatalog instance;
+    private static ProductCatalog instance;
     
     public Long getId() {
         return id;
@@ -36,11 +36,11 @@ public class ProductCatalog {
         this.id = id;
     }
 
-    /*public static ProductCatalog getInstance() {
+    public static ProductCatalog getInstance() {
         if(instance == null)
             instance = new ProductCatalog();
         return instance;
-    }*/
+    }
     
     public static long getSerialVersionUID() {
         return serialVersionUID;
