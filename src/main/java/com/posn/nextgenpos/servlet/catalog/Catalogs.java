@@ -14,6 +14,7 @@ import com.posn.nextgenpos.ejb.LineItemBean;
 import com.posn.nextgenpos.ejb.ProductCatalogBean;
 import com.posn.nextgenpos.ejb.ProductSpecificationBean;
 import com.posn.nextgenpos.ejb.SaleBean;
+import com.posn.nextgenpos.entity.ProductCatalog;
 import java.io.IOException;
 import java.util.Comparator;
 import java.util.List;
@@ -70,12 +71,16 @@ public class Catalogs extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         request.setAttribute("activePage", "Catalogs");
-
         ProductCatalogDetails catalog = prodCatBean.getCatalog();
-        List<ProductDetails> itemSpecs = catalog.getProductSpecification();
-        prodCatBean.updateCatalog(itemSpecs);
-        request.setAttribute("itemSpecs", itemSpecs);
-
+        if ( catalog.getId() == null) {
+            List<ProductDetails> itemSpecs = prodSpecsBean.getAllProductSpecifications();
+            prodCatBean.createCatalog(itemSpecs);
+            request.setAttribute("itemSpecs", itemSpecs);
+        } else {
+            List<ProductDetails> itemSpecs = catalog.getProductSpecification();
+            prodCatBean.updateCatalog(itemSpecs);
+            request.setAttribute("itemSpecs", itemSpecs);
+        }
         List<CategoryDetails> categories = categoryBean.getAllCategories();
         request.setAttribute("categories", categories);
         HttpSession session = request.getSession();

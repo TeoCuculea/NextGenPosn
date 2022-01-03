@@ -17,7 +17,7 @@ public class Store {
     
     private String name;
     private String address;
-    private ProductCatalog productCatalog=new ProductCatalog();
+    private ProductCatalog productCatalog;
     private Register register= new Register(productCatalog);
     
     Store(){}

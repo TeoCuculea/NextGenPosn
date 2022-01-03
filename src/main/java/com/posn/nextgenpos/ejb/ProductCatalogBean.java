@@ -31,7 +31,7 @@ public class ProductCatalogBean {
     public ProductCatalogDetails getCatalog() {
         LOG.info("getCatalog");
         try {
-            ProductCatalog catalog = (ProductCatalog) em.createQuery("SELECT p FROM ProductCatalog p").getSingleResult();
+            ProductCatalog catalog = ProductCatalog.getInstance();//(ProductCatalog) em.createQuery("SELECT p FROM ProductCatalog p").getSingleResult();
             return copyCatalogToDetails(catalog);
         } catch (Exception ex) {
             throw new EJBException(ex);
@@ -45,9 +45,9 @@ public class ProductCatalogBean {
     }
     public void updateCatalog(List<ProductDetails> productSpecification) {
         LOG.info("updateCatalog");
-        ProductCatalog catalog = (ProductCatalog) em.createQuery("SELECT p FROM ProductCatalog p").getSingleResult();
-        //ProductCatalog catalog = ProductCatalog.getInstance();
-        List<ProductDetails> ceva = catalog.getProductSpecification();
+        //ProductCatalog catalog = (ProductCatalog) em.createQuery("SELECT p FROM ProductCatalog p").getSingleResult();
+        //LOG.info(ProductCatalog.getInstance().toString());
+        ProductCatalog catalog = ProductCatalog.getInstance();
         catalog.setProductSpecification(productSpecification);
     }
      public ProductCatalogDetails copyCatalogToDetails(ProductCatalog catalog) {
