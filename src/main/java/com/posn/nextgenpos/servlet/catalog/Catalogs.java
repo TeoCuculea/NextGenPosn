@@ -9,6 +9,7 @@ import com.posn.nextgenpos.common.LineDetails;
 import com.posn.nextgenpos.common.ProductCatalogDetails;
 import com.posn.nextgenpos.common.ProductDetails;
 import com.posn.nextgenpos.common.SaleDetails;
+import com.posn.nextgenpos.ejb.CategoryBean;
 import com.posn.nextgenpos.ejb.LineItemBean;
 import com.posn.nextgenpos.ejb.ProductCatalogBean;
 import com.posn.nextgenpos.ejb.ProductSpecificationBean;
@@ -53,10 +54,13 @@ public class Catalogs extends HttpServlet {
     private ProductSpecificationBean prodSpecsBean;
 
     @Inject
-    LineItemBean lineItemBean;
+    private CategoryBean categoryBean;
+    
+    @Inject
+    private LineItemBean lineItemBean;
 
     @Inject
-    SaleBean saleBean;
+    private SaleBean saleBean;
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -89,10 +93,10 @@ public class Catalogs extends HttpServlet {
         request.setAttribute("categories", categories);
         HttpSession session = request.getSession();
         SaleDetails incompleteSale = saleBean.getIncompleteSale();
-        if (incompleteSale != null) {
+        if(incompleteSale!= null){
             session.setAttribute("sale", incompleteSale);
         }
-        if (session.getAttribute("sale") != null) {
+        if(session.getAttribute("sale")!=null){
             SaleDetails sale = (SaleDetails) session.getAttribute("sale");
             List<LineDetails> lineItemDetails = lineItemBean.getAllBySaleId(sale.getId());
             List<ProductDetails> prodSpecs = lineItemBean.getAllProductSpecificationsBySaleId(sale.getId());
@@ -113,7 +117,37 @@ public class Catalogs extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
+        String buton = request.getParameter("delete");
+        String act = request.getParameter("sort");
+        if(buton == null)
+        {
+            //nu s-a apasat
+        }
+        else if(buton.equals("deleteFilters")){
+            List<ProductDetails> itemSpecs = prodSpecsBean.getAllProductSpecifications();
+            prodCatBean.updateCatalog(itemSpecs);
+        }
+        if (act == null) {
+            //nu s-a apasat butonul
+        } else if (act.equals("sortByName")) {
+            ProductCatalogDetails catalog = prodCatBean.getCatalog();
+            List<ProductDetails>itemSpecs = catalog.getProductSpecification()
+                    .stream()
+                    .sorted(Comparator.comparing(ProductDetails::getName))
+                    .collect(Collectors.toList());
+            prodCatBean.updateCatalog(itemSpecs);
+            request.setAttribute("itemSpecs", itemSpecs);
+        }
+        else if (act.equals("sortByPrice")) {
+            ProductCatalogDetails catalog = prodCatBean.getCatalog();
+            List<ProductDetails>itemSpecs = catalog.getProductSpecification()
+                    .stream()
+                    .sorted(Comparator.comparingDouble(ProductDetails::getPricePerUnit))
+                    .collect(Collectors.toList());
+            prodCatBean.updateCatalog(itemSpecs);
+            request.setAttribute("itemSpecs", itemSpecs);
+        }
+        response.sendRedirect(request.getContextPath() + "/Catalogs");
     }
 
     /**

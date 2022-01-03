@@ -109,7 +109,6 @@ public class CategoryBean {
 
     public List<ProductDetails> getAllProductsFromCategory(Integer categoryId) {
         LOG.info("getAllProductsFromCategory");
-
         List<ProductDetails> productSpecificationList = new ArrayList<>();
         try {
             Category category = em.find(Category.class, categoryId);
