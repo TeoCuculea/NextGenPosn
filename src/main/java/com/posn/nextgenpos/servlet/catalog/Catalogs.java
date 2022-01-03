@@ -13,6 +13,7 @@ import com.posn.nextgenpos.ejb.ProductSpecificationBean;
 import com.posn.nextgenpos.ejb.SaleBean;
 import java.io.IOException;
 import java.util.List;
+import javax.annotation.security.DeclareRoles;
 import javax.inject.Inject;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -33,6 +34,21 @@ import javax.servlet.http.HttpSession;
  *
  * @author teodo
  */
+@DeclareRoles({"Admin", "Casier", "DirectorGeneral"})
+/*@ServletSecurity(
+//atributul value din adnotarea de mai jos ne permite sa setam ce roluri au drepturi/voie sa vada pagina aceasta, respectiva.
+        value = @HttpConstraint(rolesAllowed = {"Admin"})
+//atributul de mai jos se refera la faptul ca doar rolul AdminRole poate sa faca POST pe acest servlet.
+//       , httpMethodConstraints = {
+//                @HttpMethodConstraint(
+//                        value = "POST", rolesAllowed = {"AdminRole"}
+//                )
+//                ,
+//                @HttpMethodConstraint(
+//                        value = "GET", rolesAllowed = {"ClientRole"}
+//                )
+//        }
+)*/
 @WebServlet(name = "Catalogs", urlPatterns = {"/Catalogs"})
 public class Catalogs extends HttpServlet {
 

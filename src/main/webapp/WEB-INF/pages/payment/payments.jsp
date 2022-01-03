@@ -20,22 +20,14 @@
                 </tr>
                 <c:forEach var="itemSpecs" items="${cartItemSpecs}" varStatus="status">
                     <tr>
-                        <div>
                             <td id="cartQuantity{itemSpecs.id}">
                                 ${cartItem[status.index].quantity}
                             </td>
-                        </div>
-                        <div class="col-md-2">
                             <td>${itemSpecs.name}</td>
-                        </div>
-                        <div class="col-md-2">
                             <td>${itemSpecs.pricePerUnit}</td>
-                        </div>
-                        <div>
                             <td ${total=total + itemSpecs.pricePerUnit * cartItem[status.index].quantity}>
                                 ${itemSpecs.pricePerUnit * cartItem[status.index].quantity}
                             </td>
-                        </div>
                     </tr>
                 </c:forEach>
             </table>
