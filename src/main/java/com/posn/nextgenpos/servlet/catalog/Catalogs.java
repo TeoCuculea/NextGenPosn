@@ -34,9 +34,6 @@ import javax.servlet.http.HttpSession;
 public class Catalogs extends HttpServlet {
 
     @Inject
-    private ProductCatalogBean productCatalogBean;
-
-    @Inject
     private ProductSpecificationBean prodSpecsBean;
 
     @Inject
