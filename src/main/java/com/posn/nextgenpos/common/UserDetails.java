@@ -8,7 +8,7 @@ package com.posn.nextgenpos.common;
  *
  * @author barb_
  */
-public class UserDetails {
+public class UserDetails implements java.io.Serializable {
 
     private Integer id;
     private String username;

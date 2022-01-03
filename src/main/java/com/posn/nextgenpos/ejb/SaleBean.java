@@ -41,12 +41,7 @@ public class SaleBean {
     private List<SaleDetails> copySalesToDetails(List<Sale> sales) {
         List<SaleDetails> saleDetailsList = new ArrayList();
         for (Sale sale : sales) {
-            SaleDetails saleDetails = new SaleDetails(sale.getId(),
-                    sale.getDate(),
-                    sale.getIsComplete(),
-                    sale.getTotal(),
-                    sale.getChange()
-            );
+            SaleDetails saleDetails = sale.clone();
             saleDetailsList.add(saleDetails);
         }
         return saleDetailsList;
@@ -68,7 +63,8 @@ public class SaleBean {
 
     public SaleDetails findById(Integer saleId) {
         Sale sale = em.find(Sale.class, saleId);
-        return new SaleDetails(sale.getId(), sale.getDate(), sale.getIsComplete(), sale.getChange(), sale.getTotal());
+        SaleDetails salD = sale.clone();
+        return salD;
     }
 
     public SaleDetails getIncompleteSale() {

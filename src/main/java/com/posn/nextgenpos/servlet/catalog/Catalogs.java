@@ -74,6 +74,7 @@ public class Catalogs extends HttpServlet {
         ProductCatalogDetails catalog = prodCatBean.getCatalog();
         if ( catalog.getId() == null) {
             List<ProductDetails> itemSpecs = prodSpecsBean.getAllProductSpecifications();
+            //itemSpecs = prodSpecsBean.addTaxes(itemSpecs);
             prodCatBean.createCatalog(itemSpecs);
             request.setAttribute("itemSpecs", itemSpecs);
         } else {
@@ -93,7 +94,7 @@ public class Catalogs extends HttpServlet {
             SaleDetails sale = (SaleDetails) session.getAttribute("sale");
             List<LineDetails> lineItemDetails = lineItemBean.getAllBySaleId(sale.getId());
             List<ProductDetails> prodSpecs = lineItemBean.getAllProductSpecificationsBySaleId(sale.getId());
-
+            prodSpecs = prodSpecsBean.addTaxes(prodSpecs);
             request.setAttribute("cartItem", lineItemDetails);
             request.setAttribute("cartItemSpecs", prodSpecs);
         }
@@ -117,6 +118,7 @@ public class Catalogs extends HttpServlet {
             //nu s-a apasat
         } else if (buton.equals("deleteFilters")) {
             List<ProductDetails> itemSpecs = prodSpecsBean.getAllProductSpecifications();
+            itemSpecs = prodSpecsBean.addTaxes(itemSpecs);
             prodCatBean.updateCatalog(itemSpecs);
         }
         if (act == null) {

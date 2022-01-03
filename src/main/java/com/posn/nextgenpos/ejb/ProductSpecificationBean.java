@@ -36,12 +36,8 @@ public class ProductSpecificationBean {
     public List<ProductDetails> copyProductsToDetails(List<ProductSpecification> products) {
         List<ProductDetails> detailsList = new ArrayList();
         for (ProductSpecification product : products) {
-            ProductDetails productDetails = new ProductDetails(product.getId(),
-                    product.getName(),
-                    product.getDescription(),
-                    product.getPricePerUnit()
-            );
-            detailsList.add(productDetails);
+            ProductDetails prod = product.clone();
+            detailsList.add(prod);
         }
         return detailsList;
     }
@@ -58,12 +54,14 @@ public class ProductSpecificationBean {
 
     public ProductDetails findById(Integer productId) {
         ProductSpecification productSpecification = em.find(ProductSpecification.class, productId);
-        return new ProductDetails(productSpecification.getId(), productSpecification.getName(), productSpecification.getDescription(), productSpecification.getPricePerUnit());
+        ProductDetails prod = productSpecification.clone();
+        return prod;
     }
 
     public ProductDetails findByItemId(Integer itemId) {
         ProductSpecification productSpecification = (ProductSpecification) em.createQuery("SELECT p FROM ProductSpecification p WHERE p.item.id = :id").setParameter("id", itemId).getSingleResult();
-        return new ProductDetails(productSpecification.getId(), productSpecification.getName(), productSpecification.getDescription(), productSpecification.getPricePerUnit());
+        ProductDetails prod = productSpecification.clone();
+        return prod;
     }
 
     public void createProductSpecification(String name, String description, Double pricePerUnit, Integer itemId, Integer categoryId) {
@@ -159,5 +157,16 @@ public class ProductSpecificationBean {
         } catch (Exception ex) {
             throw new EJBException(ex);
         }
+    }
+    
+    public List<ProductDetails> addTaxes(List<ProductDetails> products)
+    {
+        List<ProductDetails> taxa = new ArrayList<>();
+        for(ProductDetails product : products)
+        {
+            ProductDetails tax = product.clone();
+            taxa.add(tax);
+        }
+        return taxa;
     }
 }

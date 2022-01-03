@@ -4,6 +4,8 @@
  */
 package com.posn.nextgenpos.entity;
 
+import com.posn.nextgenpos.allinterfaces.Prototype;
+import com.posn.nextgenpos.common.PaymentDetails;
 import java.io.Serializable;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -20,7 +22,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name="PAYMENTS")
-public class Payment implements Serializable {
+public class Payment implements Serializable, Prototype<PaymentDetails> {
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -90,5 +92,9 @@ public class Payment implements Serializable {
     public String toString() {
         return "com.posn.nextgenpos.entity.Payment[ id=" + id + " ]";
     }
-    
+
+    @Override
+    public PaymentDetails clone() {
+        return new PaymentDetails(this.getId(), this.getAmount(), this.getTotal());
+    }  
 }

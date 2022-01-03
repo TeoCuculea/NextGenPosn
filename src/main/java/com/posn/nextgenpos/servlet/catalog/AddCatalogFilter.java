@@ -81,6 +81,7 @@ public class AddCatalogFilter extends HttpServlet {
                 categoryIds.add(cat.getId());
             }
             List<ProductDetails> itemSpecs = prodSpecsBean.getAllProductSpecificationsWithFilters(categoryIds);
+            itemSpecs = prodSpecsBean.addTaxes(itemSpecs);
             prodCatBean.updateCatalog(itemSpecs);
         }
         response.sendRedirect(request.getContextPath() + "/Catalogs");

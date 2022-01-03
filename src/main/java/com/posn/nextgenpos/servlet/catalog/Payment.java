@@ -10,6 +10,7 @@ import com.posn.nextgenpos.common.ProductDetails;
 import com.posn.nextgenpos.common.SaleDetails;
 import com.posn.nextgenpos.ejb.LineItemBean;
 import com.posn.nextgenpos.ejb.PaymentBean;
+import com.posn.nextgenpos.ejb.ProductSpecificationBean;
 import com.posn.nextgenpos.ejb.SaleBean;
 import java.io.IOException;
 import java.util.List;
@@ -37,6 +38,8 @@ public class Payment extends HttpServlet {
         @Inject
         PaymentBean paymentBean;
     
+        @Inject
+        ProductSpecificationBean prodSpecsBean;
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -65,7 +68,7 @@ public class Payment extends HttpServlet {
         List<LineDetails> lineItemDetails = lineItemBean.getAllBySaleId(sale.getId());
         List<ProductDetails> prodSpecs = lineItemBean.getAllProductSpecificationsBySaleId(sale.getId());
         List<PaymentDetails> payments = paymentBean.getAllPayments();
-        
+        prodSpecs = prodSpecsBean.addTaxes(prodSpecs);
         request.setAttribute("cartItem", lineItemDetails);
         request.setAttribute("cartItemSpecs", prodSpecs);
         request.setAttribute("payments", payments);

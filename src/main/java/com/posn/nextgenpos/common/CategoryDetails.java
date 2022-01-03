@@ -3,7 +3,6 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package com.posn.nextgenpos.common;
-
 import java.io.Serializable;
 
 /**

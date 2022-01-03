@@ -122,7 +122,7 @@ public class CategoryBean {
     public List<CategoryDetails> copyCategoriesToDetails(List<Category> categories) {
         List<CategoryDetails> detailsList = new ArrayList();
         for (Category category : categories) {
-            CategoryDetails categoryDetail = new CategoryDetails(category.getId(), category.getCategoryName());
+            CategoryDetails categoryDetail = category.clone();
             detailsList.add(categoryDetail);
         }
         return detailsList;

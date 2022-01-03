@@ -29,6 +29,5 @@ public class PaymentDetails implements java.io.Serializable {
 
     public double getTotal() {
         return total;
-    }
-    
+    }   
 }

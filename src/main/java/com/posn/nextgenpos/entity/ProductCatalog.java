@@ -4,6 +4,8 @@
  */
 package com.posn.nextgenpos.entity;
 
+import com.posn.nextgenpos.allinterfaces.Prototype;
+import com.posn.nextgenpos.common.ProductCatalogDetails;
 import com.posn.nextgenpos.common.ProductDetails;
 import java.io.Serializable;
 import java.util.List;
@@ -19,7 +21,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name="CATALOG")
-public class ProductCatalog {
+public class ProductCatalog implements Serializable, Prototype<ProductCatalogDetails>{
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -78,5 +80,9 @@ public class ProductCatalog {
     public String toString() {
         return "com.posn.nextgenpos.entity.ProductCatalog[ id=" + id + " ]";
     }
-    
+
+    @Override
+    public ProductCatalogDetails clone() {
+        return new ProductCatalogDetails(this.getId(), this.getProductSpecification());
+    }  
 }

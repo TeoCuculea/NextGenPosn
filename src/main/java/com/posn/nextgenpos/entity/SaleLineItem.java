@@ -4,6 +4,8 @@
  */
 package com.posn.nextgenpos.entity;
 
+import com.posn.nextgenpos.allinterfaces.Prototype;
+import com.posn.nextgenpos.common.LineDetails;
 import java.io.Serializable;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -22,7 +24,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name="SALE_LINE_ITEMS")
-public class SaleLineItem implements Serializable {
+public class SaleLineItem implements Serializable, Prototype<LineDetails> {
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -94,6 +96,11 @@ public class SaleLineItem implements Serializable {
     @Override
     public String toString() {
         return "com.posn.nextgenpos.entity.SaleLineItem[ id=" + id + " ]";
+    }
+
+    @Override
+    public LineDetails clone() {
+        return new LineDetails(this.id,this.quantity);
     }
     
 }

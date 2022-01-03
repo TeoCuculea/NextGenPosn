@@ -51,7 +51,7 @@ public class ProductCatalogBean {
         catalog.setProductSpecification(productSpecification);
     }
      public ProductCatalogDetails copyCatalogToDetails(ProductCatalog catalog) {
-        ProductCatalogDetails catalogDetail = new ProductCatalogDetails(catalog.getId(), catalog.getProductSpecification());
+        ProductCatalogDetails catalogDetail = catalog.clone();
         return catalogDetail;
     }
 }

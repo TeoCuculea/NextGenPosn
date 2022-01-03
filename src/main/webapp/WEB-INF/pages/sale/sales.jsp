@@ -27,7 +27,7 @@
                 <td>${sale.id}</td>
                 <td>${sale.date}</td>  
                 <td>${sale.isComplete}</td> 
-                <td>${sale.change}</td> 
+                <td>${Math.round(sale.change*100)/100}</td> 
                 <td>${sale.total}</td> 
                 <td>${payments[status.index].id}</td>
                 <td>${payments[status.index].amount}</td>

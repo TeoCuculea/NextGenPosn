@@ -4,6 +4,8 @@
  */
 package com.posn.nextgenpos.entity;
 
+import com.posn.nextgenpos.allinterfaces.Prototype;
+import com.posn.nextgenpos.common.CategoryDetails;
 import java.io.Serializable;
 import java.util.Collection;
 import javax.persistence.CascadeType;
@@ -23,7 +25,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "CATEGORY")
-public class Category implements Serializable {
+public class Category implements Serializable, Prototype<CategoryDetails> {
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -99,6 +101,11 @@ public class Category implements Serializable {
     @Override
     public String toString() {
         return "com.posn.nextgenpos.entity.Category[ id=" + id + " ]";
+    }
+
+    @Override
+    public CategoryDetails clone() {
+        return new CategoryDetails(this.getId(), this.getCategoryName());
     }
     
 }

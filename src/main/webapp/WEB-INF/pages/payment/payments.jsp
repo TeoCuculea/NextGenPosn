@@ -24,9 +24,9 @@
                                 ${cartItem[status.index].quantity}
                             </td>
                             <td>${itemSpecs.name}</td>
-                            <td>${itemSpecs.pricePerUnit}</td>
-                            <td ${total=total + itemSpecs.pricePerUnit * cartItem[status.index].quantity}>
-                                ${itemSpecs.pricePerUnit * cartItem[status.index].quantity}
+                            <td>${Math.round(itemSpecs.pricePerUnit*100.0)/100.0}</td>
+                            <td ${total=Math.round((total+Math.round( itemSpecs.pricePerUnit * cartItem[status.index].quantity*100)/100)*100)/100}>
+                                ${Math.round( itemSpecs.pricePerUnit * cartItem[status.index].quantity*100)/100}
                             </td>
                     </tr>
                 </c:forEach>

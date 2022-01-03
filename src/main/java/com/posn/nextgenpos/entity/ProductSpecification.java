@@ -4,6 +4,8 @@
  */
 package com.posn.nextgenpos.entity;
 
+import com.posn.nextgenpos.allinterfaces.Prototype;
+import com.posn.nextgenpos.common.ProductDetails;
 import java.io.Serializable;
 import java.util.Collection;
 import javax.persistence.CascadeType;
@@ -23,7 +25,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "PRODUCT_SPECIFICATION")
-public class ProductSpecification implements Serializable {
+public class ProductSpecification implements Serializable, Prototype<ProductDetails> {
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -49,13 +51,10 @@ public class ProductSpecification implements Serializable {
     @JoinColumn(name="item_id", referencedColumnName="id")
     private Item item;
     
-//    @OneToMany(mappedBy="prodSpecs")
-//    private List<SaleLineItem> lineItem;
-    
     public String getName() {
         return name;
     }
-
+    
     public String getDescription() {
         return description;
     }
@@ -80,17 +79,9 @@ public class ProductSpecification implements Serializable {
         return item;
     }
 
-//    public List<SaleLineItem> getLineItem() {
-//        return lineItem;
-//    }
-
     public void setItem(Item item) {
         this.item = item;
     }
-
-//    public void setLineItem(List<SaleLineItem> lineItem) {
-//        this.lineItem = lineItem;
-//    }
 
     public Collection<Category> getCategories() {
         return categories;
@@ -108,6 +99,11 @@ public class ProductSpecification implements Serializable {
     public void dropCategory(Category category)
     {
         this.getCategories().remove(category);
+    }
+    
+    @Override
+    public ProductDetails clone() {
+        return new ProductDetails(this.id, this.description, this.name, this.pricePerUnit);
     }
     
     @Override
@@ -136,5 +132,5 @@ public class ProductSpecification implements Serializable {
         s="ID: "+this.id+"\nName: "+this.name+"\nDescription: "+this.description+"\nPricePerUnit:"+this.pricePerUnit;
         return s;
     }
-    
+   
 }

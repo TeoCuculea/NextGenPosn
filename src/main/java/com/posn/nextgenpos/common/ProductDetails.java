@@ -4,11 +4,12 @@
  */
 package com.posn.nextgenpos.common;
 
+import com.posn.nextgenpos.allinterfaces.Prototype;
 /**
  *
  * @author teodo
  */
-public class ProductDetails implements java.io.Serializable{
+public class ProductDetails implements java.io.Serializable, Prototype<ProductDetails>{
     private Integer id;
     private String name;
     private String description;
@@ -35,6 +36,11 @@ public class ProductDetails implements java.io.Serializable{
 
     public Double getPricePerUnit() {
         return pricePerUnit;
+    }
+
+    @Override
+    public ProductDetails clone() {
+        return new ProductDetails(this.id, this.description, this.name, this.pricePerUnit+this.pricePerUnit*19/100);
     }
     
 }

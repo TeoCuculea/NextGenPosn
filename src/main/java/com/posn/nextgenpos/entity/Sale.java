@@ -4,10 +4,11 @@
  */
 package com.posn.nextgenpos.entity;
 
+import com.posn.nextgenpos.allinterfaces.Prototype;
+import com.posn.nextgenpos.common.SaleDetails;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.List;
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -22,7 +23,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name="SALES")
-public class Sale implements Serializable {
+public class Sale implements Serializable, Prototype<SaleDetails> {
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -118,5 +119,10 @@ public class Sale implements Serializable {
     @Override
     public String toString() {
         return "com.posn.nextgenpos.entity.Sale[ id=" + id + " ]";
+    }
+    
+    @Override
+    public SaleDetails clone(){
+        return new SaleDetails(this.getId(), this.getDate(),this.getIsComplete(),this.getTotal(),this.getChange());
     }
 }

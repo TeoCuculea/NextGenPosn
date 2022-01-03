@@ -74,12 +74,14 @@ public class PaymentBean {
 
     public PaymentDetails findById(Integer paymentId) {
         Payment payment = em.find(Payment.class, paymentId);
-        return new PaymentDetails(payment.getId(), payment.getAmount(), payment.getTotal());
+        PaymentDetails payD = payment.clone();
+        return payD;
     }
 
     public PaymentDetails findBySaleId(Integer saleId) {
         Payment payment = (Payment) em.createQuery("SELECT p FROM Payment p WHERE p.sale.id = :id").setParameter("id", saleId).getSingleResult();
-        return new PaymentDetails(payment.getId(), payment.getAmount(), payment.getTotal());
+        PaymentDetails payD = payment.clone();
+        return payD;
     }
     
     public List<PaymentDetails> getAllPayments(){
@@ -95,7 +97,7 @@ public class PaymentBean {
     private List<PaymentDetails> copyPaymentToDetails(List<Payment> payments) {
         List<PaymentDetails> paymentList = new ArrayList<>();
         for(Payment payment: payments){
-            PaymentDetails paymentDetails = new PaymentDetails(payment.getId(),payment.getAmount(),payment.getTotal());
+            PaymentDetails paymentDetails = payment.clone();
             paymentList.add(paymentDetails);
         }
         return paymentList;

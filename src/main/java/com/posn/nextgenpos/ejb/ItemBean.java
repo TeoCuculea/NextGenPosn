@@ -40,7 +40,8 @@ public class ItemBean {
 
     public ItemDetails findById(Integer itemId) {
         Item item = em.find(Item.class, itemId);
-        return new ItemDetails(item.getId(), item.getQuantity());
+        ItemDetails itD = item.clone();
+        return itD;
     }
 
     public int createItem(Integer quantity) {
@@ -71,9 +72,7 @@ public class ItemBean {
     private List<ItemDetails> copyItemsToDetails(List<Item> items) {
         List<ItemDetails> detailsList = new ArrayList<>();
         for (Item item : items) {
-            ItemDetails itemDetails = new ItemDetails(item.getId(),
-                    item.getQuantity()
-            );
+            ItemDetails itemDetails = item.clone();
             detailsList.add(itemDetails);
         }
         return detailsList;
