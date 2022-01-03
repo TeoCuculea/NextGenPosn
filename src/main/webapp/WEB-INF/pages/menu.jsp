@@ -20,19 +20,19 @@
                     </li>
                     <c:if test="${pageContext.request.isUserInRole('Admin')}">
 
-                    <li class="nav-item ${activePage eq 'Items' ? 'active' : ''}">
-                        <a class="nav-link" href="${pageContext.request.contextPath}/Items">Items</a>
-                    </li>
+                        <li class="nav-item ${activePage eq 'Items' ? 'active' : ''}">
+                            <a class="nav-link" href="${pageContext.request.contextPath}/Items">Items</a>
+                        </li>
                     </c:if>
                     <c:if test="${pageContext.request.isUserInRole('Admin')}">
                         <li class="nav-item ${activePage eq 'Categories' ? 'active' : ''}">
                             <a class="nav-link" href="${pageContext.request.contextPath}/Categories">Categories</a>
                         </li>
                     </c:if>
-                    <c:if test="${pageContext.request.isUserInRole('Sales')}">
-                    <li class="nav-item ${activePage eq 'Sales' ? 'active' : ''}">
-                        <a class="nav-link" href="${pageContext.request.contextPath}/Sales">Sales</a>
-                    </li>
+                    <c:if test="${pageContext.request.isUserInRole('Casier') || pageContext.request.isUserInRole('Admin')}">
+                        <li class="nav-item ${activePage eq 'Sales' ? 'active' : ''}">
+                            <a class="nav-link" href="${pageContext.request.contextPath}/Sales">Sales</a>
+                        </li>
                     </c:if>
                     <c:if test="${pageContext.request.isUserInRole('Admin')}">
                         <li class="nav-item ${activePage eq 'Users' ? 'active' : ''}">

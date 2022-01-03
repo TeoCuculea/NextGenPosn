@@ -29,8 +29,8 @@
                 <td>${sale.isComplete}</td> 
                 <td>${sale.change}</td> 
                 <td>${sale.total}</td> 
-                <td>{payment[status.index].id}</td>
-                <td>{payment[status.index].amount}</td>
+                <td>${payments[status.index].id}</td>
+                <td>${payments[status.index].amount}</td>
         </tr>
     </c:forEach>
 </table>

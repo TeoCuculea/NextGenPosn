@@ -4,12 +4,13 @@
  */
 package com.posn.nextgenpos.servlet.sale;
 
+import com.posn.nextgenpos.common.PaymentDetails;
 import com.posn.nextgenpos.common.SaleDetails;
+import com.posn.nextgenpos.ejb.PaymentBean;
 import com.posn.nextgenpos.ejb.SaleBean;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Date;
 import java.util.List;
 import javax.annotation.security.DeclareRoles;
 import javax.inject.Inject;
@@ -25,13 +26,16 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author teodo
  */
-@DeclareRoles({"Sales"})
-@ServletSecurity(value = @HttpConstraint(rolesAllowed = {"Sales"}))
+//@DeclareRoles({"Admin","Casier"})
+@ServletSecurity(value = @HttpConstraint(rolesAllowed = {"Admin","Casier"}))
 @WebServlet(name = "Sales", urlPatterns = {"/Sales"})
 public class Sales extends HttpServlet {
 
     @Inject
     private SaleBean saleBean;
+    
+    @Inject
+    private PaymentBean paymentBean;
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -56,6 +60,9 @@ public class Sales extends HttpServlet {
             throws ServletException, IOException {
         request.setAttribute("activePage", "Sales");
         List<SaleDetails> sales = saleBean.getAllSales();
+        request.setAttribute("sales", sales);
+        List<PaymentDetails> payments = paymentBean.getAllPayments();
+        request.setAttribute("payments", payments);
         request.setAttribute("sales", sales);
         request.getRequestDispatcher("/WEB-INF/pages/sale/sales.jsp").forward(request, response);
     }

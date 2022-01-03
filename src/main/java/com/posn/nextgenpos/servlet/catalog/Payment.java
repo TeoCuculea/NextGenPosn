@@ -5,6 +5,7 @@
 package com.posn.nextgenpos.servlet.catalog;
 
 import com.posn.nextgenpos.common.LineDetails;
+import com.posn.nextgenpos.common.PaymentDetails;
 import com.posn.nextgenpos.common.ProductDetails;
 import com.posn.nextgenpos.common.SaleDetails;
 import com.posn.nextgenpos.ejb.LineItemBean;
@@ -63,9 +64,11 @@ public class Payment extends HttpServlet {
         
         List<LineDetails> lineItemDetails = lineItemBean.getAllBySaleId(sale.getId());
         List<ProductDetails> prodSpecs = lineItemBean.getAllProductSpecificationsBySaleId(sale.getId());
+        List<PaymentDetails> payments = paymentBean.getAllPayments();
         
         request.setAttribute("cartItem", lineItemDetails);
         request.setAttribute("cartItemSpecs", prodSpecs);
+        request.setAttribute("payments", payments);
         
         request.getRequestDispatcher("/WEB-INF/pages/payment/payments.jsp").forward(request, response);
     }
