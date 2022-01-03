@@ -19,7 +19,7 @@
                         <th>Nume <br>produs</th>
                         <th>Descriere</th>
                         <th>Pret/<br>bucata[RON]</th> 
-                    </tr> 
+                    </tr>
                     <c:forEach var="itemSpec" items="${itemSpecs}" varStatus="status">
                         <tr>
                         <div class="col-md">

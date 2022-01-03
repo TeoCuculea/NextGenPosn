@@ -4,7 +4,9 @@
  */
 package com.posn.nextgenpos.servlet.catalog;
 
+import com.posn.nextgenpos.common.CategoryDetails;
 import com.posn.nextgenpos.common.LineDetails;
+import com.posn.nextgenpos.common.ProductCatalogDetails;
 import com.posn.nextgenpos.common.ProductDetails;
 import com.posn.nextgenpos.common.SaleDetails;
 import com.posn.nextgenpos.ejb.LineItemBean;
@@ -21,14 +23,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-
-        //PROBLEMS THAT REQUIRE ATTENTION
-
-//	1.request.isUserInRole('Casier') always returns false
-//		-some problem with the role, maybe its only local
-//	2.item page not showing category name
-//	3.save button from edit item not working
-//		maybe 2 and 3 are connected, in database the id's in tables are ok
 
 /**
  *
@@ -52,17 +46,18 @@ import javax.servlet.http.HttpSession;
 @WebServlet(name = "Catalogs", urlPatterns = {"/Catalogs"})
 public class Catalogs extends HttpServlet {
 
-    @Inject 
-    private ProductCatalogBean productCatalogBean;
-    
+    @Inject
+    private ProductCatalogBean prodCatBean;
+
     @Inject
     private ProductSpecificationBean prodSpecsBean;
-    
-    @Inject 
+
+    @Inject
     LineItemBean lineItemBean;
-    
+
     @Inject
     SaleBean saleBean;
+
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -86,29 +81,27 @@ public class Catalogs extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         request.setAttribute("activePage", "Catalogs");
-        
-        request.setAttribute("trying",request.isUserInRole("Casier"));
-        List<ProductDetails> itemSpecs = prodSpecsBean.getAllProductSpecifications();
+        ProductCatalogDetails catalog = prodCatBean.getCatalog();
+        List<ProductDetails> itemSpecs = catalog.getProductSpecification();
+        prodCatBean.updateCatalog(itemSpecs);
         request.setAttribute("itemSpecs", itemSpecs);
-        
+        List<CategoryDetails> categories = categoryBean.getAllCategories();
+        request.setAttribute("categories", categories);
         HttpSession session = request.getSession();
-        
         SaleDetails incompleteSale = saleBean.getIncompleteSale();
-        if(incompleteSale!=null)
-        {
+        if (incompleteSale != null) {
             session.setAttribute("sale", incompleteSale);
         }
-        if(session.getAttribute("sale")!=null)
-        {
+        if (session.getAttribute("sale") != null) {
             SaleDetails sale = (SaleDetails) session.getAttribute("sale");
             List<LineDetails> lineItemDetails = lineItemBean.getAllBySaleId(sale.getId());
             List<ProductDetails> prodSpecs = lineItemBean.getAllProductSpecificationsBySaleId(sale.getId());
-
             request.setAttribute("cartItem", lineItemDetails);
             request.setAttribute("cartItemSpecs", prodSpecs);
         }
         request.getRequestDispatcher("/WEB-INF/pages/catalog/catalogs.jsp").forward(request, response);
     }
+
     /**
      * Handles the HTTP <code>POST</code> method.
      *
@@ -120,7 +113,7 @@ public class Catalogs extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
+
     }
 
     /**
