@@ -5,14 +5,16 @@
 package com.posn.nextgenpos.servlet.catalog;
 
 import com.posn.nextgenpos.common.CategoryDetails;
+import com.posn.nextgenpos.common.LineDetails;
 import com.posn.nextgenpos.common.ProductCatalogDetails;
 import com.posn.nextgenpos.common.ProductDetails;
+import com.posn.nextgenpos.common.SaleDetails;
 import com.posn.nextgenpos.ejb.CategoryBean;
+import com.posn.nextgenpos.ejb.LineItemBean;
 import com.posn.nextgenpos.ejb.ProductCatalogBean;
 import com.posn.nextgenpos.ejb.ProductSpecificationBean;
-import com.posn.nextgenpos.entity.ProductCatalog;
+import com.posn.nextgenpos.ejb.SaleBean;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -22,6 +24,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  *
@@ -41,6 +44,12 @@ public class Catalogs extends HttpServlet {
 
     @Inject
     private ProductCatalogBean prodCatBean;
+    
+    @Inject
+    private SaleBean saleBean;
+    
+    @Inject
+    private LineItemBean lineItemBean;
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -64,13 +73,31 @@ public class Catalogs extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        request.setAttribute("activePage", "Catalogs");
+         request.setAttribute("activePage", "Catalogs");    
+        
         ProductCatalogDetails catalog = prodCatBean.getCatalog();
         List<ProductDetails> itemSpecs = catalog.getProductSpecification();
         prodCatBean.updateCatalog(itemSpecs);
         request.setAttribute("itemSpecs", itemSpecs);
+        
         List<CategoryDetails> categories = categoryBean.getAllCategories();
         request.setAttribute("categories", categories);
+        HttpSession session = request.getSession();
+        
+        SaleDetails incompleteSale = saleBean.getIncompleteSale();
+        if(incompleteSale!=null)
+        {
+            session.setAttribute("sale", incompleteSale);
+        }
+        if(session.getAttribute("sale")!=null)
+        {
+            SaleDetails sale = (SaleDetails) session.getAttribute("sale");
+            List<LineDetails> lineItemDetails = lineItemBean.getAllBySaleId(sale.getId());
+            List<ProductDetails> prodSpecs = lineItemBean.getAllProductSpecificationsBySaleId(sale.getId());
+
+            request.setAttribute("cartItem", lineItemDetails);
+            request.setAttribute("cartItemSpecs", prodSpecs);
+        }
         request.getRequestDispatcher("/WEB-INF/pages/catalog/catalogs.jsp").forward(request, response);
     }
 
