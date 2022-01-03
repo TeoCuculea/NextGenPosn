@@ -103,7 +103,7 @@ public class LineItemBean {
     private List<LineDetails> copyLineItemsToDetails(List<SaleLineItem> lineItems) {
         List<LineDetails> lineItemDetailsList = new ArrayList<>();
         for(SaleLineItem lineItem:lineItems){
-            LineDetails lineItemDetails = new LineDetails(lineItem.getId(),lineItem.getQuantity());
+            LineDetails lineItemDetails = lineItem.clone();
             lineItemDetailsList.add(lineItemDetails);
         }
         return lineItemDetailsList;
