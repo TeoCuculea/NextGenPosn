@@ -75,12 +75,14 @@ public class ProductSpecificationBean {
         item.setProductSpecification(productSpecification);
         productSpecification.setItem(item);
 
+        em.persist(productSpecification);
+        em.flush();
+        
         Category category = em.find(Category.class, categoryId);
         category.addProduct(productSpecification);
-        productSpecification.setCategory(productSpecification.getCategories());
-        em.persist(productSpecification);
+        productSpecification.addCategory(category);        
     }
-
+    
     public void updateProductSpecification(Integer productId, String name, String description, Double pricePerUnit, Integer itemId, Integer categoryId) {
         LOG.info("updateProductSpecification");
         ProductSpecification productSpecification = em.find(ProductSpecification.class, productId);

@@ -78,7 +78,6 @@ public class AddItem extends HttpServlet {
         Integer categoryId = Integer.parseInt(request.getParameter("category_id"));
         Integer itemId = itemBean.createItem(quantity);
         prodSpecsBean.createProductSpecification(name, description, price,itemId, categoryId);
-        
         response.sendRedirect(request.getContextPath()+ "/Items");//ma intoarce inapoi in pagina Items     
     }
 

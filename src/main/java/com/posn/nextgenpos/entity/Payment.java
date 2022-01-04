@@ -15,6 +15,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.Min;
 
 /**
  *
@@ -28,7 +29,11 @@ public class Payment implements Serializable, Prototype<PaymentDetails> {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
+    
+    @Min(0)
     private double amount;
+    
+    @Min(0)
     private double total;
     
     @OneToOne(cascade = CascadeType.ALL)

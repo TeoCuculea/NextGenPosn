@@ -40,7 +40,7 @@ public class ProductDetails implements java.io.Serializable, Prototype<ProductDe
 
     @Override
     public ProductDetails clone() {
-        return new ProductDetails(this.id, this.description, this.name, this.pricePerUnit+this.pricePerUnit*19/100);
+        return new ProductDetails(this.id, this.name, this.description, this.pricePerUnit+this.pricePerUnit*19/100);
     }
     
 }

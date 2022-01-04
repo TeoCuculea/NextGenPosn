@@ -18,6 +18,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.Min;
 
 /**
  *
@@ -34,9 +35,11 @@ public class ProductSpecification implements Serializable, Prototype<ProductDeta
     private Integer id;
     private String name;
     private String description;
+    
+    @Min(0)
     private Double pricePerUnit;
     
-    @ManyToMany( mappedBy="productSpecification")
+    @ManyToMany(mappedBy="productSpecification")
     private Collection<Category> categories;
     
     public Integer getId() {
@@ -103,7 +106,7 @@ public class ProductSpecification implements Serializable, Prototype<ProductDeta
     
     @Override
     public ProductDetails clone() {
-        return new ProductDetails(this.id, this.description, this.name, this.pricePerUnit);
+        return new ProductDetails(this.id, this.name, this.description, this.pricePerUnit);
     }
     
     @Override

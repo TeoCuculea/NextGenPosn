@@ -20,7 +20,7 @@
             </div>
             <div class="col-md-2">
                 <label for="quantity">Quantity</label>
-                <input type="text" class="form-control" id="quantity" name="quantity" placeholder="" value="${item.quantity}" required="">
+                <input type="number" class="form-control" id="quantity" name="quantity" placeholder="" value="${item.quantity}" required="" min="1">
                 <div class="invalid-feedback">
                     Quantity is required.
                 </div>
@@ -34,7 +34,7 @@
             </div>
             <div class="col-md-2">
                 <label for="priceperunit">Price Per Unit</label>
-                <input type="text" class="form-control" id="priceperunit" name="priceperunit" placeholder="" value="${itemSpecs.pricePerUnit}" required="">
+                <input type="number" class="form-control" id="priceperunit" name="priceperunit" placeholder="" value="${itemSpecs.pricePerUnit}" required="" min="0">
                 <div class="invalid-feedback">
                     Quantity is required.
                 </div>
@@ -43,7 +43,7 @@
         <div class="col-md-2">
             <label for="category_id">Category</label>
             <select class="custom-select d-block w-100" id="category_id" name="category_id" required="">
-                <option value="">${category.categoryName}</option>
+                <option value="${category.id}">${category.categoryName}</option>
                 <c:forEach var="category" items="${categories}" varStatus="status">
                     <option value="${category.id}">${category.categoryName}</option>
                 </c:forEach>

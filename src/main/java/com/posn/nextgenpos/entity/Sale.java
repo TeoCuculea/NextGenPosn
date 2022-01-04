@@ -16,6 +16,7 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.Min;
 
 /**
  *
@@ -29,9 +30,12 @@ public class Sale implements Serializable, Prototype<SaleDetails> {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
-    private LocalDateTime date ;
+    private LocalDateTime date;
     private boolean isComplete;
+    
+    @Min(0)
     private double total;
+    @Min(0)
     private double change;
     
     @OneToMany(mappedBy="sale")
