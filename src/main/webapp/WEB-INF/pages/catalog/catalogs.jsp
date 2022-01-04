@@ -47,7 +47,9 @@
                         <tr>
                             <c:if test="${sessionScope.sale!=null && pageContext.request.isUserInRole('Casier')}">
                             <td>
-                                <a href="${pageContext.request.contextPath}/Cart?id=${itemSpec.id}&quan=" onclick="this.href += document.getElementById('quantity${itemSpec.id}').value" class="w3-button w3-large w3-circle w3-xlarge w3-ripple w3-black" style="z-index:0">+</a>
+                                <a href="${pageContext.request.contextPath}/Cart?id=${itemSpec.id}&quan=" 
+                                   onclick="this.href += document.getElementById('quantity${itemSpec.id}').value" 
+                                   class="btn btn-lg btn-primary" style="z-index:0">+</a>
                             </td>
                             <td>
                                 <label for="quantity" >Cantitate</label>
@@ -80,7 +82,7 @@
                                 </tr>
                                 <c:forEach var="itemSpec" items="${cartItemSpecs}" varStatus="status">
                                     <tr>
-                                        <td><a href="${pageContext.request.contextPath}/DeleteFromCart?id=${cartItem[status.index].id}">-</a></td>
+                                        <td><a href="${pageContext.request.contextPath}/DeleteFromCart?id=${cartItem[status.index].id}" class="btn btn-danger">-</a></td>
                                         <td id="cartQuantity{
                                                 itemSpec.id
                                             }">

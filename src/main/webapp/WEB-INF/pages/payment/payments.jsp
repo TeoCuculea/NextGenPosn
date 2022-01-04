@@ -37,7 +37,7 @@
             </div>
             <div>
                 <label for="amount">Introdu suma:</label>
-                <input type="number" name="amount" id="amount" placeholder="" value="" required="" min="${total}">
+                <input type="number" name="amount" id="amount" placeholder="" value="" required="" min="${total}" step="0.01">
             </div>
             <div style="text-align:center">
                 <button class="btn btn-primary btn-lg btn-block" type="submit">Plata</button>
