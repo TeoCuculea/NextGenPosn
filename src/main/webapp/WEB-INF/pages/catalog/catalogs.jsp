@@ -74,6 +74,14 @@
                         <form method="POST" action="${pageContext.request.contextPath}/ValidareCart"> 
                             <table name="lista_cumparaturi" width="100%" >
                                 <tr>
+                                    <c:if test="${quantityError!=null}">
+                                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                            Not enough items!Insert a lower quantity.
+                                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                        </div>
+                                    </c:if>
+                                </tr>
+                                <tr>
                                     <th>Sterge <br>produs<br> din cos</th>
                                     <th>Cantitate</th>
                                     <th>Nume <br>produs</th>
@@ -100,6 +108,7 @@
                                 Total:${total}
                             </div>
                             <div style="text-align:center">
+                                <a class="btn btn-danger" href="${pageContext.request.contextPath}/Catalogs/CloseSale" role="button" padding = "100px">Cancel</a>
                                 <a class="btn btn-primary btn-lg" href="${pageContext.request.contextPath}/Catalogs/Payment" role="button" padding = "100px">Spre plata</a>
                             </div>
                         </form> 

@@ -4,15 +4,18 @@
  */
 package com.posn.nextgenpos.ejb;
 
+import com.posn.nextgenpos.common.LineDetails;
 import com.posn.nextgenpos.common.SaleDetails;
 import com.posn.nextgenpos.entity.Payment;
 import com.posn.nextgenpos.entity.Sale;
+import com.posn.nextgenpos.entity.SaleLineItem;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 import javax.ejb.EJBException;
 import javax.ejb.Stateless;
+import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
@@ -29,6 +32,9 @@ public class SaleBean {
     // Add business logic below. (Right-click in editor and choose
     // "Insert Code > Add Business Method")
 
+    @Inject
+    private LineItemBean lineItemBean;
+    
     public List<SaleDetails> getAllSales() {
         try {
             List<Sale> sales = (List<Sale>) em.createQuery("SELECT s from Sale s").getResultList();
@@ -69,7 +75,7 @@ public class SaleBean {
 
     public SaleDetails getIncompleteSale() {
         List<Sale> sale = (List<Sale>) em.createQuery("SELECT s FROM Sale s WHERE s.isComplete = :c").setParameter("c", false).getResultList();
-
+        
         if (!sale.isEmpty()) {
             return new SaleDetails(sale.get(0).getId(),
                     sale.get(0).getDate(),
@@ -85,6 +91,17 @@ public class SaleBean {
         sale.setIsComplete(isComplete);
         sale.setTotal(total);
         sale.setChange(change);
+    }
+
+    public void deleteSale(Integer id) {
+        Sale sale = em.find(Sale.class,id);
+        List<LineDetails> lineItemList = lineItemBean.getAllBySaleId(sale.getId());
+        for(LineDetails lineItem:lineItemList){
+            SaleLineItem saleLineItem = em.find(SaleLineItem.class,lineItem.getId());
+            em.remove(saleLineItem);
+        }
+        
+        em.remove(sale);
     }
 
 }

@@ -8,6 +8,7 @@ import com.posn.nextgenpos.common.LineDetails;
 import com.posn.nextgenpos.common.PaymentDetails;
 import com.posn.nextgenpos.common.ProductDetails;
 import com.posn.nextgenpos.common.SaleDetails;
+import com.posn.nextgenpos.ejb.ItemBean;
 import com.posn.nextgenpos.ejb.LineItemBean;
 import com.posn.nextgenpos.ejb.PaymentBean;
 import com.posn.nextgenpos.ejb.ProductSpecificationBean;
@@ -28,7 +29,9 @@ import javax.servlet.http.HttpSession;
  */
 @WebServlet(name = "Payment", urlPatterns = {"/Catalogs/Payment"})
 public class Payment extends HttpServlet {
-
+        @Inject
+        ItemBean itemBean;
+    
         @Inject
         LineItemBean lineItemBean;
         
@@ -95,7 +98,7 @@ public class Payment extends HttpServlet {
         
         SaleDetails sale = (SaleDetails) session.getAttribute("sale");
         saleBean.updateSale(sale.getId(), true, total, amount-total);
-        
+        itemBean.decreaseQuantityOfSaleItems(sale.getId());
         paymentBean.createPayment(sale.getId(), amount, total);
         
         session.setAttribute("sale", null);

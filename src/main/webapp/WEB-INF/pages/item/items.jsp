@@ -30,15 +30,9 @@
                     <td>${itemSpecs[status.index].description}</td>
                     <td>${itemSpecs[status.index].pricePerUnit}</td>
                     <td>${categories[status.index].categoryName}</td>
-                    <td>${status.index}</td>
                     <td><a class="btn btn-secondary" href="${pageContext.request.contextPath}/Items/EditItem?id=${item.id}" role="button">Edit Item</a></td>
         </tr>
         </c:forEach>
         </table>
-        <c:forEach var="cat" items="${categories}" varStatus="status">
-            <div>
-                ${cat.categoryName}
-            </div>            
-        </c:forEach>
     </form>
 </t:pageTemplate>
