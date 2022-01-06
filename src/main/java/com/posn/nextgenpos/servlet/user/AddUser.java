@@ -1,7 +1,7 @@
 
 import com.posn.nextgenpos.ejb.UserBean;
 import com.posn.nextgenpos.util.PasswordUtil;
-import java.io.IOException;
+
 import javax.inject.Inject;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.HttpConstraint;
@@ -10,8 +10,10 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.Objects;
 
-//@ServletSecurity( value = @HttpConstraint(rolesAllowed = { "Admin"}))
+@ServletSecurity( value = @HttpConstraint(rolesAllowed = { "Admin"}))
 @WebServlet(name = "AddUser", urlPatterns = {"/Users/Create"})
 public class AddUser extends HttpServlet {
 
@@ -48,11 +50,16 @@ public class AddUser extends HttpServlet {
         String email = request.getParameter("email");
         String password= request.getParameter("password");
         String position = request.getParameter("position");
-        
+        boolean validate = false;
+        if(!position.equalsIgnoreCase("CASIER")){
+            validate = true;
+        }
         String passwordSha256 = PasswordUtil.convertToSha256(password);
         
-        userBean.createUser(username, email, passwordSha256, position);
+        userBean.createUser(username, email, passwordSha256, position,validate);
+
         response.sendRedirect(request.getContextPath()+ "/Users");
+
     }
 
     /**
