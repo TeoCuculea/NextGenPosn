@@ -14,12 +14,13 @@ public class UserDetails implements java.io.Serializable {
     private String username;
     private String email;
     private String position;
-
-    public UserDetails(Integer id, String username, String email,  String position) {
+    private boolean validate;
+    public UserDetails(Integer id, String username, String email,  String position,boolean validate) {
         this.id = id;
         this.username = username;
         this.email = email;
         this.position = position;
+        this.validate = validate;
     }
 
     public Integer getId() {
