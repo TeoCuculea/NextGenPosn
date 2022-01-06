@@ -26,7 +26,6 @@ import javax.persistence.*;
  */
 @Stateless
 @Table(name="USERS")
-@Interceptors(PositionInterceptor.class)
 public class UserBean {
 
     private static final Logger LOG = Logger.getLogger(UserBean.class.getName());
@@ -34,6 +33,7 @@ public class UserBean {
     @PersistenceContext
     private EntityManager em;
 
+    @Interceptors(PositionInterceptor.class)
     public int createUser(String username, String email, String passwordSha256, String position, boolean Validate)
     {
         User user = new User();
@@ -70,12 +70,17 @@ public class UserBean {
         return usernames;
     }
 
-    public void validateAccount(Integer userId) {
+    @Interceptors(PositionInterceptor.class)
+    public int validateAccount(Integer userId) {
         LOG.info("Validarea");
         User user = em.find(User.class, userId);
         user.setValidate(true);
         em.persist(user);
+        em.flush();
+        int localUserId = user.getId();
+        return localUserId;
     }
+    
     private List<UserDetails> copyUserToDetails(List<User> users) {
         List<UserDetails> detailsList = new ArrayList<>();
 

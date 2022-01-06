@@ -20,7 +20,6 @@ public class RealTimeEventBroker {
     public void onBrowserRequest(@Observes BrowserWindow browserWindow) {
         System.err.println("RealTimeEventBroker#onBrowserRequest");
         browsers.add(browserWindow);
-
     }
 
     public void onNewEvent(@Observes PositionEvent message) {
@@ -37,6 +36,7 @@ public class RealTimeEventBroker {
     }
 
     private void updateBrowsers() {
+        System.err.println("RealTimeEventBroker#updateBrowsers...msg");
         for (BrowserWindow browserWindow : browsers) {
             try {
                 String rez = "";

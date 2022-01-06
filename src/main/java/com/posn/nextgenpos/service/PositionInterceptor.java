@@ -14,20 +14,21 @@ public class PositionInterceptor {
     @AroundInvoke
     public Object notifyBrowser(InvocationContext ctx) {
         System.out.println("PositionInterceptor Start");
-        Boolean ok;
+        String methName = ctx.getMethod().getName();
+        int ok=-1;
         try {
-            ok = (Boolean) ctx.proceed();
+            ok = (int) ctx.proceed();
         } catch (Exception e) {
             return null;
         }
-        if (ok) {
-            String methName = ctx.getMethod().getName();
+        if (ok!=-1) {
+            
             String msgEvt;
             PositionEvent e = null;
             Object[] parameters = ctx.getParameters();
             if (methName.equals("createUser")) {
-                String id = parameters[0].toString();
-                String name = parameters[1].toString();
+                String id = String.valueOf(ok);
+                String name = parameters[0].toString();
                 System.out.println("PositionInterceptor #ID =" + id + " Name=" + name);
                 //HTML link: <a href="url">link text</a>
                 String url = "http://localhost:8080/POS/validare?id=" + id;
@@ -37,7 +38,7 @@ public class PositionInterceptor {
                 e = new PositionEvent(id, msgEvt);
 
             } else if(methName.equals("validateAccount")) {//methName.equals("validate")
-                String id = parameters[0].toString();
+                String id = String.valueOf(ok);
                 msgEvt = "Done:" + id;
                 e = new PositionEvent(id, msgEvt);
             }

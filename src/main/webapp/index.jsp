@@ -1,7 +1,6 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="t" tagdir="/WEB-INF/tags" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<% String target = "Publisher";%>
 
 <t:pageTemplate pageTitle="NextGen POS System">
         <h1>Welcome to the NextGen POS System</h1>
@@ -27,8 +26,8 @@
                 };
                 xhttp.open("GET", publisher, true);
                 xhttp.send();
-                }
                 document.getElementById("salut").innerHTML = "Salut din JS";
+                }
         </script>
 <%--        </c:if>--%>
 </t:pageTemplate>

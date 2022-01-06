@@ -33,7 +33,8 @@ public class Validare extends HttpServlet {
             throws ServletException, IOException {
         //processRequest(request, response);
         service.validateAccount(Integer.valueOf(request.getParameter("id")));
-        //....
+        
+        response.sendRedirect(request.getContextPath());
     }
 
     /**

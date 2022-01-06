@@ -39,4 +39,7 @@ public class UserDetails implements java.io.Serializable {
         return position;
     }
 
+    public boolean isValidate() {
+        return validate;
+    }
 }

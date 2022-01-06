@@ -51,10 +51,12 @@ public class AddUser extends HttpServlet {
         String password= request.getParameter("password");
         String position = request.getParameter("position");
         boolean validate = false;
-
+        if(!position.equalsIgnoreCase("CASIER")){
+            validate = true;
+        }
         String passwordSha256 = PasswordUtil.convertToSha256(password);
         
-        int userId = userBean.createUser(username, email, passwordSha256, position,validate);
+        userBean.createUser(username, email, passwordSha256, position,validate);
 
         response.sendRedirect(request.getContextPath()+ "/Users");
 
