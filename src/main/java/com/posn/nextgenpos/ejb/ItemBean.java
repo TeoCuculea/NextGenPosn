@@ -82,7 +82,6 @@ public class ItemBean {
     }
 
     public void decreaseQuantityOfSaleItems(Integer id) {
-        Sale sale = em.find(Sale.class, id);
         List<SaleLineItem> lineItemList = (List<SaleLineItem>) em.createQuery("SELECT i FROM SaleLineItem i WHERE i.sale.id = :id").setParameter("id", id).getResultList();
         for (SaleLineItem lineItem : lineItemList) {
             Item item = em.find(Item.class, lineItem.getProdSpecs().getItem().getId());
