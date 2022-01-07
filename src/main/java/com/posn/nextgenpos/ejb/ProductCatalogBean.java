@@ -7,7 +7,6 @@ package com.posn.nextgenpos.ejb;
 import com.posn.nextgenpos.common.ProductCatalogDetails;
 import com.posn.nextgenpos.common.ProductDetails;
 import com.posn.nextgenpos.entity.ProductCatalog;
-import com.posn.nextgenpos.entity.ProductSpecification;
 import java.util.List;
 import java.util.logging.Logger;
 import javax.ejb.EJBException;
@@ -45,8 +44,6 @@ public class ProductCatalogBean {
     }
     public void updateCatalog(List<ProductDetails> productSpecification) {
         LOG.info("updateCatalog");
-        //ProductCatalog catalog = (ProductCatalog) em.createQuery("SELECT p FROM ProductCatalog p").getSingleResult();
-        //LOG.info(ProductCatalog.getInstance().toString());
         ProductCatalog catalog = ProductCatalog.getInstance();
         catalog.setProductSpecification(productSpecification);
     }

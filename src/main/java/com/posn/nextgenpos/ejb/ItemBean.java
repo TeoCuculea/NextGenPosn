@@ -7,7 +7,6 @@ package com.posn.nextgenpos.ejb;
 import com.posn.nextgenpos.common.ItemDetails;
 import com.posn.nextgenpos.entity.Item;
 import com.posn.nextgenpos.entity.ProductSpecification;
-import com.posn.nextgenpos.entity.Sale;
 import com.posn.nextgenpos.entity.SaleLineItem;
 import java.util.ArrayList;
 import java.util.Collection;

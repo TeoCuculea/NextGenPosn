@@ -7,7 +7,6 @@ package com.posn.nextgenpos.servlet.sale;
 import com.posn.nextgenpos.common.SaleDetails;
 import com.posn.nextgenpos.ejb.SaleBean;
 import java.io.IOException;
-import java.io.PrintWriter;
 import javax.inject.Inject;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -24,16 +23,6 @@ import javax.servlet.http.HttpSession;
 public class CloseSale extends HttpServlet {
     @Inject
     SaleBean saleBean;
-    
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**

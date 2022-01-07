@@ -6,7 +6,6 @@ package com.posn.nextgenpos.ejb;
 
 import com.posn.nextgenpos.common.LineDetails;
 import com.posn.nextgenpos.common.SaleDetails;
-import com.posn.nextgenpos.entity.Payment;
 import com.posn.nextgenpos.entity.Sale;
 import com.posn.nextgenpos.entity.SaleLineItem;
 import java.time.LocalDateTime;

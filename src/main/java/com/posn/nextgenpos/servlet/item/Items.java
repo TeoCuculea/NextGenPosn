@@ -12,7 +12,6 @@ import com.posn.nextgenpos.ejb.ItemBean;
 import com.posn.nextgenpos.ejb.ProductSpecificationBean;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import javax.annotation.security.DeclareRoles;
 import javax.inject.Inject;
@@ -41,16 +40,6 @@ public class Items extends HttpServlet {
 
     @Inject
     private CategoryBean categoryBean;
-
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
