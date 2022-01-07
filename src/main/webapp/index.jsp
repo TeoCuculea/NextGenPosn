@@ -9,12 +9,11 @@
                         <h1>Un simplu client nelogat esti in acest moment! </h1>
                 </c:when>
                 <c:otherwise>
-                        <h2>Esti logat ca si: ${pageContext.request.getRemoteUser()}</h2>
+                        <h2>Esti logat ca si: ${pageContext.request.getUserPrincipal().getName()}</h2>
                 </c:otherwise>
         </c:choose>
-<%--        <c:if test="${pageContext.request.isUserInRole('DirectorGeneral')}">--%>
+        <c:if test="${pageContext.request.isUserInRole('DirectorGeneral')}">
         <p id="info">Aici apar notificarile.</p>
-        <p id="salut"></p>
         <script>
                 function subscribe(publisher) {
                 var xhttp = new XMLHttpRequest();
@@ -26,8 +25,7 @@
                 };
                 xhttp.open("GET", publisher, true);
                 xhttp.send();
-                document.getElementById("salut").innerHTML = "Salut din JS";
                 }
         </script>
-<%--        </c:if>--%>
+        </c:if>
 </t:pageTemplate>

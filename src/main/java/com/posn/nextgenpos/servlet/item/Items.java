@@ -29,7 +29,7 @@ import javax.servlet.http.HttpServletResponse;
  * @author teodo
  */
 @DeclareRoles({"Admin"})
-@ServletSecurity(value = @HttpConstraint(rolesAllowed = {"Admin"}))
+@ServletSecurity(value = @HttpConstraint(rolesAllowed = {"Admin","DirectorGeneral"}))
 @WebServlet(name = "Items", urlPatterns = {"/Items"})
 public class Items extends HttpServlet {
 

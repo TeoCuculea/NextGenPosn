@@ -26,25 +26,23 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+/*@ServletSecurity(
+       httpMethodConstraints = {
+                @HttpMethodConstraint(
+                        value = "POST", rolesAllowed = {"AdminRole"}
+                )
+                ,
+                @HttpMethodConstraint(
+                        value = "GET", rolesAllowed = {"ClientRole"}
+                )
+        }
+)*/
 /**
  *
  * @author teodo
  */
-/*@DeclareRoles({"Admin", "Casier", "DirectorGeneral"})
-@ServletSecurity(
-//atributul value din adnotarea de mai jos ne permite sa setam ce roluri au drepturi/voie sa vada pagina aceasta, respectiva.
-        value = @HttpConstraint(rolesAllowed = {"Admin"})
-//atributul de mai jos se refera la faptul ca doar rolul AdminRole poate sa faca POST pe acest servlet.
-//       , httpMethodConstraints = {
-//                @HttpMethodConstraint(
-//                        value = "POST", rolesAllowed = {"AdminRole"}
-//                )
-//                ,
-//                @HttpMethodConstraint(
-//                        value = "GET", rolesAllowed = {"ClientRole"}
-//                )
-//        }
-)*/
+@DeclareRoles({"Admin", "Casier", "DirectorGeneral"})
+@ServletSecurity(value= @HttpConstraint(rolesAllowed = {"Admin"}))
 @WebServlet(name = "Users", urlPatterns = {"/Users"})
 public class Users extends HttpServlet {
 

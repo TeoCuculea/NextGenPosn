@@ -1,4 +1,4 @@
-package com.posn.nextgenpos.service.publish;
+package com.posn.nextgenpos.service.eventsource;
 
 import com.posn.nextgenpos.service.PositionEvent;
 

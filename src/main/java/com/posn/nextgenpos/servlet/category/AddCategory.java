@@ -21,7 +21,7 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author teodo
  */
-@ServletSecurity(value= @HttpConstraint(rolesAllowed = {"Admin"}))
+@ServletSecurity(value = @HttpConstraint(rolesAllowed = {"Admin","DirectorGeneral"}))
 @WebServlet(name = "AddCategory", urlPatterns = {"/Categories/AddCategory"})
 public class AddCategory extends HttpServlet {
 

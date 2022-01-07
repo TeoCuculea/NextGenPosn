@@ -1,4 +1,4 @@
-package com.posn.nextgenpos.service;
+package com.posn.nextgenpos.servlet;
 
 import com.posn.nextgenpos.ejb.UserBean;
 

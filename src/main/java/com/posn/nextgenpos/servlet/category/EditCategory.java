@@ -22,7 +22,7 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author teodo
  */
-@ServletSecurity( value = @HttpConstraint(rolesAllowed = { "Admin"}))
+@ServletSecurity(value = @HttpConstraint(rolesAllowed = {"Admin","DirectorGeneral"}))
 @WebServlet(name = "EditCategory", urlPatterns = {"/Categories/EditCategory"})
 public class EditCategory extends HttpServlet {
 

@@ -1,4 +1,6 @@
-package com.posn.nextgenpos.service.publish;
+package com.posn.nextgenpos.servlet;
+
+import com.posn.nextgenpos.service.publish.BrowserWindow;
 
 import javax.enterprise.event.Event;
 import javax.inject.Inject;

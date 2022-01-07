@@ -24,15 +24,7 @@ import javax.servlet.http.HttpServletResponse;
  * @author teodo
  */
 @DeclareRoles({"Admin"})
-@ServletSecurity(
-        value=@HttpConstraint(rolesAllowed={"Admin"}
-        )
-        //,
-        //httpMethodConstraints={
-           // @HttpMethodConstraint(value="POST", rolesAllowed={"AdminRole"}
-           // )
-        //}
-)
+@ServletSecurity(value = @HttpConstraint(rolesAllowed = {"Admin","DirectorGeneral"}))
 @WebServlet(name = "Categories", urlPatterns = {"/Categories"})
 public class Categories extends HttpServlet {
 
