@@ -33,7 +33,6 @@ import javax.servlet.http.HttpSession;
  *
  * @author teodo
  */
-@ServletSecurity(value = @HttpConstraint(rolesAllowed = {"Casier"}))
 @WebServlet(name = "Catalogs", urlPatterns = {"/Catalogs"})
 public class Catalogs extends HttpServlet {
 

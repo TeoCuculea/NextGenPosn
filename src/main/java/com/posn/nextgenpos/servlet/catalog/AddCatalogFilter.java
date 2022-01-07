@@ -26,7 +26,6 @@ import javax.servlet.http.HttpServletResponse;
  * @author teodo
  */
 @WebServlet(name = "AddCatalogFilter", urlPatterns = {"/Catalogs/AddCatalogFilter"})
-@ServletSecurity(value = @HttpConstraint(rolesAllowed = {"Admin","DirectorGeneral"}))
 public class AddCatalogFilter extends HttpServlet {
 
     @Inject
