@@ -1,7 +1,7 @@
+package com.posn.nextgenpos.servlet.user;
 
 import com.posn.nextgenpos.ejb.UserBean;
 import com.posn.nextgenpos.util.PasswordUtil;
-
 import javax.inject.Inject;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.HttpConstraint;

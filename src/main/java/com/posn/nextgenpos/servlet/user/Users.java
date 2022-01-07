@@ -1,16 +1,11 @@
-package com.posn.nextgenpos.servlet.user;
-
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
-
-
-
+package com.posn.nextgenpos.servlet.user;
 
 import com.posn.nextgenpos.common.UserDetails;
 import com.posn.nextgenpos.ejb.UserBean;
-
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.List;
@@ -19,7 +14,6 @@ import javax.annotation.security.DeclareRoles;
 import javax.inject.Inject;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.HttpConstraint;
-import javax.servlet.annotation.HttpMethodConstraint;
 import javax.servlet.annotation.ServletSecurity;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -81,7 +75,7 @@ public class Users extends HttpServlet {
         String[] userIdsAsString = request.getParameterValues("user_ids");
         if(userIdsAsString !=null)
         {
-            Set<Integer> userIds = new HashSet<Integer>();
+            Set<Integer> userIds = new HashSet<>();
             for(String userIdAsString : userIdsAsString)
             {
                 userIds.add(Integer.parseInt(userIdAsString));

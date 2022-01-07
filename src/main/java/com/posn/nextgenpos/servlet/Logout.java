@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletResponse;
  * @author kicky
  */
 public class Logout extends HttpServlet {
+    
     /**
      * Handles the HTTP <code>GET</code> method.
      * @param request servlet request
