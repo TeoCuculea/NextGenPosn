@@ -44,7 +44,6 @@
                 <select class="custom-select d-block w-100" id="position" name="position" required="">
                     <option value="">Choose...</option>
                     <option value="ADMINISTRATOR">Administrator</option>
-                    <option value="CLIENT">Client</option>
                     <option value="CASIER">Casier</option>
                     <option value="DG">DG</option>
                 </select>

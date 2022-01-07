@@ -24,20 +24,21 @@ import javax.servlet.http.HttpServletResponse;
  * @author teodo
  */
 @DeclareRoles({"Admin"})
-@ServletSecurity(
-        value=@HttpConstraint(rolesAllowed={"Admin"}
-        )
-        //,
-        //httpMethodConstraints={
-           // @HttpMethodConstraint(value="POST", rolesAllowed={"AdminRole"}
-           // )
-        //}
-)
+@ServletSecurity(value = @HttpConstraint(rolesAllowed = {"Admin","DirectorGeneral"}))
 @WebServlet(name = "Categories", urlPatterns = {"/Categories"})
 public class Categories extends HttpServlet {
 
     @Inject
     CategoryBean categoryBean;
+    /**
+     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
+     * methods.
+     *
+     * @param request servlet request
+     * @param response servlet response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
+     */
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**

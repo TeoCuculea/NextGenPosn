@@ -1,9 +1,11 @@
-package com.posn.nextgenpos.service;
+package com.posn.nextgenpos.servlet;
 
 import com.posn.nextgenpos.ejb.UserBean;
 
 import javax.inject.Inject;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.HttpConstraint;
+import javax.servlet.annotation.ServletSecurity;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -15,6 +17,7 @@ import java.io.IOException;
  * @author admin
  */
 @WebServlet(name = "Validare", urlPatterns = {"/validare"})
+@ServletSecurity(value = @HttpConstraint(rolesAllowed = {"DirectorGeneral"}))
 public class Validare extends HttpServlet {
     @Inject
     UserBean service;

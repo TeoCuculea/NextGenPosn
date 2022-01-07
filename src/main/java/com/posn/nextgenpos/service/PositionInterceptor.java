@@ -34,7 +34,7 @@ public class PositionInterceptor {
                 String url = "http://localhost:8080/POS/validare?id=" + id;
                 String htmlLink = "<a href=\"" + url + "\"target=\"bbb\">" + name + "</a>";
 
-                msgEvt = "RequestValidate => " + htmlLink;
+                msgEvt = "New User:" + htmlLink;
                 e = new PositionEvent(id, msgEvt);
 
             } else if(methName.equals("validateAccount")) {//methName.equals("validate")

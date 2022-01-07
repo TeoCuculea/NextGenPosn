@@ -15,32 +15,34 @@ import java.io.IOException;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import javax.annotation.security.DeclareRoles;
 import javax.inject.Inject;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.HttpConstraint;
+import javax.servlet.annotation.HttpMethodConstraint;
+import javax.servlet.annotation.ServletSecurity;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+/*@ServletSecurity(
+       httpMethodConstraints = {
+                @HttpMethodConstraint(
+                        value = "POST", rolesAllowed = {"AdminRole"}
+                )
+                ,
+                @HttpMethodConstraint(
+                        value = "GET", rolesAllowed = {"ClientRole"}
+                )
+        }
+)*/
 /**
  *
  * @author teodo
  */
-/*@DeclareRoles({"Admin", "Casier", "DirectorGeneral"})
-@ServletSecurity(
-//atributul value din adnotarea de mai jos ne permite sa setam ce roluri au drepturi/voie sa vada pagina aceasta, respectiva.
-        value = @HttpConstraint(rolesAllowed = {"Admin"})
-//atributul de mai jos se refera la faptul ca doar rolul AdminRole poate sa faca POST pe acest servlet.
-//       , httpMethodConstraints = {
-//                @HttpMethodConstraint(
-//                        value = "POST", rolesAllowed = {"AdminRole"}
-//                )
-//                ,
-//                @HttpMethodConstraint(
-//                        value = "GET", rolesAllowed = {"ClientRole"}
-//                )
-//        }
-)*/
+@DeclareRoles({"Admin", "Casier", "DirectorGeneral"})
+@ServletSecurity(value= @HttpConstraint(rolesAllowed = {"Admin"}))
 @WebServlet(name = "Users", urlPatterns = {"/Users"})
 public class Users extends HttpServlet {
 
