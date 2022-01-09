@@ -26,7 +26,7 @@
         <group-name>DG</group-name>
     </security-role-mapping>
     <security-role-mapping>
-        <role-name>Sales</role-name>
+        <role-name>AdminSiDirector</role-name>
         <group-name>DG</group-name>
         <group-name>ADMINISTRATOR</group-name>
     </security-role-mapping>
