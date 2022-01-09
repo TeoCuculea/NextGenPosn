@@ -97,13 +97,11 @@ public class ProductSpecificationBean {
 
         List<Category> oldCategory = (List<Category>) productSpecification.getCategories();
         if (!oldCategory.isEmpty()) {
-            LOG.info(oldCategory.get(0).getCategoryName() + "---------");
             oldCategory.get(0).dropProduct(productSpecification);
             productSpecification.dropCategory(oldCategory.get(0));
         }
         
         Category category = em.find(Category.class, categoryId);
-        LOG.info(category.getCategoryName() + "XXXXXXXXXXXX");
         category.addProduct(productSpecification);
         productSpecification.addCategory(category);
     }
