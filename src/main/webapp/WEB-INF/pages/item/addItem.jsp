@@ -34,7 +34,7 @@
             </div>
             <div class="col-md-2">
                 <label for="priceperunit">Price per Unit</label>
-                <input type="number" class="form-control" id="priceperunit" name="priceperunit" placeholder="" value="" required="" min="0">
+                <input type="number" class="form-control" id="priceperunit" name="priceperunit" placeholder="" value="" required="" min="0" step="0.01">
                 <div class="invalid-feedback">
                     Price is required.
                 </div>

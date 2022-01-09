@@ -34,7 +34,7 @@
             </div>
             <div class="col-md-2">
                 <label for="priceperunit">Price Per Unit</label>
-                <input type="number" class="form-control" id="priceperunit" name="priceperunit" placeholder="" value="${itemSpecs.pricePerUnit}" required="" min="0">
+                <input type="number" class="form-control" id="priceperunit" name="priceperunit" placeholder="" value="${itemSpecs.pricePerUnit}" required="" min="0" step="0.01">
                 <div class="invalid-feedback">
                     Quantity is required.
                 </div>
