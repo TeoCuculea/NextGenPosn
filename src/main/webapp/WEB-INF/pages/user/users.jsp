@@ -13,23 +13,23 @@
         <a class="btn btn-primary btn-lg" href="${pageContext.request.contextPath}/Users/Create" role="button">Add
             User</a>
         <div class="row">
-            <div class="col-md-3">
-                <h3> Checkbox</h3>
+            <div class="col-md-1">
+                <h5> Checkbox</h5>
             </div>
             <div class="col-md-3">
-                <h3>Username</h3>
+                <h4>Username</h4>
             </div>
             <div class="col-md-3">
-                <h3>Email</h3>
+                <h4>Email</h4>
             </div>
             <div class="col-md-3">
-                <h3>Position</h3>
+                <h4>Position</h4>
             </div>
         </div>
 
         <c:forEach var="user" items="${users}" varStatus="status">
             <div class="row">
-                <div class="col-md-3">
+                <div class="col-md-1">
                     <input type="checkbox" name="user_ids" value="${user.id}"/>
                 </div>                
                 <div class="col-md-3">

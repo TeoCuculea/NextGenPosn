@@ -103,10 +103,7 @@ public class ProductSpecificationBean {
         
         Category category = em.find(Category.class, categoryId);
         category.addProduct(productSpecification);
-        //category.setProductSpecification(category.getProductSpecification());
         productSpecification.addCategory(category);
-        //productSpecification.setCategory(productSpecification.getCategories());
-
     }
 
     public void deleteProductSpecificationByIds(Collection<Integer> productId) {

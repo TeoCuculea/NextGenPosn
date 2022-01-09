@@ -7,6 +7,7 @@ package com.posn.nextgenpos.allinterfaces;
 /**
  *
  * @author teodo
+ * @param <T>
  */
 public interface Prototype<T> {
     public T clone();

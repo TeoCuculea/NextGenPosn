@@ -3,7 +3,7 @@
 <glassfish-web-app error-url="">
     <context-root>/POS</context-root>
   
-    <security-role>
+   <!-- <security-role>
         <role-name>ADMINISTRATOR</role-name>
     </security-role>
     <security-role>
@@ -11,7 +11,7 @@
     </security-role>
     <security-role>
         <role-name>DG</role-name>
-    </security-role>
+    </security-role>-->
   
     <security-role-mapping>
         <role-name>Admin</role-name>

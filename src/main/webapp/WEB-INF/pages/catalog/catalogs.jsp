@@ -77,7 +77,7 @@
                                     <c:if test="${quantityError!=null}">
                                         <div class="alert alert-danger alert-dismissible fade show" role="alert">
                                             Not enough items!Insert a lower quantity.
-                                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                            <button type="button" id="closeQuantityError" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                                         </div>
                                     </c:if>
                                 </tr>
@@ -122,4 +122,9 @@
             </c:choose>
         </c:if>
     </div>
+            
+            <script>
+                const button = document.getElementById("closeQuantityError");
+                button.addEventListener('click',event =>{ ${quantityError=null} });
+            </script>
 </t:pageTemplate>

@@ -29,7 +29,10 @@ public class User implements Serializable, Prototype<UserDetails> {
     private String email;
     private String password;
     private String position;
-    
+    private boolean validate;
+
+
+
     public Integer getId() {
         return id;
     }
@@ -73,7 +76,13 @@ public class User implements Serializable, Prototype<UserDetails> {
     public String getPosition() {
         return position;
     }
-    
+    public boolean getValidate() {
+        return validate;
+    }
+
+    public void setValidate(boolean validate) {
+        this.validate = validate;
+    }
     @Override
     public int hashCode() {
         int hash = 0;
@@ -101,7 +110,7 @@ public class User implements Serializable, Prototype<UserDetails> {
 
     @Override
     public UserDetails clone() {
-        return new UserDetails(this.getId(), this.getUsername(), this.getEmail(), this.getPosition());
+        return new UserDetails(this.getId(), this.getUsername(), this.getEmail(), this.getPosition(),this.getValidate());
     }
     
 }

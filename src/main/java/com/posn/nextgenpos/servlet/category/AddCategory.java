@@ -4,10 +4,8 @@
  */
 package com.posn.nextgenpos.servlet.category;
 
-import com.posn.nextgenpos.common.CategoryDetails;
 import com.posn.nextgenpos.ejb.CategoryBean;
 import java.io.IOException;
-import java.util.List;
 import javax.inject.Inject;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.HttpConstraint;
@@ -21,21 +19,12 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author teodo
  */
-@ServletSecurity(value= @HttpConstraint(rolesAllowed = {"Admin"}))
+@ServletSecurity(value = @HttpConstraint(rolesAllowed = {"Admin","DirectorGeneral"}))
 @WebServlet(name = "AddCategory", urlPatterns = {"/Categories/AddCategory"})
 public class AddCategory extends HttpServlet {
 
     @Inject
     CategoryBean categoryBean;
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**

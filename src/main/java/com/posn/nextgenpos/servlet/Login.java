@@ -5,7 +5,6 @@
 package com.posn.nextgenpos.servlet;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -42,6 +41,8 @@ public class Login extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        request.setAttribute("message", "Username or password incorrect!");
+        request.getRequestDispatcher("/WEB-INF/pages/login.jsp").forward(request, response);
     }
 
     /**
