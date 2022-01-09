@@ -13,8 +13,7 @@ import com.posn.nextgenpos.ejb.CategoryBean;
 import com.posn.nextgenpos.ejb.LineItemBean;
 import com.posn.nextgenpos.ejb.ProductCatalogBean;
 import com.posn.nextgenpos.ejb.ProductSpecificationBean;
-import com.posn.nextgenpos.ejb.SaleBean;
-import com.posn.nextgenpos.entity.ProductCatalog;
+import com.posn.nextgenpos.ejb.SaleBean;										 
 import java.io.IOException;
 import java.util.Comparator;
 import java.util.List;
@@ -48,16 +47,7 @@ public class Catalogs extends HttpServlet {
 
     @Inject
     private LineItemBean lineItemBean;
-
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
+       
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
@@ -72,8 +62,9 @@ public class Catalogs extends HttpServlet {
             throws ServletException, IOException {
         request.setAttribute("activePage", "Catalogs");
         ProductCatalogDetails catalog = prodCatBean.getCatalog();
-        if ( catalog.getId() == null) {
+        if (catalog.getId() == null) {
             List<ProductDetails> itemSpecs = prodSpecsBean.getAllProductSpecifications();
+            //itemSpecs = prodSpecsBean.addTaxes(itemSpecs);
             prodCatBean.createCatalog(itemSpecs);
             request.setAttribute("itemSpecs", itemSpecs);
         } else {
@@ -84,11 +75,7 @@ public class Catalogs extends HttpServlet {
         List<CategoryDetails> categories = categoryBean.getAllCategories();
         request.setAttribute("categories", categories);
         HttpSession session = request.getSession();
-
-        SaleDetails incompleteSale = saleBean.getIncompleteSale();
-        if (incompleteSale != null) {
-            session.setAttribute("sale", incompleteSale);
-        }
+	 
         if (session.getAttribute("sale") != null) {
             SaleDetails sale = (SaleDetails) session.getAttribute("sale");
             List<LineDetails> lineItemDetails = lineItemBean.getAllBySaleId(sale.getId());
@@ -96,6 +83,11 @@ public class Catalogs extends HttpServlet {
             prodSpecs = prodSpecsBean.addTaxes(prodSpecs);
             request.setAttribute("cartItem", lineItemDetails);
             request.setAttribute("cartItemSpecs", prodSpecs);
+        } else {
+            SaleDetails incompleteSale = saleBean.getIncompleteSale();
+            if (incompleteSale != null) {
+                session.setAttribute("sale", incompleteSale);
+            }
         }
         request.getRequestDispatcher("/WEB-INF/pages/catalog/catalogs.jsp").forward(request, response);
     }
