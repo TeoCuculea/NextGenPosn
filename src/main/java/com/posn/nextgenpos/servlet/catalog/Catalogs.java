@@ -74,7 +74,6 @@ public class Catalogs extends HttpServlet {
         ProductCatalogDetails catalog = prodCatBean.getCatalog();
         if ( catalog.getId() == null) {
             List<ProductDetails> itemSpecs = prodSpecsBean.getAllProductSpecifications();
-            //itemSpecs = prodSpecsBean.addTaxes(itemSpecs);
             prodCatBean.createCatalog(itemSpecs);
             request.setAttribute("itemSpecs", itemSpecs);
         } else {
