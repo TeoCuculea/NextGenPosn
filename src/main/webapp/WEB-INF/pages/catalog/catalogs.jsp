@@ -12,8 +12,12 @@
     <div class="clearfix">
         <form "needs-validation"  novalidate="" method="POST" action="${pageContext.request.contextPath}/Catalogs">
             <button name="delete" value="deleteFilters" class="btn btn-danger" type="submit">Delete filters</button>
-            <input type="submit" name="sort" value="sortByName"/>
-            <input type="submit" name="sort" value="sortByPrice"/>
+            <button type="submit" name="sort" value="sortByName">Sort by name</button>
+            <button type="submit" name="sort" value="sortByPrice">Sort by price</button>
+            <select required="" name="sortare" id="sortare">
+                <option id="ASC" value="ASC">ASC</option>
+                <option id="DESC" value="DESC">DESC</option>
+            </select>
         </form>
         <form class="needs-validation"  novalidate="" method="POST" action="${pageContext.request.contextPath}/Catalogs/AddCatalogFilter">
             <div class="dropdown">
@@ -36,9 +40,9 @@
                 <table class="display" name="catalog" style="width:100%">
                     <tr>
                         <c:if test="${sessionScope.sale!=null && pageContext.request.isUserInRole('Casier')}">
-                        <th>Adauga <br>produs<br> in cos</th>
-                        <th>Cantitate</th>
-                        </c:if>
+                            <th>Adauga <br>produs<br> in cos</th>
+                            <th>Cantitate</th>
+                            </c:if>
                         <th>Nume <br>produs</th>
                         <th>Descriere</th>
                         <th>Pret/<br>bucata[RON]</th> 
@@ -46,18 +50,18 @@
                     <c:forEach var="itemSpec" items="${itemSpecs}" varStatus="status">
                         <tr>
                             <c:if test="${sessionScope.sale!=null && pageContext.request.isUserInRole('Casier')}">
-                            <td>
-                                <a href="${pageContext.request.contextPath}/Cart?id=${itemSpec.id}&quan=" 
-                                   onclick="this.href += document.getElementById('quantity${itemSpec.id}').value" 
-                                   class="btn btn-lg btn-primary" style="z-index:0">+</a>
-                            </td>
-                            <td>
-                                <label for="quantity" >Cantitate</label>
-                                <input type="number" class="form-control" id="quantity${itemSpec.id}" name="quantity" placeholder="" value="" required="" min="1">
-                                <div class="invalid-feedback">
-                                    Quantity is required.
-                                </div>
-                            </td>
+                                <td>
+                                    <a href="${pageContext.request.contextPath}/Cart?id=${itemSpec.id}&quan=" 
+                                       onclick="this.href += document.getElementById('quantity${itemSpec.id}').value" 
+                                       class="btn btn-lg btn-primary" style="z-index:0">+</a>
+                                </td>
+                                <td>
+                                    <label for="quantity" >Cantitate</label>
+                                    <input type="number" class="form-control" id="quantity${itemSpec.id}" name="quantity" placeholder="" value="" required="" min="1">
+                                    <div class="invalid-feedback">
+                                        Quantity is required.
+                                    </div>
+                                </td>
                             </c:if>
                             <td>${itemSpec.name}</td>
                             <td>${itemSpec.description}</td>
@@ -75,11 +79,11 @@
                             <table name="lista_cumparaturi" width="100%" >
                                 <tr>
                                     <c:if test="${quantityError!=null}">
-                                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                                            Not enough items!Insert a lower quantity.
-                                            <button type="button" id="closeQuantityError" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                                        </div>
-                                    </c:if>
+                                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                        Not enough items!Insert a lower quantity.
+                                        <button type="button" id="closeQuantityError" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                    </div>
+                                </c:if>
                                 </tr>
                                 <tr>
                                     <th>Sterge <br>produs<br> din cos</th>
@@ -122,9 +126,20 @@
             </c:choose>
         </c:if>
     </div>
-            
-            <script>
-                const button = document.getElementById("closeQuantityError");
-                button.addEventListener('click',event =>{ ${quantityError=null} });
-            </script>
+
+    <script>
+        const button = document.getElementById("closeQuantityError");
+        button.addEventListener('click', event => {
+        ${quantityError=null}
+        });
+    </script>
+    <script>
+       document.getElementById('sortare').onchange = function() {
+        localStorage.setItem('selectedtem', document.getElementById('sortare').value);
+      };
+
+      if (localStorage.getItem('selectedtem')) {
+        document.getElementById('sortare').options[localStorage.getItem('selectedtem')].selected = true;
+      }
+    </script>
 </t:pageTemplate>

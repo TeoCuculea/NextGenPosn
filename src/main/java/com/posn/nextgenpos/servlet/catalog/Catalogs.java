@@ -15,6 +15,7 @@ import com.posn.nextgenpos.ejb.ProductCatalogBean;
 import com.posn.nextgenpos.ejb.ProductSpecificationBean;
 import com.posn.nextgenpos.ejb.SaleBean;										 
 import java.io.IOException;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -105,6 +106,7 @@ public class Catalogs extends HttpServlet {
             throws ServletException, IOException {
         String buton = request.getParameter("delete");
         String act = request.getParameter("sort");
+        String stare = request.getParameter("sortare");
         if (buton == null) {
             //nu s-a apasat
         } else if (buton.equals("deleteFilters")) {
@@ -114,7 +116,7 @@ public class Catalogs extends HttpServlet {
         }
         if (act == null) {
             //nu s-a apasat butonul
-        } else if (act.equals("sortByName")) {
+        } else if (act.equals("sortByName") && stare.equals("ASC")) {
             ProductCatalogDetails catalog = prodCatBean.getCatalog();
             List<ProductDetails> itemSpecs = catalog.getProductSpecification()
                     .stream()
@@ -122,11 +124,29 @@ public class Catalogs extends HttpServlet {
                     .collect(Collectors.toList());
             prodCatBean.updateCatalog(itemSpecs);
             request.setAttribute("itemSpecs", itemSpecs);
-        } else if (act.equals("sortByPrice")) {
+        } 
+        else if (act.equals("sortByName") && stare.equals("DESC")) {
+            ProductCatalogDetails catalog = prodCatBean.getCatalog();
+            List<ProductDetails> itemSpecs = catalog.getProductSpecification()
+                    .stream()
+                    .sorted(Comparator.comparing(ProductDetails::getName).reversed())
+                    .collect(Collectors.toList());
+            prodCatBean.updateCatalog(itemSpecs);
+            request.setAttribute("itemSpecs", itemSpecs);
+        }else if (act.equals("sortByPrice") && stare.equals("ASC")) {
             ProductCatalogDetails catalog = prodCatBean.getCatalog();
             List<ProductDetails> itemSpecs = catalog.getProductSpecification()
                     .stream()
                     .sorted(Comparator.comparingDouble(ProductDetails::getPricePerUnit))
+                    .collect(Collectors.toList());
+            prodCatBean.updateCatalog(itemSpecs);
+            request.setAttribute("itemSpecs", itemSpecs);
+        }
+        else if (act.equals("sortByPrice") && stare.equals("DESC")) {
+            ProductCatalogDetails catalog = prodCatBean.getCatalog();
+            List<ProductDetails> itemSpecs = catalog.getProductSpecification()
+                    .stream()
+                    .sorted(Comparator.comparingDouble(ProductDetails::getPricePerUnit).reversed())
                     .collect(Collectors.toList());
             prodCatBean.updateCatalog(itemSpecs);
             request.setAttribute("itemSpecs", itemSpecs);
