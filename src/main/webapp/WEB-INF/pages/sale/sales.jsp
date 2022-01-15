@@ -9,9 +9,6 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <t:pageTemplate pageTitle="Sales">
     <h1>Sales</h1>
-    <!--<form method="POST" action="${pageContext.request.contextPath}/Sales">
-        <a class="btn btn-primary btn-lg" href="${pageContext.request.contextPath}/Sales/AddISales" role="button">Add sales?</a>
-        <button class="btn btn-danger" type="submit">Delete Sales</button>-->
     <table name="sale" style="width:100%">
         <tr>
             <th>Sale ID</th>
@@ -21,6 +18,7 @@
             <th>Total</th>
             <th>Payment_ID</th>
             <th>Payment Amount</th>
+            <th>Process return</th>
         </tr>
         <c:forEach var="sale" items="${sales}" varStatus="status">
             <tr>
@@ -31,6 +29,8 @@
                 <td>${sale.total}</td> 
                 <td>${payments[status.index].id}</td>
                 <td>${payments[status.index].amount}</td>
+                <td><a href="${pageContext.request.contextPath}/Sales/ProcessReturn?id=${sale.id}" 
+                    class="btn btn-lg btn-primary" >Process Return</a></td>
         </tr>
     </c:forEach>
 </table>
