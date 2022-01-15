@@ -7,7 +7,7 @@ package com.posn.nextgenpos.ejb;
 import com.posn.nextgenpos.common.ItemDetails;
 import com.posn.nextgenpos.entity.Item;
 import com.posn.nextgenpos.entity.ProductSpecification;
-import com.posn.nextgenpos.entity.SaleLineItem;
+import com.posn.nextgenpos.entity.LineItem;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -81,8 +81,8 @@ public class ItemBean {
     }
 
     public void decreaseQuantityOfSaleItems(Integer id) {
-        List<SaleLineItem> lineItemList = (List<SaleLineItem>) em.createQuery("SELECT i FROM SaleLineItem i WHERE i.sale.id = :id").setParameter("id", id).getResultList();
-        for (SaleLineItem lineItem : lineItemList) {
+        List<LineItem> lineItemList = (List<LineItem>) em.createQuery("SELECT i FROM LineItem i WHERE i.sale.id = :id").setParameter("id", id).getResultList();
+        for (LineItem lineItem : lineItemList) {
             Item item = em.find(Item.class, lineItem.getProdSpecs().getItem().getId());
             item.setQuantity(item.getQuantity() - lineItem.getQuantity());
         }
