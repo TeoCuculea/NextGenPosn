@@ -7,7 +7,6 @@ package com.posn.nextgenpos.ejb;
 import com.posn.nextgenpos.common.ProductCatalogDetails;
 import com.posn.nextgenpos.common.ProductDetails;
 import com.posn.nextgenpos.entity.ProductCatalog;
-import com.posn.nextgenpos.entity.ProductSpecification;
 import java.util.List;
 import java.util.logging.Logger;
 import javax.ejb.EJBException;
@@ -31,27 +30,25 @@ public class ProductCatalogBean {
     public ProductCatalogDetails getCatalog() {
         LOG.info("getCatalog");
         try {
-            ProductCatalog catalog = (ProductCatalog) em.createQuery("SELECT p FROM ProductCatalog p").getSingleResult();
+            ProductCatalog catalog = ProductCatalog.getInstance();//(ProductCatalog) em.createQuery("SELECT p FROM ProductCatalog p").getSingleResult();
             return copyCatalogToDetails(catalog);
         } catch (Exception ex) {
             throw new EJBException(ex);
         }
     }
-    /*public void createCatalog(List<ProductDetails> productSpecification) {
+    public void createCatalog(List<ProductDetails> productSpecification) {
         LOG.info("createCatalog");
         ProductCatalog catalog = ProductCatalog.getInstance();
         catalog.setProductSpecification(productSpecification);
         em.persist(catalog);
-    }*/
+    }
     public void updateCatalog(List<ProductDetails> productSpecification) {
         LOG.info("updateCatalog");
-        ProductCatalog catalog = (ProductCatalog) em.createQuery("SELECT p FROM ProductCatalog p").getSingleResult();
-        //ProductCatalog catalog = ProductCatalog.getInstance();
-        List<ProductDetails> ceva = catalog.getProductSpecification();
+        ProductCatalog catalog = ProductCatalog.getInstance();
         catalog.setProductSpecification(productSpecification);
     }
      public ProductCatalogDetails copyCatalogToDetails(ProductCatalog catalog) {
-        ProductCatalogDetails catalogDetail = new ProductCatalogDetails(catalog.getId(), catalog.getProductSpecification());
+        ProductCatalogDetails catalogDetail = catalog.clone();
         return catalogDetail;
     }
 }

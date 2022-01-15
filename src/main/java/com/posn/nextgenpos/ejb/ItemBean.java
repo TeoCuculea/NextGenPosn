@@ -6,6 +6,8 @@ package com.posn.nextgenpos.ejb;
 
 import com.posn.nextgenpos.common.ItemDetails;
 import com.posn.nextgenpos.entity.Item;
+import com.posn.nextgenpos.entity.ProductSpecification;
+import com.posn.nextgenpos.entity.LineItem;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -40,7 +42,8 @@ public class ItemBean {
 
     public ItemDetails findById(Integer itemId) {
         Item item = em.find(Item.class, itemId);
-        return new ItemDetails(item.getId(), item.getQuantity());
+        ItemDetails itD = item.clone();
+        return itD;
     }
 
     public int createItem(Integer quantity) {
@@ -71,11 +74,26 @@ public class ItemBean {
     private List<ItemDetails> copyItemsToDetails(List<Item> items) {
         List<ItemDetails> detailsList = new ArrayList<>();
         for (Item item : items) {
-            ItemDetails itemDetails = new ItemDetails(item.getId(),
-                    item.getQuantity()
-            );
+            ItemDetails itemDetails = item.clone();
             detailsList.add(itemDetails);
         }
         return detailsList;
+    }
+
+    public void decreaseQuantityOfSaleItems(Integer id) {
+        List<LineItem> lineItemList = (List<LineItem>) em.createQuery("SELECT i FROM LineItem i WHERE i.sale.id = :id").setParameter("id", id).getResultList();
+        for (LineItem lineItem : lineItemList) {
+            Item item = em.find(Item.class, lineItem.getProdSpecs().getItem().getId());
+            item.setQuantity(item.getQuantity() - lineItem.getQuantity());
+        }
+    }
+
+    public boolean enoughQuantity(Integer productId, Integer quantity) {
+        ProductSpecification prodSpec = em.find(ProductSpecification.class, productId);
+        Item item = em.find(Item.class, prodSpec.getItem().getId());
+        if (item.getQuantity() < quantity) {
+            return false;
+        }
+        return true;
     }
 }

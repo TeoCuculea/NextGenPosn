@@ -4,6 +4,8 @@
  */
 package com.posn.nextgenpos.entity;
 
+import com.posn.nextgenpos.allinterfaces.Prototype;
+import com.posn.nextgenpos.common.UserDetails;
 import java.io.Serializable;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -17,7 +19,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name= "USERS")
-public class User implements Serializable {
+public class User implements Serializable, Prototype<UserDetails> {
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -27,7 +29,10 @@ public class User implements Serializable {
     private String email;
     private String password;
     private String position;
-    
+    private boolean validate;
+
+
+
     public Integer getId() {
         return id;
     }
@@ -71,7 +76,13 @@ public class User implements Serializable {
     public String getPosition() {
         return position;
     }
-    
+    public boolean getValidate() {
+        return validate;
+    }
+
+    public void setValidate(boolean validate) {
+        this.validate = validate;
+    }
     @Override
     public int hashCode() {
         int hash = 0;
@@ -95,6 +106,11 @@ public class User implements Serializable {
     @Override
     public String toString() {
         return "com.posn.nextgenpos.entity.User[ id=" + id + " ]";
+    }
+
+    @Override
+    public UserDetails clone() {
+        return new UserDetails(this.getId(), this.getUsername(), this.getEmail(), this.getPosition(),this.getValidate());
     }
     
 }

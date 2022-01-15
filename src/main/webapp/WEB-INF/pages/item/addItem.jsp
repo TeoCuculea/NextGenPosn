@@ -20,7 +20,7 @@
             </div>
             <div class="col-md-2">
                 <label for="quantity">Quantity</label>
-                <input type="text" class="form-control" id="quantity" name="quantity" placeholder="" value="" required="">
+                <input type="number" class="form-control" id="quantity" name="quantity" placeholder="" value="" required="" min="1">
                 <div class="invalid-feedback">
                     Quantity is required.
                 </div>
@@ -34,7 +34,7 @@
             </div>
             <div class="col-md-2">
                 <label for="priceperunit">Price per Unit</label>
-                <input type="text" class="form-control" id="priceperunit" name="priceperunit" placeholder="" value="" required="">
+                <input type="number" class="form-control" id="priceperunit" name="priceperunit" placeholder="" value="" required="" min="0" step="0.01">
                 <div class="invalid-feedback">
                     Price is required.
                 </div>

@@ -4,10 +4,7 @@
  */
 package com.posn.nextgenpos.classes;
 
-import com.posn.nextgenpos.classes.Register;
 import com.posn.nextgenpos.entity.ProductCatalog;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  *
@@ -17,7 +14,7 @@ public class Store {
     
     private String name;
     private String address;
-    private ProductCatalog productCatalog=new ProductCatalog();
+    private ProductCatalog productCatalog;
     private Register register= new Register(productCatalog);
     
     Store(){}

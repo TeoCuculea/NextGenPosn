@@ -12,6 +12,8 @@ import java.io.IOException;
 import java.util.List;
 import javax.inject.Inject;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.HttpConstraint;
+import javax.servlet.annotation.ServletSecurity;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -21,7 +23,7 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author teodo
  */
-//@ServletSecurity( value = @HttpConstraint(rolesAllowed = { "AdminRole"}))
+@ServletSecurity(value = @HttpConstraint(rolesAllowed = {"Admin","DirectorGeneral"}))
 @WebServlet(name = "AddItem", urlPatterns = {"/Items/AddItem"})
 public class AddItem extends HttpServlet {
 
@@ -33,15 +35,6 @@ public class AddItem extends HttpServlet {
     
     @Inject
     private CategoryBean categoryBean;
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
@@ -78,7 +71,6 @@ public class AddItem extends HttpServlet {
         Integer categoryId = Integer.parseInt(request.getParameter("category_id"));
         Integer itemId = itemBean.createItem(quantity);
         prodSpecsBean.createProductSpecification(name, description, price,itemId, categoryId);
-        
         response.sendRedirect(request.getContextPath()+ "/Items");//ma intoarce inapoi in pagina Items     
     }
 

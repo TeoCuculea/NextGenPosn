@@ -4,8 +4,9 @@
  */
 package com.posn.nextgenpos.entity;
 
+import com.posn.nextgenpos.allinterfaces.Prototype;
+import com.posn.nextgenpos.common.LineDetails;
 import java.io.Serializable;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -13,8 +14,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.Min;
 
 /**
  *
@@ -22,13 +23,14 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name="SALE_LINE_ITEMS")
-public class SaleLineItem implements Serializable {
+public class LineItem implements Serializable, Prototype<LineDetails> {
 
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name="id")
     private Integer id;
+    @Min(0)
     private int quantity;  
     //private int itemId, saleID;-> tabel
     @ManyToOne
@@ -38,6 +40,10 @@ public class SaleLineItem implements Serializable {
     @ManyToOne
     @JoinColumn(name="productspec_id", referencedColumnName="id")
     private ProductSpecification prodSpecs;
+    
+    @ManyToOne
+    @JoinColumn(name="return_id")
+    private Return returns;
     
     public Integer getId() {
         return id;
@@ -70,6 +76,14 @@ public class SaleLineItem implements Serializable {
     public void setSale(Sale sale) {
         this.sale = sale;
     }
+
+    public Return getReturns() {
+        return returns;
+    }
+
+    public void setReturns(Return returns) {
+        this.returns = returns;
+    }
     
     @Override
     public int hashCode() {
@@ -81,10 +95,10 @@ public class SaleLineItem implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof SaleLineItem)) {
+        if (!(object instanceof LineItem)) {
             return false;
         }
-        SaleLineItem other = (SaleLineItem) object;
+        LineItem other = (LineItem) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -93,7 +107,12 @@ public class SaleLineItem implements Serializable {
 
     @Override
     public String toString() {
-        return "com.posn.nextgenpos.entity.SaleLineItem[ id=" + id + " ]";
+        return "com.posn.nextgenpos.entity.LineItem[ id=" + id + " ]";
+    }
+
+    @Override
+    public LineDetails clone() {
+        return new LineDetails(this.id,this.quantity);
     }
     
 }

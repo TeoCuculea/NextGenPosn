@@ -18,13 +18,13 @@
                     <li class="nav-item ${activePage eq 'Catalogs' ? 'active' : ''}">
                         <a class="nav-link" href="${pageContext.request.contextPath}/Catalogs">Catalogs</a>
                     </li>
-                    <c:if test="${pageContext.request.isUserInRole('Admin')}">
+                    <c:if test="${pageContext.request.isUserInRole('DirectorGeneral') || pageContext.request.isUserInRole('Admin')}">
 
                         <li class="nav-item ${activePage eq 'Items' ? 'active' : ''}">
                             <a class="nav-link" href="${pageContext.request.contextPath}/Items">Items</a>
                         </li>
                     </c:if>
-                    <c:if test="${pageContext.request.isUserInRole('Admin')}">
+                    <c:if test="${pageContext.request.isUserInRole('DirectorGeneral') || pageContext.request.isUserInRole('Admin')}">
                         <li class="nav-item ${activePage eq 'Categories' ? 'active' : ''}">
                             <a class="nav-link" href="${pageContext.request.contextPath}/Categories">Categories</a>
                         </li>
@@ -44,10 +44,10 @@
                     <li class="nav-item">
                         <c:choose>
                             <c:when test="${pageContext.request.getRemoteUser() == null}">
-                                <a href="${pageContext.request.contextPath}/Login">Login</a>
+                                <a class="nav-link" href="${pageContext.request.contextPath}/Login">Login</a>
                             </c:when>
                             <c:otherwise>
-                                <a href="${pageContext.request.contextPath}/Logout">Logout</a>
+                                <a class="nav-link" href="${pageContext.request.contextPath}/Logout">Logout</a>
                             </c:otherwise>
                         </c:choose>
                     </li>

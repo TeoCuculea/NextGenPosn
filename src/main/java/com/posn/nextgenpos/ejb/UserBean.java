@@ -9,12 +9,15 @@ package com.posn.nextgenpos.ejb;
 
 import com.posn.nextgenpos.common.UserDetails;
 import com.posn.nextgenpos.entity.User;
+import com.posn.nextgenpos.service.PositionInterceptor;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.logging.Logger;
 import javax.ejb.EJBException;
 import javax.ejb.Stateless;
+import javax.interceptor.Interceptors;
 import javax.persistence.*;
 
 /**
@@ -30,15 +33,21 @@ public class UserBean {
     @PersistenceContext
     private EntityManager em;
 
-    public void createUser(String username, String email, String passwordSha256, String position)
+    @Interceptors(PositionInterceptor.class)
+    public int createUser(String username, String email, String passwordSha256, String position, boolean Validate)
     {
         User user = new User();
         user.setUsername(username);
         user.setEmail(email);
         user.setPassword(passwordSha256);
         user.setPosition(position);
+        user.setValidate(Validate);
         
         em.persist(user);
+        em.flush();
+        int userId = user.getId();
+        return userId;
+
     }
     public List<UserDetails> getAllUsers() {
         LOG.info("getAllUsers");
@@ -61,14 +70,22 @@ public class UserBean {
         return usernames;
     }
 
+    @Interceptors(PositionInterceptor.class)
+    public int validateAccount(Integer userId) {
+        LOG.info("Validarea");
+        User user = em.find(User.class, userId);
+        user.setValidate(true);
+        em.persist(user);
+        em.flush();
+        int localUserId = user.getId();
+        return localUserId;
+    }
+    
     private List<UserDetails> copyUserToDetails(List<User> users) {
         List<UserDetails> detailsList = new ArrayList<>();
 
         for (User user : users) {
-            UserDetails userDetails = new UserDetails(user.getId(),
-                    user.getUsername(),
-                    user.getEmail(),
-                    user.getPosition());
+            UserDetails userDetails = user.clone();
             detailsList.add(userDetails);
         }
 

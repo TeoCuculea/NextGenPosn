@@ -13,7 +13,7 @@ import com.posn.nextgenpos.ejb.CategoryBean;
 import com.posn.nextgenpos.ejb.LineItemBean;
 import com.posn.nextgenpos.ejb.ProductCatalogBean;
 import com.posn.nextgenpos.ejb.ProductSpecificationBean;
-import com.posn.nextgenpos.ejb.SaleBean;
+import com.posn.nextgenpos.ejb.SaleBean;										 
 import java.io.IOException;
 import java.util.Comparator;
 import java.util.List;
@@ -34,9 +34,6 @@ import javax.servlet.http.HttpSession;
 public class Catalogs extends HttpServlet {
 
     @Inject
-    private ProductCatalogBean productCatalogBean;
-
-    @Inject
     private ProductSpecificationBean prodSpecsBean;
 
     @Inject
@@ -44,23 +41,13 @@ public class Catalogs extends HttpServlet {
 
     @Inject
     private ProductCatalogBean prodCatBean;
-    
+
     @Inject
     private SaleBean saleBean;
-    
+
     @Inject
     private LineItemBean lineItemBean;
-
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-
+       
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
@@ -73,30 +60,34 @@ public class Catalogs extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        request.setAttribute("activePage", "Catalogs");   
-
+        request.setAttribute("activePage", "Catalogs");
         ProductCatalogDetails catalog = prodCatBean.getCatalog();
-        List<ProductDetails> itemSpecs = catalog.getProductSpecification();
-        prodCatBean.updateCatalog(itemSpecs);
-        request.setAttribute("itemSpecs", itemSpecs);
-        
+        if (catalog.getId() == null) {
+            List<ProductDetails> itemSpecs = prodSpecsBean.getAllProductSpecifications();
+            //itemSpecs = prodSpecsBean.addTaxes(itemSpecs);
+            prodCatBean.createCatalog(itemSpecs);
+            request.setAttribute("itemSpecs", itemSpecs);
+        } else {
+            List<ProductDetails> itemSpecs = catalog.getProductSpecification();
+            prodCatBean.updateCatalog(itemSpecs);
+            request.setAttribute("itemSpecs", itemSpecs);
+        }
         List<CategoryDetails> categories = categoryBean.getAllCategories();
         request.setAttribute("categories", categories);
         HttpSession session = request.getSession();
-        
-        SaleDetails incompleteSale = saleBean.getIncompleteSale();
-        if(incompleteSale!=null)
-        {
-            session.setAttribute("sale", incompleteSale);
-        }
-        if(session.getAttribute("sale")!=null)
-        {
+	 
+        if (session.getAttribute("sale") != null) {
             SaleDetails sale = (SaleDetails) session.getAttribute("sale");
             List<LineDetails> lineItemDetails = lineItemBean.getAllBySaleId(sale.getId());
             List<ProductDetails> prodSpecs = lineItemBean.getAllProductSpecificationsBySaleId(sale.getId());
-
+            prodSpecs = prodSpecsBean.addTaxes(prodSpecs);
             request.setAttribute("cartItem", lineItemDetails);
             request.setAttribute("cartItemSpecs", prodSpecs);
+        } else {
+            SaleDetails incompleteSale = saleBean.getIncompleteSale();
+            if (incompleteSale != null) {
+                session.setAttribute("sale", incompleteSale);
+            }
         }
         request.getRequestDispatcher("/WEB-INF/pages/catalog/catalogs.jsp").forward(request, response);
     }
@@ -114,30 +105,47 @@ public class Catalogs extends HttpServlet {
             throws ServletException, IOException {
         String buton = request.getParameter("delete");
         String act = request.getParameter("sort");
-        if(buton == null)
-        {
+        String stare = request.getParameter("sortare");
+        if (buton == null) {
             //nu s-a apasat
-        }
-        else if(buton.equals("deleteFilters")){
+        } else if (buton.equals("deleteFilters")) {
             List<ProductDetails> itemSpecs = prodSpecsBean.getAllProductSpecifications();
+            itemSpecs = prodSpecsBean.addTaxes(itemSpecs);
             prodCatBean.updateCatalog(itemSpecs);
         }
         if (act == null) {
             //nu s-a apasat butonul
-        } else if (act.equals("sortByName")) {
+        } else if (act.equals("sortByName") && stare.equals("ASC")) {
             ProductCatalogDetails catalog = prodCatBean.getCatalog();
-            List<ProductDetails>itemSpecs = catalog.getProductSpecification()
+            List<ProductDetails> itemSpecs = catalog.getProductSpecification()
                     .stream()
                     .sorted(Comparator.comparing(ProductDetails::getName))
                     .collect(Collectors.toList());
             prodCatBean.updateCatalog(itemSpecs);
             request.setAttribute("itemSpecs", itemSpecs);
-        }
-        else if (act.equals("sortByPrice")) {
+        } 
+        else if (act.equals("sortByName") && stare.equals("DESC")) {
             ProductCatalogDetails catalog = prodCatBean.getCatalog();
-            List<ProductDetails>itemSpecs = catalog.getProductSpecification()
+            List<ProductDetails> itemSpecs = catalog.getProductSpecification()
+                    .stream()
+                    .sorted(Comparator.comparing(ProductDetails::getName).reversed())
+                    .collect(Collectors.toList());
+            prodCatBean.updateCatalog(itemSpecs);
+            request.setAttribute("itemSpecs", itemSpecs);
+        }else if (act.equals("sortByPrice") && stare.equals("ASC")) {
+            ProductCatalogDetails catalog = prodCatBean.getCatalog();
+            List<ProductDetails> itemSpecs = catalog.getProductSpecification()
                     .stream()
                     .sorted(Comparator.comparingDouble(ProductDetails::getPricePerUnit))
+                    .collect(Collectors.toList());
+            prodCatBean.updateCatalog(itemSpecs);
+            request.setAttribute("itemSpecs", itemSpecs);
+        }
+        else if (act.equals("sortByPrice") && stare.equals("DESC")) {
+            ProductCatalogDetails catalog = prodCatBean.getCatalog();
+            List<ProductDetails> itemSpecs = catalog.getProductSpecification()
+                    .stream()
+                    .sorted(Comparator.comparingDouble(ProductDetails::getPricePerUnit).reversed())
                     .collect(Collectors.toList());
             prodCatBean.updateCatalog(itemSpecs);
             request.setAttribute("itemSpecs", itemSpecs);

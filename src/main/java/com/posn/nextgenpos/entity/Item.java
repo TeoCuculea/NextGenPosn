@@ -4,16 +4,17 @@
  */
 package com.posn.nextgenpos.entity;
 
+import com.posn.nextgenpos.allinterfaces.Prototype;
+import com.posn.nextgenpos.common.ItemDetails;
 import java.io.Serializable;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.Min;
 
 /**
  *
@@ -21,13 +22,15 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "ITEMS")
-public class Item implements Serializable {
+public class Item implements Serializable, Prototype<ItemDetails> {
 
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")
     private Integer id;
+    
+    @Min(0)
     private Integer quantity;
 
     public Integer getId() {
@@ -80,6 +83,11 @@ public class Item implements Serializable {
     @Override
     public String toString() {
         return "com.posn.nextgenpos.entity.Item[ id=" + id + " ]";
+    }
+
+    @Override
+    public ItemDetails clone() {
+        return new ItemDetails(this.getId(), this.getQuantity());
     }
 
 }

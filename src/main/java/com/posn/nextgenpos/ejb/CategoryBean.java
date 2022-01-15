@@ -18,8 +18,6 @@ import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
-import javax.persistence.TypedQuery;
 
 /**
  *
@@ -122,7 +120,7 @@ public class CategoryBean {
     public List<CategoryDetails> copyCategoriesToDetails(List<Category> categories) {
         List<CategoryDetails> detailsList = new ArrayList();
         for (Category category : categories) {
-            CategoryDetails categoryDetail = new CategoryDetails(category.getId(), category.getCategoryName());
+            CategoryDetails categoryDetail = category.clone();
             detailsList.add(categoryDetail);
         }
         return detailsList;
@@ -154,7 +152,5 @@ public class CategoryBean {
         }
         else
             return null;
-        //Category category = (Category) em.createQuery("SELECT csp from CATEGORY_PRODUCT_SPECIFICATION csp WHERE csp.PRODUCT_SPECIFICATION_ID=: prodId ").setParameter("prodId", productId).getResultList();
-        //return new CategoryDetails(category.getId(), category.getCategoryName());
     }
 }

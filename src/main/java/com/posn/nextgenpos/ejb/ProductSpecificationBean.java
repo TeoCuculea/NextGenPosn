@@ -32,16 +32,12 @@ public class ProductSpecificationBean {
 
     @Inject
     CategoryBean categoryBean;
-    
+
     public List<ProductDetails> copyProductsToDetails(List<ProductSpecification> products) {
         List<ProductDetails> detailsList = new ArrayList();
         for (ProductSpecification product : products) {
-            ProductDetails productDetails = new ProductDetails(product.getId(),
-                    product.getName(),
-                    product.getDescription(),
-                    product.getPricePerUnit()
-            );
-            detailsList.add(productDetails);
+            ProductDetails prod = product.clone();
+            detailsList.add(prod);
         }
         return detailsList;
     }
@@ -58,12 +54,14 @@ public class ProductSpecificationBean {
 
     public ProductDetails findById(Integer productId) {
         ProductSpecification productSpecification = em.find(ProductSpecification.class, productId);
-        return new ProductDetails(productSpecification.getId(), productSpecification.getName(), productSpecification.getDescription(), productSpecification.getPricePerUnit());
+        ProductDetails prod = productSpecification.clone();
+        return prod;
     }
 
     public ProductDetails findByItemId(Integer itemId) {
         ProductSpecification productSpecification = (ProductSpecification) em.createQuery("SELECT p FROM ProductSpecification p WHERE p.item.id = :id").setParameter("id", itemId).getSingleResult();
-        return new ProductDetails(productSpecification.getId(), productSpecification.getName(), productSpecification.getDescription(), productSpecification.getPricePerUnit());
+        ProductDetails prod = productSpecification.clone();
+        return prod;
     }
 
     public void createProductSpecification(String name, String description, Double pricePerUnit, Integer itemId, Integer categoryId) {
@@ -77,10 +75,12 @@ public class ProductSpecificationBean {
         item.setProductSpecification(productSpecification);
         productSpecification.setItem(item);
 
+        em.persist(productSpecification);
+        em.flush();
+
         Category category = em.find(Category.class, categoryId);
         category.addProduct(productSpecification);
-        productSpecification.setCategory(productSpecification.getCategories());
-        em.persist(productSpecification);
+        productSpecification.addCategory(category);
     }
 
     public void updateProductSpecification(Integer productId, String name, String description, Double pricePerUnit, Integer itemId, Integer categoryId) {
@@ -95,18 +95,15 @@ public class ProductSpecificationBean {
         item.setProductSpecification(productSpecification);
         productSpecification.setItem(item);
 
-        List<Category> oldCategory =  (List<Category>) productSpecification.getCategories() ;
-        LOG.info(oldCategory.get(0).getCategoryName()+"---------");
-        oldCategory.get(0).dropProduct(productSpecification);
-        productSpecification.dropCategory(oldCategory.get(0));
+        List<Category> oldCategory = (List<Category>) productSpecification.getCategories();
+        if (!oldCategory.isEmpty()) {
+            oldCategory.get(0).dropProduct(productSpecification);
+            productSpecification.dropCategory(oldCategory.get(0));
+        }
         
         Category category = em.find(Category.class, categoryId);
-         LOG.info(category.getCategoryName()+"XXXXXXXXXXXX");
         category.addProduct(productSpecification);
-        //category.setProductSpecification(category.getProductSpecification());
         productSpecification.addCategory(category);
-        //productSpecification.setCategory(productSpecification.getCategories());
-
     }
 
     public void deleteProductSpecificationByIds(Collection<Integer> productId) {
@@ -150,8 +147,7 @@ public class ProductSpecificationBean {
         List<ProductDetails> products = new ArrayList<>();
         List<ProductDetails> allProducts = new ArrayList<>();
         try {
-            for ( Integer categoryId : categoryIds)
-            {
+            for (Integer categoryId : categoryIds) {
                 products = categoryBean.getAllProductsFromCategory(categoryId);
                 allProducts.addAll(products);
             }
@@ -159,5 +155,14 @@ public class ProductSpecificationBean {
         } catch (Exception ex) {
             throw new EJBException(ex);
         }
+    }
+
+    public List<ProductDetails> addTaxes(List<ProductDetails> products) {
+        List<ProductDetails> taxa = new ArrayList<>();
+        for (ProductDetails product : products) {
+            ProductDetails tax = product.clone();
+            taxa.add(tax);
+        }
+        return taxa;
     }
 }

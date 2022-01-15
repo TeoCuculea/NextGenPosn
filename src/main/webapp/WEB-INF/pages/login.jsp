@@ -4,9 +4,14 @@
 <t:pageTemplate pageTitle="Login">
 
     <c:if test="${message != null}">
-        <div class="alert alert-danger" role="alert">
-                ${message}
+        <div class="row justify-content-center">
+            <div class="col-md-4  d-flex justify-content-center">
+                <div class="alert alert-danger" role="alert">
+                        ${message}
+                </div>
+            </div>
         </div>
+
     </c:if>
 
     <form class="form-signin" method="POST" action="j_security_check">

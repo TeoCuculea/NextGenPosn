@@ -9,7 +9,23 @@
                         <h1>Un simplu client nelogat esti in acest moment! </h1>
                 </c:when>
                 <c:otherwise>
-                        <h2>Esti logat ca si: ${pageContext.request.getRemoteUser()}</h2>
+                        <h2>Esti logat ca si: ${pageContext.request.getUserPrincipal().getName()}</h2>
                 </c:otherwise>
         </c:choose>
+        <c:if test="${pageContext.request.isUserInRole('DirectorGeneral')}">
+        <p id="info">Aici apar notificarile.</p>
+        <script>
+                function subscribe(publisher) {
+                var xhttp = new XMLHttpRequest();
+                xhttp.onreadystatechange = function () {
+                        if (this.readyState === 4 && this.status === 200) {
+                                document.getElementById("info").innerHTML = this.responseText;
+                                subscribe(publisher);
+                        }
+                };
+                xhttp.open("GET", publisher, true);
+                xhttp.send();
+                }
+        </script>
+        </c:if>
 </t:pageTemplate>

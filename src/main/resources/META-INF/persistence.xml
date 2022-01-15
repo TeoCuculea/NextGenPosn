@@ -7,9 +7,10 @@
     <class>com.posn.nextgenpos.entity.ProductSpecification</class>
     <class>com.posn.nextgenpos.entity.Sale</class>
     <class>com.posn.nextgenpos.entity.Payment</class>
-    <class>com.posn.nextgenpos.entity.SaleLineItem</class>
     <class>com.posn.nextgenpos.entity.Category</class>
     <class>com.posn.nextgenpos.entity.ProductCatalog</class>
+    <class>com.posn.nextgenpos.entity.Return</class>
+    <class>com.posn.nextgenpos.entity.LineItem</class>
     <properties>
       <property name="javax.persistence.schema-generation.database.action" value="create"/>
       <property name="javax.persistence.jdbc.url" value="jdbc:derby://localhost:1527/NextGenPos"/>

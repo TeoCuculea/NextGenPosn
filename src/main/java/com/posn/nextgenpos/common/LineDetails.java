@@ -4,8 +4,6 @@
  */
 package com.posn.nextgenpos.common;
 
-import com.posn.nextgenpos.entity.ProductSpecification;
-
 /**
  *
  * @author teodo

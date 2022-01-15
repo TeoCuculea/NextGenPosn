@@ -4,14 +4,13 @@
  */
 package com.posn.nextgenpos.common;
 
-import com.posn.nextgenpos.entity.ProductSpecification;
 import java.util.List;
 
 /**
  *
  * @author teodo
  */
-public class ProductCatalogDetails {
+public class ProductCatalogDetails implements java.io.Serializable{
     private Long id;
     private List<ProductDetails> productSpecification;
 
