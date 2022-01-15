@@ -4,9 +4,12 @@
  */
 package com.posn.nextgenpos.servlet.preturn;
 
+import com.posn.nextgenpos.common.ItemDetails;
 import com.posn.nextgenpos.common.LineDetails;
 import com.posn.nextgenpos.common.ProductDetails;
+import com.posn.nextgenpos.ejb.ItemBean;
 import com.posn.nextgenpos.ejb.LineItemBean;
+import com.posn.nextgenpos.ejb.ProductSpecificationBean;
 import java.io.IOException;
 import javax.inject.Inject;
 import javax.servlet.ServletException;
@@ -24,7 +27,12 @@ public class DeleteFromReturnList extends HttpServlet {
 
     @Inject
     LineItemBean lineItemBean;
-
+    
+    @Inject
+    ProductSpecificationBean prodSpecBean;
+    
+    @Inject
+    ItemBean itemBean;
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
@@ -42,10 +50,13 @@ public class DeleteFromReturnList extends HttpServlet {
     
         LineDetails lineItem = lineItemBean.findById(lineItemId);
         ProductDetails prodSpecs = lineItemBean.getProductSpecificationsByLineItemId(lineItem.getId());
-    
+        ItemDetails item = itemBean.findByProdSpecId(prodSpecs.getId());
+        itemBean.updateItem(item.getId(), item.getQuantity()+lineItem.getQuantity());
+        
         LineDetails saleLineItem = lineItemBean.findByProdSpecIdAndSaleId(saleId, prodSpecs.getId());
         lineItemBean.updateLineItemQuantity(saleLineItem.getId(), saleLineItem.getQuantity()+lineItem.getQuantity());
         lineItemBean.deleteLineItem(lineItem.getId());
+        
         response.sendRedirect(request.getContextPath() + "/Sales/ProcessReturn?id="+saleId);
     }
 

@@ -46,6 +46,12 @@ public class ItemBean {
         return itD;
     }
 
+    public ItemDetails findByProdSpecId(Integer prodSpecId){
+        ProductSpecification prodSpec = em.find(ProductSpecification.class, prodSpecId);
+        Item item = em.find(Item.class, prodSpec.getItem().getId());
+        return item.clone();
+    }
+    
     public int createItem(Integer quantity) {
         LOG.info("createItem");
         Item item = new Item();
@@ -80,14 +86,14 @@ public class ItemBean {
         return detailsList;
     }
 
-    public void decreaseQuantityOfSaleItems(Integer id) {
-        List<LineItem> lineItemList = (List<LineItem>) em.createQuery("SELECT i FROM LineItem i WHERE i.sale.id = :id").setParameter("id", id).getResultList();
+    public void decreaseQuantityOfSaleItems(Integer saleId) {
+        List<LineItem> lineItemList = (List<LineItem>) em.createQuery("SELECT i FROM LineItem i WHERE i.sale.id = :id").setParameter("id", saleId).getResultList();
         for (LineItem lineItem : lineItemList) {
             Item item = em.find(Item.class, lineItem.getProdSpecs().getItem().getId());
             item.setQuantity(item.getQuantity() - lineItem.getQuantity());
         }
     }
-
+    
     public boolean enoughQuantity(Integer productId, Integer quantity) {
         ProductSpecification prodSpec = em.find(ProductSpecification.class, productId);
         Item item = em.find(Item.class, prodSpec.getItem().getId());

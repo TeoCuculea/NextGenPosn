@@ -4,8 +4,17 @@
  */
 package com.posn.nextgenpos.servlet.preturn;
 
+import com.posn.nextgenpos.common.LineDetails;
+import com.posn.nextgenpos.common.PaymentDetails;
+import com.posn.nextgenpos.common.ProductDetails;
+import com.posn.nextgenpos.common.SaleDetails;
+import com.posn.nextgenpos.ejb.LineItemBean;
+import com.posn.nextgenpos.ejb.PaymentBean;
+import com.posn.nextgenpos.ejb.ProductSpecificationBean;
+import com.posn.nextgenpos.ejb.SaleBean;
 import java.io.IOException;
-import java.io.PrintWriter;
+import java.util.List;
+import javax.inject.Inject;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -19,6 +28,18 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet(name = "Refund", urlPatterns = {"/Refund"})
 public class Refund extends HttpServlet {
 
+    @Inject
+    SaleBean saleBean;
+    
+    @Inject
+    PaymentBean paymentBean;
+    
+    @Inject
+    ProductSpecificationBean prodSpecBean;
+    
+    @Inject
+    LineItemBean lineItemBean;
+    
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
@@ -31,6 +52,22 @@ public class Refund extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        
+        Integer saleId = Integer.parseInt(request.getParameter("saleId"));
+        List<LineDetails> lineItemList = lineItemBean.getAllBySaleId(saleId);
+        lineItemBean.deleteLineItemWithZeroQuantity(saleId);
+        
+        List<ProductDetails> productList = lineItemBean.getAllProductSpecificationsBySaleId(saleId);
+        productList = prodSpecBean.addTaxes(productList);
+        double total = 0.00;
+        for(ProductDetails prodSpec:productList){
+            total+=prodSpec.getPricePerUnit();
+        }
+        PaymentDetails payment= paymentBean.findBySaleId(saleId);
+        paymentBean.updatePayment(payment.getId(), saleId, payment.getAmount(), total);
+        saleBean.updateSale(saleId, true, total, payment.getAmount()-total);
+        
+        
         response.sendRedirect(request.getContextPath() + "/Sales");
     }
 

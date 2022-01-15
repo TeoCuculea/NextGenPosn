@@ -207,4 +207,14 @@ public class LineItemBean {
         em.remove(lineItem);
     }
 
+    public void deleteLineItemWithZeroQuantity(Integer saleId) {
+        List<LineItem> lineItemList = em.createQuery("SELECT i FROM LineItem i WHERE i.sale.id =:id AND i.quantity=0")
+                .setParameter("id", saleId)
+                .getResultList();
+        
+        for(LineItem lineItem:lineItemList){
+            em.remove(lineItem);
+        }
+    }
+
 }

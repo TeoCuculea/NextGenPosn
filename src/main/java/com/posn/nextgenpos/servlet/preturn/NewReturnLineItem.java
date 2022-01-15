@@ -4,8 +4,12 @@
  */
 package com.posn.nextgenpos.servlet.preturn;
 
+import com.posn.nextgenpos.common.ItemDetails;
 import com.posn.nextgenpos.common.LineDetails;
+import com.posn.nextgenpos.common.ProductDetails;
+import com.posn.nextgenpos.ejb.ItemBean;
 import com.posn.nextgenpos.ejb.LineItemBean;
+import com.posn.nextgenpos.ejb.ProductSpecificationBean;
 import java.io.IOException;
 import javax.inject.Inject;
 import javax.servlet.ServletException;
@@ -24,6 +28,11 @@ public class NewReturnLineItem extends HttpServlet {
     @Inject
     LineItemBean lineItemBean;
     
+    @Inject
+    ProductSpecificationBean prodSpecBean;
+    
+    @Inject
+    ItemBean itemBean;
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
@@ -37,11 +46,11 @@ public class NewReturnLineItem extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         Integer returnId = Integer.parseInt(request.getParameter("retId"));
-        Integer itemId = Integer.parseInt(request.getParameter("itemId"));
+        Integer prodSpecId = Integer.parseInt(request.getParameter("itemId"));
         Integer quantity = Integer.parseInt(request.getParameter("quan"));
         Integer saleId = Integer.parseInt(request.getParameter("saleId"));
         
-        LineDetails lineDetail = lineItemBean.findByProdSpecIdAndSaleId(saleId, itemId);
+        LineDetails lineDetail = lineItemBean.findByProdSpecIdAndSaleId(saleId, prodSpecId);
         
         if(lineDetail.getQuantity()<quantity){
             request.setAttribute("quantityError", true);
@@ -49,14 +58,18 @@ public class NewReturnLineItem extends HttpServlet {
         else{
             request.setAttribute("quantityError", null);
             lineItemBean.updateLineItemQuantity(lineDetail.getId(), lineDetail.getQuantity()-quantity);
-
-            lineDetail = lineItemBean.findByProdSpecIdAndReturnId(returnId, itemId);
+            
+            ProductDetails prodSpec = prodSpecBean.findById(prodSpecId);
+            ItemDetails item = itemBean.findByProdSpecId(prodSpec.getId());
+            itemBean.updateItem(item.getId(), item.getQuantity()-quantity);
+            
+            lineDetail = lineItemBean.findByProdSpecIdAndReturnId(returnId, prodSpecId);
             if(lineDetail!=null){
                 //Existing returnLineItem
                 lineItemBean.updateLineItemQuantity(lineDetail.getId(),lineDetail.getQuantity()+quantity);
             }else{
                 //New returnLineItem
-                lineItemBean.createReturnLineItem(quantity, itemId, returnId);
+                lineItemBean.createReturnLineItem(quantity, prodSpecId, returnId);
             }
         }
         response.sendRedirect(request.getContextPath() + "/Sales/ProcessReturn?id="+saleId);
