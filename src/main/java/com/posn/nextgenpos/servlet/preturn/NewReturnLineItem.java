@@ -5,14 +5,8 @@
 package com.posn.nextgenpos.servlet.preturn;
 
 import com.posn.nextgenpos.common.LineDetails;
-import com.posn.nextgenpos.common.ProductDetails;
-import com.posn.nextgenpos.common.ReturnDetails;
 import com.posn.nextgenpos.ejb.LineItemBean;
-import com.posn.nextgenpos.ejb.ProductSpecificationBean;
-import com.posn.nextgenpos.ejb.ReturnBean;
-import com.posn.nextgenpos.ejb.SaleBean;
 import java.io.IOException;
-import java.util.List;
 import javax.inject.Inject;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -22,22 +16,13 @@ import javax.servlet.http.HttpServletResponse;
 
 /**
  *
- * @author teodo
+ * @author barb_
  */
-@WebServlet(name = "ProcessReturn", urlPatterns = {"/Sales/ProcessReturn"})
-public class ProcessReturn extends HttpServlet {
+@WebServlet(name = "NewReturnLineItem", urlPatterns = {"/NewReturnLineItem"})
+public class NewReturnLineItem extends HttpServlet {
 
     @Inject
-    private SaleBean saleBean;
-    
-    @Inject 
-    private LineItemBean lineItemBean;
-    
-    @Inject
-    private ProductSpecificationBean prodSpecsBean;
-
-    @Inject
-    private ReturnBean returnBean;
+    LineItemBean lineItemBean;
     
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
@@ -51,28 +36,30 @@ public class ProcessReturn extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        Integer saleId = Integer.parseInt(request.getParameter("id"));
+        Integer returnId = Integer.parseInt(request.getParameter("retId"));
+        Integer itemId = Integer.parseInt(request.getParameter("itemId"));
+        Integer quantity = Integer.parseInt(request.getParameter("quan"));
+        Integer saleId = Integer.parseInt(request.getParameter("saleId"));
         
-        List<LineDetails> cart = lineItemBean.getAllBySaleId(saleId);
-        request.setAttribute("cart", cart);
-        List<ProductDetails> products = lineItemBean.getAllProductSpecificationsBySaleId(Integer.parseInt(request.getParameter("id")));
-        request.setAttribute("itemSpecs", products);
+        LineDetails lineDetail = lineItemBean.findByProdSpecIdAndSaleId(saleId, itemId);
         
-        Integer returnId;
-        ReturnDetails retDetail = returnBean.findBySaleId(saleId);
-        if(retDetail != null){
-            List<LineDetails> lineItemDetails = lineItemBean.getAllByReturnId(retDetail.getId());
-            List<ProductDetails> prodSpecs = lineItemBean.getAllProductSpecificationsByReturnId(retDetail.getId());
-            prodSpecs = prodSpecsBean.addTaxes(prodSpecs);
-            request.setAttribute("cartItem", lineItemDetails);
-            request.setAttribute("cartItemSpecs", prodSpecs);
-            returnId = retDetail.getId();
-        }else{
-            returnId = returnBean.createReturn(saleId);
+        if(lineDetail.getQuantity()<quantity){
+            request.setAttribute("quantityError", true);
         }
-        request.setAttribute("returnId", returnId);
-        request.setAttribute("saleId", saleId);
-        request.getRequestDispatcher("/WEB-INF/pages/preturn/preturn.jsp").forward(request, response);
+        else{
+            request.setAttribute("quantityError", null);
+            lineItemBean.updateLineItemQuantity(lineDetail.getId(), lineDetail.getQuantity()-quantity);
+
+            lineDetail = lineItemBean.findByProdSpecIdAndReturnId(returnId, itemId);
+            if(lineDetail!=null){
+                //Existing returnLineItem
+                lineItemBean.updateLineItemQuantity(lineDetail.getId(),lineDetail.getQuantity()+quantity);
+            }else{
+                //New returnLineItem
+                lineItemBean.createReturnLineItem(quantity, itemId, returnId);
+            }
+        }
+        response.sendRedirect(request.getContextPath() + "/Sales/ProcessReturn?id="+saleId);
     }
 
     /**
@@ -86,7 +73,6 @@ public class ProcessReturn extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
     }
 
     /**

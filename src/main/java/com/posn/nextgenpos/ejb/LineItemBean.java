@@ -9,6 +9,7 @@ import com.posn.nextgenpos.common.ProductDetails;
 import com.posn.nextgenpos.entity.ProductSpecification;
 import com.posn.nextgenpos.entity.Sale;
 import com.posn.nextgenpos.entity.LineItem;
+import com.posn.nextgenpos.entity.Return;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
@@ -34,8 +35,8 @@ public class LineItemBean {
     
     // Add business logic below. (Right-click in editor and choose
     // "Insert Code > Add Business Method")
-    public void createLineItem(Integer quantity, Integer productSpecificationId, Integer saleId) {
-       LOG.info("createLineItem");
+    public void createSaleLineItem(Integer quantity, Integer productSpecificationId, Integer saleId) {
+       LOG.info("createSaleLineItem");
        
        LineItem lineItem = new LineItem();
        lineItem.setQuantity(quantity);
@@ -49,6 +50,24 @@ public class LineItemBean {
        em.persist(lineItem);
     }
 
+    public int createReturnLineItem(Integer quantity, Integer productSpecificationId, Integer returnId){
+        LOG.info("createSaleLineItem");
+       
+       LineItem lineItem = new LineItem();
+       lineItem.setQuantity(quantity);
+       
+       ProductSpecification prodSpec = em.find(ProductSpecification.class,productSpecificationId);
+       Return ret = em.find(Return.class,returnId);
+       
+       lineItem.setProdSpecs(prodSpec);
+       lineItem.setReturns(ret);
+       
+       em.persist(lineItem);
+       em.flush();
+       int lineItemId = lineItem.getId();
+       return lineItemId;
+    }
+    
     public List<LineDetails> getAllLineItem(){
         LOG.info("getAllItems");
         try {
@@ -69,6 +88,16 @@ public class LineItemBean {
         }
     }
     
+    public List<LineDetails> getAllByReturnId(Integer returnId){
+        LOG.info("getAllByReturnId");
+        try {
+            List<LineItem> lineItems = (List<LineItem>) em.createQuery("SELECT i FROM LineItem i WHERE i.returns.id = :id").setParameter("id", returnId).getResultList();
+            return copyLineItemsToDetails(lineItems);
+        } catch (Exception ex) {
+            throw new EJBException(ex);
+        }
+    }
+    
     public List<ProductDetails> getAllProductSpecificationsBySaleId(Integer saleId)
     {
         LOG.info("getAllProductSpecificationsBySaleId");
@@ -81,6 +110,59 @@ public class LineItemBean {
             return prodSpecsBean.copyProductsToDetails(prodSpecsList);
         }
         catch(Exception ex){
+            throw new EJBException(ex);
+        }
+    }
+    
+    public List<ProductDetails> getAllProductSpecificationsByReturnId(Integer returnId)
+    {
+        LOG.info("getAllProductSpecificationsByReturnId");
+        List<ProductSpecification> prodSpecsList = new ArrayList<>();
+        try{
+            List<LineItem> lineItemsList = (List<LineItem>) em.createQuery("SELECT i FROM LineItem i WHERE i.returns.id = :id").setParameter("id", returnId).getResultList();
+            for(LineItem lineItem:lineItemsList){
+                prodSpecsList.add(lineItem.getProdSpecs());
+            }
+            return prodSpecsBean.copyProductsToDetails(prodSpecsList);
+        }
+        catch(Exception ex){
+            throw new EJBException(ex);
+        }
+    }
+    
+    public ProductDetails getProductSpecificationsByLineItemId(Integer lineId){
+        LineItem lineItem = em.find(LineItem.class,lineId);
+        return lineItem.getProdSpecs().clone();
+    }
+    
+    public LineDetails findByProdSpecIdAndReturnId(Integer returnId, Integer prodId){
+        LOG.info("findByProdSpecIdAndReturnId");
+        try {
+            List<LineItem> lineItems = (List<LineItem>) em.createQuery("SELECT i FROM LineItem i WHERE i.returns.id = :id AND i.prodSpecs.id=:id2")
+                    .setParameter("id", returnId)
+                    .setParameter("id2", prodId)
+                    .getResultList();
+            if(!lineItems.isEmpty()){
+                return lineItems.get(0).clone();
+            }
+            return null;
+        } catch (Exception ex) {
+            throw new EJBException(ex);
+        }
+    }
+    
+    public LineDetails findByProdSpecIdAndSaleId(Integer saleId, Integer prodId){
+        LOG.info("findByProdSpecIdAndReturnId");
+        try {
+            List<LineItem> lineItems = (List<LineItem>) em.createQuery("SELECT i FROM LineItem i WHERE i.sale.id = :id AND i.prodSpecs.id=:id2")
+                    .setParameter("id", saleId)
+                    .setParameter("id2", prodId)
+                    .getResultList();
+            if(!lineItems.isEmpty()){
+                return lineItems.get(0).clone();
+            }
+            return null;
+        } catch (Exception ex) {
             throw new EJBException(ex);
         }
     }
@@ -110,13 +192,19 @@ public class LineItemBean {
         return lineItemDetailsList;
     }
 
-    List<LineDetails> getAllByReturnId(Integer id) {
-        LOG.info("getAllByReturnId");
-        try {
-            List<LineItem> lineItems = (List<LineItem>) em.createQuery("SELECT i FROM LineItem i WHERE i.returns.id = :id").setParameter("id", id).getResultList();
-            return copyLineItemsToDetails(lineItems);
-        } catch (Exception ex) {
-            throw new EJBException(ex);
-        }
+    public void updateLineItemQuantity(Integer lineItemId, Integer newQuantity) {
+        LineItem lineItem = em.find(LineItem.class,lineItemId);
+        lineItem.setQuantity(newQuantity);
     }
+
+    public LineDetails findById(Integer lineItemId) {
+        LineItem lineItem = em.find(LineItem.class,lineItemId);
+        return lineItem.clone();
+    }
+
+    public void deleteLineItem(Integer id) {
+        LineItem lineItem = em.find(LineItem.class,id);
+        em.remove(lineItem);
+    }
+
 }

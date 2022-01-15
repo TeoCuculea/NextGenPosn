@@ -13,7 +13,8 @@ public class ReturnDetails {
     private Integer saleId;
     
     public ReturnDetails(Integer id, Integer saleId) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        this.id = id;
+        this.saleId = saleId;
     }
 
     public Integer getId() {

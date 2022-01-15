@@ -76,6 +76,14 @@ public class LineItem implements Serializable, Prototype<LineDetails> {
     public void setSale(Sale sale) {
         this.sale = sale;
     }
+
+    public Return getReturns() {
+        return returns;
+    }
+
+    public void setReturns(Return returns) {
+        this.returns = returns;
+    }
     
     @Override
     public int hashCode() {

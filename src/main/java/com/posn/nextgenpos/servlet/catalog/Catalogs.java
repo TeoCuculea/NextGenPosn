@@ -15,7 +15,6 @@ import com.posn.nextgenpos.ejb.ProductCatalogBean;
 import com.posn.nextgenpos.ejb.ProductSpecificationBean;
 import com.posn.nextgenpos.ejb.SaleBean;										 
 import java.io.IOException;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;

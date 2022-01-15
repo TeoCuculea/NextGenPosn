@@ -72,9 +72,12 @@ public class ReturnBean {
     }
     
     public ReturnDetails findBySaleId(Integer saleId){
-        Return ret = (Return) em.createQuery("SELECT r FROM Return r WHERE r.sale.id =:id").setParameter("id", saleId).getSingleResult();
-        ReturnDetails retDetails = ret.clone();
-        return retDetails;
+        List<Return> retList = (List<Return>) em.createQuery("SELECT r FROM Return r WHERE r.sale.id =:id").setParameter("id", saleId).getResultList();
+        if(!retList.isEmpty()){
+            ReturnDetails retDetails = retList.get(0).clone();
+            return retDetails;
+        }
+        return null;
     }
 
     public void deleteReturn(Integer id){

@@ -18,21 +18,21 @@
                 <th>Price/<br>Item[RON]</th>
                 <th>Adauga la<br> returnare</th>
                 <form class="needs-validation"  novalidate="" method="POST" action="${pageContext.request.contextPath}/Sales/ProcessReturn">
-                    <c:forEach var="theCart" items="${cart}" varStatus="status">
+                    <c:forEach var="itemSpec" items="${itemSpecs}" varStatus="status">
                         <tr>
-                            <td>${itemSpecs[status.index].name}</td>
+                            <td>${itemSpec.name}</td>
                             <td>
                                 <div class="col-md-2">
-                                    <input type="number" id="quantity" name="quantity" placeholder="" value="${theCart.quantity}" required="" min="1">
+                                    <input type="number" id="quantity${cart[status.index].id}" name="quantity" placeholder="" value="${cart[status.index].quantity}" required="" min="1">
                                     <div class="invalid-feedback">
                                         Quantity is required.
                                     </div>
                                 </div>
                             </td>
-                            <td>${itemSpecs[status.index].description}</td>
-                            <td>${itemSpecs[status.index].pricePerUnit}</td>
-                            <td> <a href="${pageContext.request.contextPath}/Cart?id=${itemSpec.id}&quan=" 
-                                    onclick="this.href += document.getElementById('quantity${itemSpec.id}').value" 
+                            <td>${itemSpec.description}</td>
+                            <td>${itemSpec.pricePerUnit}</td>
+                            <td> <a href="${pageContext.request.contextPath}/NewReturnLineItem?saleId=${saleId}&retId=${returnId}&itemId=${itemSpec.id}&quan=" 
+                                    onclick="this.href += document.getElementById('quantity${cart[status.index].id}').value" 
                                     class="btn btn-lg btn-primary" style="z-index:0">+</a></td>
                         </tr>
                     </c:forEach>
@@ -45,11 +45,11 @@
                     <table name="lista_returnuri" width="100%" >
                         <tr>
                             <c:if test="${quantityError!=null}">
-                            <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                                Not enough items!Insert a lower quantity.
-                                <button type="button" id="closeQuantityError" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                            </div>
-                        </c:if>
+                                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                        Not enough items!Insert a lower quantity.
+                                        <button type="button" id="closeQuantityError" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                    </div>
+                            </c:if>
                         </tr>
                         <tr>
                             <th>Sterge <br>produs<br> din return</th>
@@ -60,7 +60,7 @@
                         </tr>
                         <c:forEach var="itemSpec" items="${cartItemSpecs}" varStatus="status">
                             <tr>
-                                <td><a href="${pageContext.request.contextPath}/DeleteFromCart?id=${cartItem[status.index].id}" class="btn btn-danger">-</a></td>
+                                <td><a href="${pageContext.request.contextPath}/DeleteFromReturnList?id=${cartItem[status.index].id}&saleId=${saleId}" class="btn btn-danger">-</a></td>
                                 <td id="cartQuantity{
                                         itemSpec.id
                                     }">
@@ -78,8 +78,8 @@
                         Total:${total}
                     </div>
                     <div style="text-align:center">
-                        <a class="btn btn-danger" href="${pageContext.request.contextPath}/Catalogs/CloseSale" role="button" padding = "100px">Cancel</a>
-                        <a class="btn btn-primary btn-lg" href="${pageContext.request.contextPath}/Catalogs/Payment" role="button" padding = "100px">Refund</a>
+                        <a class="btn btn-danger" href="${pageContext.request.contextPath}/CancelReturn" role="button" padding = "100px">Cancel</a>
+                        <a class="btn btn-primary btn-lg" href="${pageContext.request.contextPath}/Refund" role="button" padding = "100px">Refund</a>
                     </div>
                 </form> 
             </div>
