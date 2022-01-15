@@ -23,7 +23,7 @@ import javax.validation.constraints.Min;
  */
 @Entity
 @Table(name="SALE_LINE_ITEMS")
-public class SaleLineItem implements Serializable, Prototype<LineDetails> {
+public class LineItem implements Serializable, Prototype<LineDetails> {
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -40,6 +40,10 @@ public class SaleLineItem implements Serializable, Prototype<LineDetails> {
     @ManyToOne
     @JoinColumn(name="productspec_id", referencedColumnName="id")
     private ProductSpecification prodSpecs;
+    
+    @ManyToOne
+    @JoinColumn(name="return_id")
+    private Return returns;
     
     public Integer getId() {
         return id;
@@ -83,10 +87,10 @@ public class SaleLineItem implements Serializable, Prototype<LineDetails> {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof SaleLineItem)) {
+        if (!(object instanceof LineItem)) {
             return false;
         }
-        SaleLineItem other = (SaleLineItem) object;
+        LineItem other = (LineItem) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -95,7 +99,7 @@ public class SaleLineItem implements Serializable, Prototype<LineDetails> {
 
     @Override
     public String toString() {
-        return "com.posn.nextgenpos.entity.SaleLineItem[ id=" + id + " ]";
+        return "com.posn.nextgenpos.entity.LineItem[ id=" + id + " ]";
     }
 
     @Override

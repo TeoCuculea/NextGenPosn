@@ -9,6 +9,7 @@ import com.posn.nextgenpos.common.SaleDetails;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -38,12 +39,15 @@ public class Sale implements Serializable, Prototype<SaleDetails> {
     @Min(0)
     private double change;
     
-    @OneToMany(mappedBy="sale")
-    private List<SaleLineItem> lineItems;
+    @OneToMany(mappedBy="sale",cascade = CascadeType.ALL)
+    private List<LineItem> lineItems;
     
     @OneToOne(mappedBy="sale")
     private Payment payment;
   
+    @OneToOne(mappedBy="sale")
+    private Return ret;
+    
     public Integer getId() {
         return id;
     }
@@ -56,7 +60,7 @@ public class Sale implements Serializable, Prototype<SaleDetails> {
         return isComplete;
     }
 
-    public List<SaleLineItem> getLineItems() {
+    public List<LineItem> getLineItems() {
         return lineItems;
     }
 
@@ -80,7 +84,7 @@ public class Sale implements Serializable, Prototype<SaleDetails> {
         this.isComplete = isComplete;
     }
 
-    public void setLineItems(List<SaleLineItem> lineItems) {
+    public void setLineItems(List<LineItem> lineItems) {
         this.lineItems = lineItems;
     }
 
@@ -100,6 +104,14 @@ public class Sale implements Serializable, Prototype<SaleDetails> {
         this.date = date;
     }
 
+    public Return getRet() {
+        return ret;
+    }
+
+    public void setRet(Return ret) {
+        this.ret = ret;
+    }
+    
     @Override
     public int hashCode() {
         int hash = 0;

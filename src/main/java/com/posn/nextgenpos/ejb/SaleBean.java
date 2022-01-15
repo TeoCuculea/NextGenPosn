@@ -7,7 +7,7 @@ package com.posn.nextgenpos.ejb;
 import com.posn.nextgenpos.common.LineDetails;
 import com.posn.nextgenpos.common.SaleDetails;
 import com.posn.nextgenpos.entity.Sale;
-import com.posn.nextgenpos.entity.SaleLineItem;
+import com.posn.nextgenpos.entity.LineItem;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -96,7 +96,7 @@ public class SaleBean {
         Sale sale = em.find(Sale.class,id);
         List<LineDetails> lineItemList = lineItemBean.getAllBySaleId(sale.getId());
         for(LineDetails lineItem:lineItemList){
-            SaleLineItem saleLineItem = em.find(SaleLineItem.class,lineItem.getId());
+            LineItem saleLineItem = em.find(LineItem.class,lineItem.getId());
             em.remove(saleLineItem);
         }
         

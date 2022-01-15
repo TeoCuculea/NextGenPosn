@@ -8,7 +8,7 @@ import com.posn.nextgenpos.common.LineDetails;
 import com.posn.nextgenpos.common.ProductDetails;
 import com.posn.nextgenpos.entity.ProductSpecification;
 import com.posn.nextgenpos.entity.Sale;
-import com.posn.nextgenpos.entity.SaleLineItem;
+import com.posn.nextgenpos.entity.LineItem;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
@@ -37,7 +37,7 @@ public class LineItemBean {
     public void createLineItem(Integer quantity, Integer productSpecificationId, Integer saleId) {
        LOG.info("createLineItem");
        
-       SaleLineItem lineItem = new SaleLineItem();
+       LineItem lineItem = new LineItem();
        lineItem.setQuantity(quantity);
        
        ProductSpecification prodSpec = em.find(ProductSpecification.class,productSpecificationId);
@@ -52,7 +52,7 @@ public class LineItemBean {
     public List<LineDetails> getAllLineItem(){
         LOG.info("getAllItems");
         try {
-            List<SaleLineItem> lineItems = (List<SaleLineItem>) em.createQuery("SELECT i FROM SaleLineItem i").getResultList();
+            List<LineItem> lineItems = (List<LineItem>) em.createQuery("SELECT i FROM LineItem i").getResultList();
             return copyLineItemsToDetails(lineItems);
         } catch (Exception ex) {
             throw new EJBException(ex);
@@ -60,21 +60,22 @@ public class LineItemBean {
     }
 
     public List<LineDetails> getAllBySaleId(Integer saleId){
-        LOG.info("getAllItems");
+        LOG.info("getAllBySaleId");
         try {
-            List<SaleLineItem> lineItems = (List<SaleLineItem>) em.createQuery("SELECT i FROM SaleLineItem i WHERE i.sale.id = :id").setParameter("id", saleId).getResultList();
+            List<LineItem> lineItems = (List<LineItem>) em.createQuery("SELECT i FROM LineItem i WHERE i.sale.id = :id").setParameter("id", saleId).getResultList();
             return copyLineItemsToDetails(lineItems);
         } catch (Exception ex) {
             throw new EJBException(ex);
-        }}
+        }
+    }
     
     public List<ProductDetails> getAllProductSpecificationsBySaleId(Integer saleId)
     {
         LOG.info("getAllProductSpecificationsBySaleId");
         List<ProductSpecification> prodSpecsList = new ArrayList<>();
         try{
-            List<SaleLineItem> lineItemsList = (List<SaleLineItem>) em.createQuery("SELECT i FROM SaleLineItem i WHERE i.sale.id = :id").setParameter("id", saleId).getResultList();
-            for(SaleLineItem lineItem:lineItemsList){
+            List<LineItem> lineItemsList = (List<LineItem>) em.createQuery("SELECT i FROM LineItem i WHERE i.sale.id = :id").setParameter("id", saleId).getResultList();
+            for(LineItem lineItem:lineItemsList){
                 prodSpecsList.add(lineItem.getProdSpecs());
             }
             return prodSpecsBean.copyProductsToDetails(prodSpecsList);
@@ -87,25 +88,35 @@ public class LineItemBean {
     public void deleteLineItemById(Integer lineItemId){
         LOG.info("deleteLineItemById");
         
-        SaleLineItem lineItem = em.find(SaleLineItem.class,lineItemId);
+        LineItem lineItem = em.find(LineItem.class,lineItemId);
         em.remove(lineItem);
     }
     
     public void deleteLineItemBySaleId(Integer saleId){
         LOG.info("deleteLineItemBySaleId");
         
-        List<SaleLineItem> lineItems = em.createQuery("SELECT i FROM SaleLineItem i WHERE i.sale.id =:id").setParameter("id", saleId).getResultList();
-        for(SaleLineItem item:lineItems){
+        List<LineItem> lineItems = em.createQuery("SELECT i FROM LineItem i WHERE i.sale.id =:id").setParameter("id", saleId).getResultList();
+        for(LineItem item:lineItems){
             em.remove(item);
         }
     }
     
-    private List<LineDetails> copyLineItemsToDetails(List<SaleLineItem> lineItems) {
+    private List<LineDetails> copyLineItemsToDetails(List<LineItem> lineItems) {
         List<LineDetails> lineItemDetailsList = new ArrayList<>();
-        for(SaleLineItem lineItem:lineItems){
+        for(LineItem lineItem:lineItems){
             LineDetails lineItemDetails = lineItem.clone();
             lineItemDetailsList.add(lineItemDetails);
         }
         return lineItemDetailsList;
+    }
+
+    List<LineDetails> getAllByReturnId(Integer id) {
+        LOG.info("getAllByReturnId");
+        try {
+            List<LineItem> lineItems = (List<LineItem>) em.createQuery("SELECT i FROM LineItem i WHERE i.returns.id = :id").setParameter("id", id).getResultList();
+            return copyLineItemsToDetails(lineItems);
+        } catch (Exception ex) {
+            throw new EJBException(ex);
+        }
     }
 }
