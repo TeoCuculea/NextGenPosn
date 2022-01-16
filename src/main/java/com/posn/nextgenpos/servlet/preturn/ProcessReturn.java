@@ -87,7 +87,8 @@ public class ProcessReturn extends HttpServlet {
 
                 List<CategoryDetails> categories = categoryBean.getAllCategories();
                 request.setAttribute("categories", categories);
-            } else {
+            } 
+              else {
                 ProductCatalogDetails catalog = prodCatBean.getCatalog();
                 if (catalog.getId() == null) {
                     List<ProductDetails> itemSpecs = lineItemBean.getAllProductSpecificationsBySaleId(saleId);
@@ -106,20 +107,20 @@ public class ProcessReturn extends HttpServlet {
             }
         } else {
             ProductCatalogDetails catalog = prodCatBean.getCatalog();
-            if (catalog.getId() == null) {
+                if (catalog.getId() != null) {
+                    prodCatBean.deleteCatalog(catalog.getId());
+                }
                 List<ProductDetails> itemSpecs = lineItemBean.getAllProductSpecificationsBySaleId(saleId);
+
                 itemSpecs = prodSpecsBean.addTaxes(itemSpecs);
                 prodCatBean.createCatalog(itemSpecs);
                 request.setAttribute("itemSpecs", itemSpecs);
-                List<LineDetails> cart = lineItemBean.getAllBySaleId(saleId);
-                request.setAttribute("cart", cart);
-            } else {
-                List<ProductDetails> itemSpecs = catalog.getProductSpecification();
-                prodCatBean.updateCatalog(itemSpecs);
-                request.setAttribute("itemSpecs", itemSpecs);
+
                 List<LineDetails> cart = lineItemBean.getAllWithFiltersBySaleId(itemSpecs, saleId);
                 request.setAttribute("cart", cart);
-            }
+
+                List<CategoryDetails> categories = categoryBean.getAllCategories();
+                request.setAttribute("categories", categories);
         }
         List<CategoryDetails> categories = categoryBean.getAllCategories();
         request.setAttribute("categories", categories);
@@ -160,8 +161,9 @@ public class ProcessReturn extends HttpServlet {
         } else if (buton.equals("deleteFilters")) {
 
             List<ProductDetails> products = lineItemBean.getAllProductSpecificationsBySaleId(Integer.parseInt(saleId));
-            request.setAttribute("itemSpecs", products);
+            products = prodSpecsBean.addTaxes(products);
             prodCatBean.updateCatalog(products);
+            request.setAttribute("itemSpecs", products);
         }
         if (act == null) {
             //nu s-a apasat butonul

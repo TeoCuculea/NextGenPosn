@@ -213,8 +213,9 @@ public class LineItemBean {
         try{
             for(ProductDetails prodSpec : prodSpecs)
             {
-                LineItem lineItem = (LineItem) em.createQuery("SELECT i FROM LineItem i WHERE i.sale.id = :id and i.prodSpecs.id=:id2").setParameter("id", saleId).setParameter("id2", prodSpec.getId()).getSingleResult();
-                lineItemList.add(lineItem);
+                List<LineItem> lineItem = (List<LineItem>) em.createQuery("SELECT i FROM LineItem i WHERE i.sale.id = :id and i.prodSpecs.id=:id2").setParameter("id", saleId).setParameter("id2", prodSpec.getId()).getResultList();
+                if(!lineItem.isEmpty())
+                lineItemList.add(lineItem.get(0));
             }
             return copyLineItemsToDetails(lineItemList);
         }
