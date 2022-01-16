@@ -27,12 +27,13 @@ public class DeleteFromReturnList extends HttpServlet {
 
     @Inject
     LineItemBean lineItemBean;
-    
+
     @Inject
     ProductSpecificationBean prodSpecBean;
-    
+
     @Inject
     ItemBean itemBean;
+
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
@@ -47,17 +48,21 @@ public class DeleteFromReturnList extends HttpServlet {
             throws ServletException, IOException {
         Integer lineItemId = Integer.parseInt(request.getParameter("id"));
         Integer saleId = Integer.parseInt(request.getParameter("saleId"));
-    
+
         LineDetails lineItem = lineItemBean.findById(lineItemId);
         ProductDetails prodSpecs = lineItemBean.getProductSpecificationsByLineItemId(lineItem.getId());
         ItemDetails item = itemBean.findByProdSpecId(prodSpecs.getId());
-        itemBean.updateItem(item.getId(), item.getQuantity()+lineItem.getQuantity());
-        
+        itemBean.updateItem(item.getId(), item.getQuantity() + lineItem.getQuantity());
+
         LineDetails saleLineItem = lineItemBean.findByProdSpecIdAndSaleId(saleId, prodSpecs.getId());
-        lineItemBean.updateLineItemQuantity(saleLineItem.getId(), saleLineItem.getQuantity()+lineItem.getQuantity());
+        if (saleLineItem == null) {
+            lineItemBean.createSaleLineItem(lineItem.getQuantity(), prodSpecs.getId(), saleId);
+        } else {
+            lineItemBean.updateLineItemQuantity(saleLineItem.getId(), saleLineItem.getQuantity() + lineItem.getQuantity());
+        }
         lineItemBean.deleteLineItem(lineItem.getId());
-        
-        response.sendRedirect(request.getContextPath() + "/Sales/ProcessReturn?id="+saleId);
+
+        response.sendRedirect(request.getContextPath() + "/Sales/ProcessReturn?id=" + saleId);
     }
 
     /**
