@@ -11,15 +11,15 @@ import java.util.List;
  * @author teodo
  */
 public class ProductCatalogDetails implements java.io.Serializable{
-    private Long id;
+    private Integer id;
     private List<ProductDetails> productSpecification;
 
-    public ProductCatalogDetails(Long id, List<ProductDetails> productSpecification) {
+    public ProductCatalogDetails(Integer id, List<ProductDetails> productSpecification) {
         this.id = id;
         this.productSpecification = productSpecification;
     }
 
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 

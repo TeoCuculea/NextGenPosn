@@ -51,4 +51,10 @@ public class ProductCatalogBean {
         ProductCatalogDetails catalogDetail = catalog.clone();
         return catalogDetail;
     }
+
+    public void deleteCatalog(Integer catalogId) {
+        LOG.info("deleteCatalog");
+        ProductCatalog catalog = em.find(ProductCatalog.class, catalogId);
+        em.remove(catalog);
+    }
 }

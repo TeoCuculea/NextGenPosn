@@ -9,6 +9,33 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <t:pageTemplate pageTitle="Process Return">
     <h1>Process Return</h1>
+    <div class="clearfix">
+        <form "needs-validation"  novalidate="" method="POST" action="${pageContext.request.contextPath}/Sales/ProcessReturn">
+            <button name="delete" value="deleteFilters" class="btn btn-danger" type="submit">Delete filters</button>
+            <button type="submit" name="sort" value="sortByName">Sort by name</button>
+            <button type="submit" name="sort" value="sortByPrice">Sort by price</button>
+            <select required="" name="sortare" id="sortare">
+                <option id="ASC" value="ASC">ASC</option>
+                <option id="DESC" value="DESC">DESC</option>
+            </select>
+            <input type="hidden" name="sale_id" value="${sale.id}">
+        </form>
+        <form class="needs-validation"  novalidate="" method="POST" action="${pageContext.request.contextPath}/Sales/ProcessReturn/AddReturnFilter">
+            <div class="dropdown">
+                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                    Filters
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <c:forEach var="category" items="${categories}" varStatus="status">
+                        <li class="dropdown-item"><input type="checkbox" name="category_ids" value="${category.id}"></li>
+                        <li class="dropdown-item">${category.categoryName}</li>
+                        </c:forEach> 
+                    <button class="btn btn-primary btn-lg btn-block col-md-12 " type="submit">Apply filters</button>
+                </ul>
+                <input type="hidden" name="sale_id" value="${sale.id}">
+            </div> 
+        </form >
+    </div>
     <div class="row">
         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6"> 
             <table name="preturn" style="width:100%">
@@ -79,7 +106,7 @@
                     </div>
                     <div style="text-align:center">
                         <a class="btn btn-danger" href="${pageContext.request.contextPath}/CancelReturn" role="button" padding = "100px">Cancel</a>
-                        <a class="btn btn-primary btn-lg" href="${pageContext.request.contextPath}/Refund?saleId=${saleId}" role="button" padding = "100px">Refund</a>
+                        <a class="btn btn-primary btn-lg" href="${pageContext.request.contextPath}/Refund" role="button" padding = "100px">Refund</a>
                     </div>
                 </form> 
             </div>
@@ -108,5 +135,13 @@
         }, false);
     })();
 </script>
+<script>
+       document.getElementById('sortare').onchange = function() {
+        localStorage.setItem('selectedtem', document.getElementById('sortare').value);
+      };
 
+      if (localStorage.getItem('selectedtem')) {
+        document.getElementById('sortare').options[localStorage.getItem('selectedtem')].selected = true;
+      }
+</script>
 </t:pageTemplate>

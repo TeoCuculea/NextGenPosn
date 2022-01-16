@@ -26,24 +26,24 @@ public class ProductCatalog implements Serializable, Prototype<ProductCatalogDet
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
     private List<ProductDetails> productSpecification;
     private static ProductCatalog instance;
-    
-    public Long getId() {
+
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
-
+    
     public static ProductCatalog getInstance() {
         if(instance == null)
             instance = new ProductCatalog();
         return instance;
     }
-    
+       
     public static long getSerialVersionUID() {
         return serialVersionUID;
     }

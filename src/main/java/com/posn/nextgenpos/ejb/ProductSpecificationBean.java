@@ -4,6 +4,7 @@
  */
 package com.posn.nextgenpos.ejb;
 
+import com.posn.nextgenpos.common.CategoryDetails;
 import com.posn.nextgenpos.common.ProductDetails;
 import com.posn.nextgenpos.entity.Category;
 import com.posn.nextgenpos.entity.Item;
@@ -32,6 +33,9 @@ public class ProductSpecificationBean {
 
     @Inject
     CategoryBean categoryBean;
+    
+    @Inject
+    LineItemBean lineItemBean;
 
     public List<ProductDetails> copyProductsToDetails(List<ProductSpecification> products) {
         List<ProductDetails> detailsList = new ArrayList();
@@ -150,6 +154,28 @@ public class ProductSpecificationBean {
             for (Integer categoryId : categoryIds) {
                 products = categoryBean.getAllProductsFromCategory(categoryId);
                 allProducts.addAll(products);
+            }
+            return allProducts;
+        } catch (Exception ex) {
+            throw new EJBException(ex);
+        }
+    }
+    
+    public List<ProductDetails> getAllProductSpecificationsFromCartWithFilters(List<Integer> categoryIds, Integer saleId) {
+        LOG.info("getAllProductSpecificationsFromCartWithFilters");
+        List<ProductDetails> products = new ArrayList<>();
+        List<ProductDetails> allProducts = new ArrayList<>();
+        try {
+            products = lineItemBean.getAllProductSpecificationsBySaleId(saleId);
+            for (Integer categoryId : categoryIds) {
+                for( ProductDetails product : products)
+                {
+                    CategoryDetails catOfProduct = categoryBean.getCategoriesOfProduct(product.getId()).get(0);
+                    if(catOfProduct.getId()==categoryId)
+                    {
+                        allProducts.add(product);
+                    }
+                }             
             }
             return allProducts;
         } catch (Exception ex) {
