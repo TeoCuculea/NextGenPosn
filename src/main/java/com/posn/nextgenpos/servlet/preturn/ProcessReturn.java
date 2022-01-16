@@ -8,11 +8,13 @@ import com.posn.nextgenpos.common.CategoryDetails;
 import com.posn.nextgenpos.common.LineDetails;
 import com.posn.nextgenpos.common.ProductCatalogDetails;
 import com.posn.nextgenpos.common.ProductDetails;
+import com.posn.nextgenpos.common.ReturnDetails;
 import com.posn.nextgenpos.common.SaleDetails;
 import com.posn.nextgenpos.ejb.CategoryBean;
 import com.posn.nextgenpos.ejb.LineItemBean;
 import com.posn.nextgenpos.ejb.ProductCatalogBean;
 import com.posn.nextgenpos.ejb.ProductSpecificationBean;
+import com.posn.nextgenpos.ejb.ReturnBean;
 import com.posn.nextgenpos.ejb.SaleBean;
 import java.io.IOException;
 import java.util.Comparator;
@@ -47,6 +49,9 @@ public class ProcessReturn extends HttpServlet {
     @Inject
     private CategoryBean categoryBean;
 
+    @Inject
+    private ReturnBean returnBean;
+    
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
@@ -119,7 +124,7 @@ public class ProcessReturn extends HttpServlet {
         List<CategoryDetails> categories = categoryBean.getAllCategories();
         request.setAttribute("categories", categories);
 
-        /*Integer returnId;
+        Integer returnId;
         ReturnDetails retDetail = returnBean.findBySaleId(saleId);
         if(retDetail != null){
             List<LineDetails> lineItemDetails = lineItemBean.getAllByReturnId(retDetail.getId());
@@ -131,7 +136,7 @@ public class ProcessReturn extends HttpServlet {
         }else{
             returnId = returnBean.createReturn(saleId);
         }
-        request.setAttribute("returnId", returnId);*/
+        request.setAttribute("returnId", returnId);
         request.getRequestDispatcher("/WEB-INF/pages/preturn/preturn.jsp").forward(request, response);
     }
 
