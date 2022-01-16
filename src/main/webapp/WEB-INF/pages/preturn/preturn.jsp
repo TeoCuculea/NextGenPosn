@@ -106,7 +106,7 @@
                     </div>
                     <div style="text-align:center">
                         <a class="btn btn-danger" href="${pageContext.request.contextPath}/CancelReturn" role="button" padding = "100px">Cancel</a>
-                        <a class="btn btn-primary btn-lg" href="${pageContext.request.contextPath}/Refund" role="button" padding = "100px">Refund</a>
+                        <a class="btn btn-primary btn-lg" href="${pageContext.request.contextPath}/Refund?saleId=${saleId}" role="button" padding = "100px">Refund</a>
                     </div>
                 </form> 
             </div>

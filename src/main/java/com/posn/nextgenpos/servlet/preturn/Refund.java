@@ -63,6 +63,7 @@ public class Refund extends HttpServlet {
         for(ProductDetails prodSpec:productList){
             total+=prodSpec.getPricePerUnit();
         }
+        total = total*100/100;
         PaymentDetails payment= paymentBean.findBySaleId(saleId);
         paymentBean.updatePayment(payment.getId(), saleId, payment.getAmount(), total);
         saleBean.updateSale(saleId, true, total, payment.getAmount()-total);
