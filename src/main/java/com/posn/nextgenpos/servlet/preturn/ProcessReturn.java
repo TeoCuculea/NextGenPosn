@@ -8,13 +8,11 @@ import com.posn.nextgenpos.common.CategoryDetails;
 import com.posn.nextgenpos.common.LineDetails;
 import com.posn.nextgenpos.common.ProductCatalogDetails;
 import com.posn.nextgenpos.common.ProductDetails;
-import com.posn.nextgenpos.common.ReturnDetails;
 import com.posn.nextgenpos.common.SaleDetails;
 import com.posn.nextgenpos.ejb.CategoryBean;
 import com.posn.nextgenpos.ejb.LineItemBean;
 import com.posn.nextgenpos.ejb.ProductCatalogBean;
 import com.posn.nextgenpos.ejb.ProductSpecificationBean;
-import com.posn.nextgenpos.ejb.ReturnBean;
 import com.posn.nextgenpos.ejb.SaleBean;
 import java.io.IOException;
 import java.util.Comparator;
@@ -49,9 +47,6 @@ public class ProcessReturn extends HttpServlet {
     @Inject
     private CategoryBean categoryBean;
 
-    @Inject
-    private ReturnBean returnBean;
-    
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
@@ -66,45 +61,65 @@ public class ProcessReturn extends HttpServlet {
             throws ServletException, IOException {
         int saleId = 0;
         String o = request.getParameter("id");
+        String sesiune = (String) request.getSession().getAttribute("returnSaleId");
         request.getSession().setAttribute("returnSaleId", o);
-        saleId= Integer.parseInt(o);
-        /*if (o != null) {
-            request.getServletContext().setAttribute("sale_id", Integer.parseInt(o));
-        }
-        String comp="";
-        if (request.getServletContext().getAttribute("sale_id") != null) {
-            saleId = (int) request.getServletContext().getAttribute("sale_id");
-            comp=(String) request.getServletContext().getAttribute("sale_id");
-        }*/
-        ProductCatalogDetails catalog = prodCatBean.getCatalog();
-        //prodCatBean.deleteCatalog();
-        if (catalog.getId() == null) {
-            List<ProductDetails> itemSpecs = lineItemBean.getAllProductSpecificationsBySaleId(saleId);
-            itemSpecs = prodSpecsBean.addTaxes(itemSpecs);
-            prodCatBean.createCatalog(itemSpecs);
-            request.setAttribute("itemSpecs", itemSpecs);
+        saleId = Integer.parseInt(o);
+        request.setAttribute("saleId", saleId);
+        if (sesiune != null) {
+            if (!sesiune.equals(o)) {
+                ProductCatalogDetails catalog = prodCatBean.getCatalog();
+                if (catalog.getId() != null) {
+                    prodCatBean.deleteCatalog(catalog.getId());
+                }
+                List<ProductDetails> itemSpecs = lineItemBean.getAllProductSpecificationsBySaleId(saleId);
+
+                itemSpecs = prodSpecsBean.addTaxes(itemSpecs);
+                prodCatBean.createCatalog(itemSpecs);
+                request.setAttribute("itemSpecs", itemSpecs);
+
+                List<LineDetails> cart = lineItemBean.getAllWithFiltersBySaleId(itemSpecs, saleId);
+                request.setAttribute("cart", cart);
+
+                List<CategoryDetails> categories = categoryBean.getAllCategories();
+                request.setAttribute("categories", categories);
+            } else {
+                ProductCatalogDetails catalog = prodCatBean.getCatalog();
+                if (catalog.getId() == null) {
+                    List<ProductDetails> itemSpecs = lineItemBean.getAllProductSpecificationsBySaleId(saleId);
+                    itemSpecs = prodSpecsBean.addTaxes(itemSpecs);
+                    prodCatBean.createCatalog(itemSpecs);
+                    request.setAttribute("itemSpecs", itemSpecs);
+                    List<LineDetails> cart = lineItemBean.getAllBySaleId(saleId);
+                    request.setAttribute("cart", cart);
+                } else {
+                    List<ProductDetails> itemSpecs = catalog.getProductSpecification();
+                    prodCatBean.updateCatalog(itemSpecs);
+                    request.setAttribute("itemSpecs", itemSpecs);
+                    List<LineDetails> cart = lineItemBean.getAllWithFiltersBySaleId(itemSpecs, saleId);
+                    request.setAttribute("cart", cart);
+                }
+            }
         } else {
-            List<ProductDetails> itemSpecs = catalog.getProductSpecification();
-            prodCatBean.updateCatalog(itemSpecs);
-            request.setAttribute("itemSpecs", itemSpecs);
+            ProductCatalogDetails catalog = prodCatBean.getCatalog();
+            if (catalog.getId() == null) {
+                List<ProductDetails> itemSpecs = lineItemBean.getAllProductSpecificationsBySaleId(saleId);
+                itemSpecs = prodSpecsBean.addTaxes(itemSpecs);
+                prodCatBean.createCatalog(itemSpecs);
+                request.setAttribute("itemSpecs", itemSpecs);
+                List<LineDetails> cart = lineItemBean.getAllBySaleId(saleId);
+                request.setAttribute("cart", cart);
+            } else {
+                List<ProductDetails> itemSpecs = catalog.getProductSpecification();
+                prodCatBean.updateCatalog(itemSpecs);
+                request.setAttribute("itemSpecs", itemSpecs);
+                List<LineDetails> cart = lineItemBean.getAllWithFiltersBySaleId(itemSpecs, saleId);
+                request.setAttribute("cart", cart);
+            }
         }
-        //<ProductDetails> itemSpecs = catalog.getProductSpecification();
-        List<ProductDetails> itemSpecs = lineItemBean.getAllProductSpecificationsBySaleId(saleId);
-        SaleDetails sale = saleBean.findById(saleId);
-        request.getServletContext().setAttribute("sale", sale);
-        /*if( itemSpecs == null)
-        {
-            List<LineDetails> cart = lineItemBean.getAllBySaleId(saleId);
-            request.setAttribute("cart", cart);
-        }
-        else{*/
-            List<LineDetails> cart = lineItemBean.getAllWithFiltersBySaleId(itemSpecs, saleId);
-            request.setAttribute("cart", cart);
-        //}
         List<CategoryDetails> categories = categoryBean.getAllCategories();
         request.setAttribute("categories", categories);
 
-        Integer returnId;
+        /*Integer returnId;
         ReturnDetails retDetail = returnBean.findBySaleId(saleId);
         if(retDetail != null){
             List<LineDetails> lineItemDetails = lineItemBean.getAllByReturnId(retDetail.getId());
@@ -116,8 +131,7 @@ public class ProcessReturn extends HttpServlet {
         }else{
             returnId = returnBean.createReturn(saleId);
         }
-        request.setAttribute("returnId", returnId);
-        request.setAttribute("saleId", saleId);
+        request.setAttribute("returnId", returnId);*/
         request.getRequestDispatcher("/WEB-INF/pages/preturn/preturn.jsp").forward(request, response);
     }
 
@@ -139,7 +153,7 @@ public class ProcessReturn extends HttpServlet {
         if (buton == null) {
             //nu s-a apasat
         } else if (buton.equals("deleteFilters")) {
-            
+
             List<ProductDetails> products = lineItemBean.getAllProductSpecificationsBySaleId(Integer.parseInt(saleId));
             request.setAttribute("itemSpecs", products);
             prodCatBean.updateCatalog(products);
@@ -179,7 +193,7 @@ public class ProcessReturn extends HttpServlet {
             prodCatBean.updateCatalog(itemSpecs);
             request.setAttribute("itemSpecs", itemSpecs);
         }
-        response.sendRedirect(request.getContextPath() + "/Sales/ProcessReturn?id="+saleId);
+        response.sendRedirect(request.getContextPath() + "/Sales/ProcessReturn?id=" + saleId);
     }
 
     /**
