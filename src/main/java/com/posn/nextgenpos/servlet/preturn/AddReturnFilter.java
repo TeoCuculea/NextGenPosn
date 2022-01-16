@@ -2,11 +2,13 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
-package com.posn.nextgenpos.servlet.catalog;
+package com.posn.nextgenpos.servlet.preturn;
 
 import com.posn.nextgenpos.common.CategoryDetails;
+import com.posn.nextgenpos.common.LineDetails;
 import com.posn.nextgenpos.common.ProductDetails;
 import com.posn.nextgenpos.ejb.CategoryBean;
+import com.posn.nextgenpos.ejb.LineItemBean;
 import com.posn.nextgenpos.ejb.ProductCatalogBean;
 import com.posn.nextgenpos.ejb.ProductSpecificationBean;
 import java.io.IOException;
@@ -23,8 +25,8 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author teodo
  */
-@WebServlet(name = "AddCatalogFilter", urlPatterns = {"/Catalogs/AddCatalogFilter"})
-public class AddCatalogFilter extends HttpServlet {
+@WebServlet(name = "AddReturnFilter", urlPatterns = {"/Sales/ProcessReturn/AddReturnFilter"})
+public class AddReturnFilter extends HttpServlet {
 
     @Inject
     CategoryBean categoryBean;
@@ -34,6 +36,9 @@ public class AddCatalogFilter extends HttpServlet {
     
     @Inject
     ProductCatalogBean prodCatBean;
+    
+    @Inject
+    LineItemBean lineItemBean;
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
@@ -47,9 +52,9 @@ public class AddCatalogFilter extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        List<CategoryDetails> categories = categoryBean.getAllCategories();
-        request.setAttribute("categories", categories);
-        request.getRequestDispatcher("/WEB-INF/pages/catalog/addCatalogFilter.jsp").forward(request, response);
+        //List<CategoryDetails> categories = categoryBean.getAllCategories();
+        //request.setAttribute("categories", categories);
+        //request.getRequestDispatcher("/WEB-INF/pages/catalog/addCatalogFilter.jsp").forward(request, response);
     }
 
     /**
@@ -63,7 +68,8 @@ public class AddCatalogFilter extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String[] itemIdsAsString = null;
+        String[] itemIdsAsString = null; 
+        String saleId = (String) request.getSession().getAttribute("returnSaleId");
         itemIdsAsString = request.getParameterValues("category_ids");
         if (itemIdsAsString != null) {
             List<Integer> categoryIds = new ArrayList<>();
@@ -71,11 +77,12 @@ public class AddCatalogFilter extends HttpServlet {
                 CategoryDetails cat = categoryBean.findById(Integer.parseInt(ids));
                 categoryIds.add(cat.getId());
             }
-            List<ProductDetails> itemSpecs = prodSpecsBean.getAllProductSpecificationsWithFilters(categoryIds);
+           
+            List<ProductDetails> itemSpecs = prodSpecsBean.getAllProductSpecificationsFromCartWithFilters(categoryIds, Integer.parseInt(saleId));
             itemSpecs = prodSpecsBean.addTaxes(itemSpecs);
             prodCatBean.updateCatalog(itemSpecs);
         }
-        response.sendRedirect(request.getContextPath() + "/Catalogs");
+        response.sendRedirect(request.getContextPath() + "/Sales/ProcessReturn?id="+saleId);
     }
 
     /**

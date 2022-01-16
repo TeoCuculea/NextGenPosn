@@ -207,4 +207,20 @@ public class LineItemBean {
         em.remove(lineItem);
     }
 
+    public List<LineDetails> getAllWithFiltersBySaleId(List<ProductDetails> prodSpecs, int saleId) {
+        LOG.info("getAllWithFiltersBySaleId");
+        List<LineItem> lineItemList = new ArrayList<LineItem>();
+        try{
+            for(ProductDetails prodSpec : prodSpecs)
+            {
+                LineItem lineItem = (LineItem) em.createQuery("SELECT i FROM LineItem i WHERE i.sale.id = :id and i.prodSpecs.id=:id2").setParameter("id", saleId).setParameter("id2", prodSpec.getId()).getSingleResult();
+                lineItemList.add(lineItem);
+            }
+            return copyLineItemsToDetails(lineItemList);
+        }
+        catch(Exception ex){
+            throw new EJBException(ex);
+        }
+    }
+
 }

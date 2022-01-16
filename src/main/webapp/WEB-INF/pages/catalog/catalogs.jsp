@@ -29,7 +29,7 @@
                         <li class="dropdown-item"><input type="checkbox" name="category_ids" value="${category.id}"></li>
                         <li class="dropdown-item">${category.categoryName}</li>
                         </c:forEach> 
-                    <button class="btn btn-primary btn-lg btn-block col-md-12 " type="submit">Apply filters</button>
+                    <button class="btn btn-primary btn-lg btn-block col-md-12 " name="butonul"type="submit">Apply filters</button>
                 </ul>
             </div> 
         </form >
